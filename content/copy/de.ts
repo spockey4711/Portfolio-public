@@ -351,13 +351,9 @@ export const deCopy = {
       eyebrow: "Ausgewählte Arbeiten",
       lead: "Ein paar Dinge, die ich gebaut habe - vom ersten Problem bis zur laufenden App.",
     },
-    live: {
-      eyebrow: "Gerade jetzt",
-      lead: "Kein statisches Portfolio: was hier läuft, aktualisiert sich von selbst - Musik, Commits, der letzte Beitrag.",
-    },
-    stats: {
+    github: {
       eyebrow: "Die Arbeit, in Zahlen",
-      lead: "Woran ich zuletzt gesessen habe - direkt aus WakaTime und GitHub, nicht geschätzt.",
+      lead: "Ein Jahr Commits, direkt aus GitHub - nicht geschätzt, nicht kuratiert.",
     },
   },
 

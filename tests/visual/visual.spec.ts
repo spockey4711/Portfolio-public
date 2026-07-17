@@ -13,8 +13,9 @@ import { expect, test, type Page } from "@playwright/test";
 // German accessible-names of the home page's live-data widgets - mirrors
 // content/copy/de.ts (the site renders de-DE). Their content changes per request, so
 // they are masked out of the snapshot; a renamed label just means the region is no
-// longer masked and the diff will flag it loudly.
-const HOME_LIVE_REGIONS = ["GitHub-Aktivität", "Zeichen von Leben", "Coding-Aktivität"];
+// longer masked and the diff will flag it loudly. Since the lean one-pager
+// (ADR-0011) the GitHub heatmap is the only live region left on the home page.
+const HOME_LIVE_REGIONS = ["GitHub-Aktivität"];
 
 // Fully static templates - one representative route each, no live data to mask.
 const STATIC_PAGES = [
@@ -35,10 +36,7 @@ async function open(page: Page, path: string): Promise<void> {
 test("home page", async ({ page }) => {
   await open(page, "/");
 
-  const masks = [
-    page.getByTestId("hero-live-status"),
-    ...HOME_LIVE_REGIONS.map((name) => page.getByRole("region", { name })),
-  ];
+  const masks = HOME_LIVE_REGIONS.map((name) => page.getByRole("region", { name }));
 
   await expect(page).toHaveScreenshot("home.png", { fullPage: true, mask: masks });
 });
