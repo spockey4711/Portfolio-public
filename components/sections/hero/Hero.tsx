@@ -16,8 +16,9 @@ import { cn } from "@/lib/utils/cn";
  * in the grid (see Onepager.tsx), so the hero holds nothing but the words.
  *
  * Beside the copy stands a full-body pixel-art character (me). On large screens it
- * shares the row with the type, foot-aligned to the copy's baseline; on phones it
- * drops below the CTAs, centred and height-capped. The source is a 600px-wide PNG
+ * shares the row with the type, nudged down so its head begins level with the
+ * headline (its feet then reach past the copy into the whitespace below); on phones
+ * it drops below the CTAs, centred and height-capped. The source is a 600px-wide PNG
  * (public/images/hero-avatar.png) rendered small, so it stays crisp on retina
  * without weighing on the LCP - `priority` loads it eagerly since it is above the
  * fold. It reveals last in the entrance sequence.
@@ -93,8 +94,11 @@ export function Hero({ locale }: { locale: Locale }) {
 
         {/* The pixel-art character. Foot-aligned to the copy on lg (self-end),
             centred and height-capped on phones. w-auto keeps the aspect from the
-            intrinsic 600x1795, so only the height drives its on-screen size. */}
-        <div {...reveal(0.48, "shrink-0 self-center lg:self-end")}>
+            intrinsic 600x1795, so only the height drives its on-screen size. On lg
+            it is nudged down (relative/top, not transform - the rise-up animation
+            owns transform and its `forwards` fill would otherwise reset the offset)
+            so the head begins level with the headline rather than above it. */}
+        <div {...reveal(0.48, "shrink-0 self-center lg:relative lg:top-[5.5rem] lg:self-end")}>
           <Image
             src="/images/hero-avatar.png"
             alt={hero.visual.portraitAlt}
