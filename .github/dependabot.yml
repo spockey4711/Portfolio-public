@@ -1,0 +1,52 @@
+# Automated dependency updates (S2-10). Dependabot opens PRs against the
+# `develop` integration branch - never `master`, which only moves via the
+# periodic release PR (docs/engineering/git-workflow.md#releases-promoting-develop-to-master).
+# CI (.github/workflows/ci.yml) runs the full gate on each PR before it can merge.
+# See docs/engineering/dependency-updates.md.
+version: 2
+updates:
+  # Application dependencies (pnpm lockfile). Minor and patch bumps are grouped
+  # into a single PR to keep review overhead low; majors open individually so a
+  # potential breaking change is reviewed on its own.
+  - package-ecosystem: npm
+    directory: "/"
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # GitHub Actions used by the CI and deploy workflows. Grouped together and
+  # committed with the `ci` type since they touch the pipeline, not the app.
+  - package-ecosystem: github-actions
+    directory: "/"
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: ci
+    groups:
+      github-actions:
+        update-types:
+          - minor
+          - patch

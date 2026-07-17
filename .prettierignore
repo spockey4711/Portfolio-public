@@ -1,0 +1,21 @@
+# Build output and dependencies
+.next/
+out/
+build/
+node_modules/
+
+# Generated files
+next-env.d.ts
+tsconfig.tsbuildinfo
+pnpm-lock.yaml
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+
+# Prettier owns code and config formatting only. Long-form docs are authored by
+# hand (carefully wrapped, tables and list indentation that Prettier would mangle)
+# and the design handoff is a generated, authoritative artifact - leave both alone.
+*.md
+docs/design/handoff/

@@ -1,0 +1,25 @@
+# Server-only overrides for the deployed container on the Contabo VPS.
+# Applied on top of docker-compose.yml by the deploy workflow (and by any manual
+# deploy) with an explicit file list:
+#
+#   IMAGE_TAG=sha-abc1234 \
+#     docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# It changes two things versus the local base file:
+#   1. Pull the image from GHCR (built and pushed by CI) instead of building it
+#      on the server. IMAGE_TAG selects an immutable tag; it defaults to latest.
+#   2. Bind the container to loopback only, so Nginx (the sole public entry
+#      point) reaches it over 127.0.0.1 and the app is never exposed directly.
+#      HOST_PORT selects the loopback port (3000 preview, 3002 production), so
+#      both environments can run side by side on the same box. See
+#      docs/operations/two-environment-setup.md.
+#
+# `!override` replaces the base `ports` list instead of appending to it. Without
+# it Compose concatenates the two lists, so the base mapping (all interfaces)
+# and this loopback mapping both claim the host port and the second bind fails
+# with "address already in use". Requires Docker Compose v2.24+.
+services:
+  web:
+    image: ghcr.io/spockey4711/portfolio2:${IMAGE_TAG:-latest}
+    ports: !override
+      - "127.0.0.1:${HOST_PORT:-3000}:3000"

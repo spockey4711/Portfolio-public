@@ -1,0 +1,54 @@
+# Self-hosted, cookieless web analytics (Umami) for the portfolio (S2-5).
+#
+# This is a STANDALONE stack, deliberately separate from the app's
+# docker-compose.yml: it has its own datastore and lifecycle and is NOT built or
+# deployed by the app's CI. Bring it up once, by hand, on the same Contabo VPS,
+# following docs/operations/analytics.md.
+#
+# Umami binds to loopback only; Nginx is the sole public entry point and proxies
+# analytics.<domain> to 127.0.0.1:3001 over TLS. Secrets (the Postgres password
+# and Umami's APP_SECRET) live in a sibling `.env` (mode 600), never in the repo
+# - see .env.example.
+services:
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    restart: unless-stopped
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    ports:
+      # Loopback only: reachable via Nginx, never directly from the internet.
+      - "127.0.0.1:3001:3000"
+    environment:
+      DATABASE_TYPE: postgresql
+      # POSTGRES_PASSWORD is interpolated raw here, so it must be URL-safe (no
+      # `+`, `/`, `=`); generate it with `openssl rand -hex 24`. See .env.example.
+      DATABASE_URL: postgresql://umami:${POSTGRES_PASSWORD}@umami-db:5432/umami
+      # Signs Umami's own auth/session tokens. Generate once, keep stable:
+      # `openssl rand -base64 36`. Rotating it logs dashboard users out.
+      APP_SECRET: ${APP_SECRET}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/heartbeat >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  umami-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  umami-db-data:

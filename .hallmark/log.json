@@ -1,0 +1,24 @@
+[
+  {
+    "date": "2026-07-16",
+    "macrostructure": "Banded (open prose + framed clusters)",
+    "theme": "carnival",
+    "drop": "pressroom",
+    "theme_axes": "light-tinted / display-heavy / warm-amber+slate-duo",
+    "nav": "N7 Brutal slab",
+    "footer": "Ft4 Dense colophon",
+    "enrichment": "none",
+    "brief": "Landing de-box pass - break the single bento grid into alternating open editorial bands and framed instrument clusters, add background lead-ins (BandIntro)"
+  },
+  {
+    "date": "2026-07-16",
+    "macrostructure": "Bento Grid",
+    "theme": "carnival",
+    "drop": "pressroom",
+    "theme_axes": "light-tinted / display-heavy / warm-amber+slate-duo",
+    "nav": "N7 Brutal slab",
+    "footer": "Ft4 Dense colophon",
+    "enrichment": "none",
+    "brief": "Portfolio landing redesign - full fingerprint swap from Sand & Pine long-scroll to Pressroom bento"
+  }
+]

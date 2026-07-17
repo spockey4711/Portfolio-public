@@ -1,0 +1,30 @@
+{
+  "projectId": "f5d59bb9-b78a-453a-a255-d376772b7f12",
+  "shape": "package",
+  "pkg": "portfolio",
+  "globalName": "PortfolioDS",
+  "srcDir": "components/ui",
+  "tsconfig": "./tsconfig.json",
+  "cssEntry": ".design-sync/css/tailwind.css",
+  "componentSrcMap": {
+    "Button": "components/ui/Button.tsx",
+    "Card": "components/ui/Card.tsx",
+    "Divider": "components/ui/Divider.tsx",
+    "MonoLabel": "components/ui/MonoLabel.tsx",
+    "Pill": "components/ui/Pill.tsx",
+    "SectionHeader": "components/ui/SectionHeader.tsx"
+  },
+  "dtsPropsFor": {
+    "Button": "/** Visual variant. */ variant?: \"primary\" | \"secondary\" | \"ghost\"; /** When set, renders an anchor instead of a button. */ href?: string; className?: string; children?: React.ReactNode; disabled?: boolean; type?: \"button\" | \"submit\" | \"reset\"; onClick?: React.MouseEventHandler; target?: string; rel?: string;",
+    "Card": "children?: React.ReactNode; className?: string; onClick?: React.MouseEventHandler;",
+    "Divider": "className?: string;",
+    "MonoLabel": "/** Text colour tone. */ tone?: \"pine\" | \"muted\" | \"ink\"; children?: React.ReactNode; className?: string;",
+    "Pill": "/** Leads with the pulsing signal-green status dot. */ dot?: boolean; children?: React.ReactNode; className?: string;",
+    "SectionHeader": "/** Section number, rendered zero-padded (e.g. 01). */ index: number; /** Eyebrow title after the number. */ title: string; className?: string;"
+  },
+  "overrides": {
+    "SectionHeader": { "cardMode": "column" }
+  },
+  "guidelinesGlob": ["docs/design/*.md", "docs/design/handoff/README.md"],
+  "readmeHeader": ".design-sync/conventions.md"
+}

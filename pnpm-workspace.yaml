@@ -1,0 +1,12 @@
+# Approve postinstall build scripts (pnpm blocks them by default).
+# sharp: Next.js image optimization. unrs-resolver: ESLint import resolver.
+# @sentry/cli is disabled: its build only fetches the source-map upload CLI,
+# which we do not use (upload is off, see next.config.ts). Leaving it ignored is
+# a harmless warning; it is never a runtime or build dependency.
+allowBuilds:
+  "@sentry/cli": false
+  sharp: true
+  unrs-resolver: true
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver

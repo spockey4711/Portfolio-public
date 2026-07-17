@@ -1,0 +1,40 @@
+# Self-hosted uptime monitoring + public status page (Uptime Kuma) for the
+# portfolio (S6-2).
+#
+# This is a STANDALONE stack, deliberately separate from the app's
+# docker-compose.yml: its own datastore and lifecycle, NOT built or deployed by
+# the app's CI. Bring it up once, by hand, on the same Contabo VPS, following
+# docs/operations/error-monitoring.md.
+#
+# Uptime Kuma binds to loopback only; Nginx is the sole public entry point and
+# proxies status.<domain> to 127.0.0.1:3004 over TLS - same pattern as the app
+# (:3000), Umami (:3001) and GlitchTip (:3003). The firewall stays 22/80/443.
+#
+# What it watches (all configured in the Uptime Kuma UI, not in this file):
+#   - the app health endpoint  https://yannikwuenker.de/api/health
+#   - the dev subdomain        https://portfolio.yannikwuenker.de/api/health
+#   - analytics.<domain> and errors.<domain> heartbeats
+# Alerts go out via e-mail / Telegram / webhook (a notification set up in the
+# UI), and the public status page is the "small status signal" S6-2 asks for.
+#
+# Blind spot: this watcher runs on the SAME box as the app, so a total-host
+# outage takes the watcher down with it and no alert fires. An external check is
+# the complement for that case - see docs/operations/error-monitoring.md.
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: unless-stopped
+    ports:
+      # Loopback only: reachable via Nginx, never directly from the internet.
+      - "127.0.0.1:3004:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+    healthcheck:
+      test: ["CMD-SHELL", "extra/healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+volumes:
+  uptime-kuma-data:

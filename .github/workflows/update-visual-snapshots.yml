@@ -1,0 +1,60 @@
+name: Update visual snapshots
+
+# Regenerate the Playwright visual-regression baselines in the same pinned container
+# the CI `visual` job verifies against, then commit them back to the branch. Run this
+# from the Actions tab (or `gh workflow run update-visual-snapshots.yml --ref <branch>`)
+# whenever an intended visual change updates the snapshots - the baselines are
+# Linux-rendered, so they match CI exactly and cannot be produced reliably on macOS.
+
+on:
+  workflow_dispatch:
+
+# Needs write access to push the regenerated baselines back to the branch.
+permissions:
+  contents: write
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  update:
+    name: Regenerate baselines
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Update snapshots
+        run: pnpm test:visual --update-snapshots
+
+      - name: Commit baselines
+        run: |
+          # actions/checkout runs as a different user than the container root, so git
+          # would otherwise refuse to operate on the "dubious ownership" workspace.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain -- tests/visual)" ]; then
+            git add tests/visual
+            git commit -m "test(visual): update visual-regression baselines"
+            git push
+          else
+            echo "No snapshot changes."
+          fi

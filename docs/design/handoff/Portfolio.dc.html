@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:#eae6d9; color:#1c211c; font-family:'Hanken Grotesk',sans-serif; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#24543f; color:#f5f1e7; }
+  @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes bootline { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes riseUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes cueDot { 0%{transform:translateY(0);opacity:0} 30%{opacity:1} 100%{transform:translateY(22px);opacity:0} }
+  @keyframes glowPulse { 0%,100%{box-shadow:0 0 0 0 rgba(31,138,91,0.5)} 50%{box-shadow:0 0 0 5px rgba(31,138,91,0)} }
+</style>
+</helmet>
+
+<!-- ============ BOOT OVERLAY ============ -->
+<div ref="{{ overlayRef }}" style="position:fixed;inset:0;z-index:100;background:#0f130f;display:flex;align-items:center;justify-content:center;transition:opacity .7s ease">
+  <div style="width:min(520px,86vw);font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.9;color:#9bb0a2">
+    <div style="opacity:0;animation:bootline .35s ease forwards;animation-delay:.10s"><span style="color:#5fb98a">▸</span> booting portfolio.os <span style="color:#e8ede6">v2.4</span></div>
+    <div style="opacity:0;animation:bootline .35s ease forwards;animation-delay:.45s">loading modules&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5fb98a">ok</span></div>
+    <div style="opacity:0;animation:bootline .35s ease forwards;animation-delay:.80s">mounting /projects&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5fb98a">ok</span></div>
+    <div style="opacity:0;animation:bootline .35s ease forwards;animation-delay:1.15s">establishing uplink&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5fb98a">ok</span></div>
+    <div style="opacity:0;animation:bootline .35s ease forwards;animation-delay:1.5s"><span style="color:#e8ede6">whoami</span> → dein.name</div>
+    <div style="opacity:0;animation:bootline .35s ease forwards;animation-delay:1.85s"><span style="color:#5fb98a">▸</span> ready<span style="display:inline-block;width:8px;height:15px;background:#5fb98a;vertical-align:middle;margin-left:4px;animation:blink 1s step-end infinite"></span></div>
+  </div>
+</div>
+
+<!-- ============ SCROLL SPINE ============ -->
+<div style="position:fixed;left:71px;top:0;bottom:0;width:2px;background:#d8d3c3;z-index:5">
+  <div ref="{{ fillRef }}" style="position:absolute;left:0;top:0;width:2px;height:0%;background:#24543f"></div>
+  <div ref="{{ nodeRef }}" style="position:absolute;left:-3px;top:0%;width:8px;height:8px;border-radius:50%;background:#1f8a5b;transform:translateY(-4px);box-shadow:0 0 0 3px #eae6d9"></div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:22px 56px 22px 104px;backdrop-filter:blur(8px);background:linear-gradient(#eae6d9,rgba(234,230,217,0))">
+  <a href="#top" style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:#1c211c;text-decoration:none;letter-spacing:-0.02em">dein.name<span style="color:#1f8a5b">_</span></a>
+  <div style="display:flex;align-items:center;gap:28px">
+    <a href="#projekte" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#57534a;text-decoration:none" style-hover="color:#1f8a5b">Projekte</a>
+    <a href="#ueber" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#57534a;text-decoration:none" style-hover="color:#1f8a5b">Über</a>
+    <a href="#blog" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#57534a;text-decoration:none" style-hover="color:#1f8a5b">Blog</a>
+    <a href="#kontakt" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#57534a;text-decoration:none" style-hover="color:#1f8a5b">Kontakt</a>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#74766b;border-left:1px solid #d8d3c3;padding-left:20px"><span ref="{{ pctRef }}">00</span>%</span>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="top" style="min-height:100vh;box-sizing:border-box;padding:150px 56px 60px 104px;display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:center;max-width:1320px;margin:0 auto">
+
+  <div>
+    <div style="display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:1px;color:#24543f;margin-bottom:26px;opacity:0;animation:riseUp .7s ease forwards;animation-delay:2.3s">
+      <span style="width:7px;height:7px;border-radius:50%;background:#1f8a5b;animation:glowPulse 2.4s ease infinite"></span>
+      WIRTSCHAFTSINFORMATIK · SOFTWARE · APPS
+    </div>
+
+    <h1 style="font-family:'Instrument Serif',serif;font-size:72px;line-height:1.02;margin:0 0 24px;color:#1c211c;letter-spacing:-0.01em;max-width:14ch;opacity:0;animation:riseUp .8s ease forwards;animation-delay:2.42s">Ich baue Software, die sich <span style="font-style:italic;color:#24543f">gut anfühlt.</span></h1>
+
+    <p style="font-size:18px;line-height:1.6;color:#57534a;max-width:46ch;margin:0 0 36px;opacity:0;animation:riseUp .8s ease forwards;animation-delay:2.54s">Student, der eigene Apps von der ersten Idee bis zum Release im Store baut — und dabei produktnah denkt statt nur zu coden.</p>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;opacity:0;animation:riseUp .8s ease forwards;animation-delay:2.66s">
+      <a href="#projekte" style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#f5f1e7;background:#24543f;border-radius:9px;padding:14px 22px;text-decoration:none;transition:background .2s" style-hover="background:#1f8a5b">Projekte ansehen →</a>
+      <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1c211c;background:transparent;border:1px solid #c6c1b0;border-radius:9px;padding:14px 22px;text-decoration:none;transition:border-color .2s" style-hover="border-color:#24543f">CV laden</a>
+      <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#24543f;padding:14px 8px;text-decoration:none;transition:color .2s" style-hover="color:#1f8a5b">GitHub ↗</a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;opacity:0;animation:riseUp .8s ease forwards;animation-delay:2.78s">
+      <span style="display:inline-flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#1c211c;background:#f5f1e7;border:1px solid #d8d3c3;border-radius:999px;padding:8px 15px"><span style="width:8px;height:8px;border-radius:50%;background:#1f8a5b;animation:glowPulse 2.4s ease infinite"></span>Verfügbar für Werkstudent</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#74766b">GER · 14:32 CET · 18°C</span>
+    </div>
+  </div>
+
+  <!-- hero visual: video/character placeholder -->
+  <div style="position:relative;opacity:0;animation:riseUp .9s ease forwards;animation-delay:2.6s">
+    <div style="position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;border:1px solid #d8d3c3;background:repeating-linear-gradient(45deg,#e2dccb,#e2dccb 1px,transparent 1px,transparent 10px),#f0ece2;display:flex;align-items:center;justify-content:center">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#a29e8d;text-align:center;line-height:1.7">[ hero-video.mp4 ]<br>dein mini-charakter</span>
+      <span style="position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1c211c;background:rgba(245,241,231,0.9);border-radius:999px;padding:5px 11px"><span style="width:7px;height:7px;border-radius:50%;background:#c0392b"></span>REC</span>
+    </div>
+    <!-- floating now-widget -->
+    <div style="position:absolute;bottom:-22px;left:-24px;background:#f5f1e7;border:1px solid #d8d3c3;border-radius:12px;padding:13px 16px;box-shadow:0 20px 40px -24px rgba(40,60,40,0.4);min-width:180px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#74766b;margin-bottom:7px">// now playing</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:flex-end;gap:2px;height:16px">
+          <span style="width:3px;height:60%;background:#1f8a5b;border-radius:1px"></span>
+          <span style="width:3px;height:100%;background:#1f8a5b;border-radius:1px"></span>
+          <span style="width:3px;height:40%;background:#1f8a5b;border-radius:1px"></span>
+          <span style="width:3px;height:80%;background:#1f8a5b;border-radius:1px"></span>
+        </div>
+        <span style="font-size:13px;color:#1c211c;font-weight:500">Lofi &amp; Commits</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TERMINAL HINT STRIP ============ -->
+<div style="max-width:1320px;margin:0 auto;padding:0 56px 40px 104px">
+  <div style="background:#0f130f;border-radius:12px;padding:15px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:13px">
+    <span style="color:#5fb98a">$</span>
+    <span style="color:#e8ede6">type</span>
+    <span style="color:#9bb0a2">'help'</span>
+    <span style="color:#6b7d70">—</span>
+    <span style="color:#9bb0a2">try:</span>
+    <span style="color:#e8ede6;border:1px solid #2a352c;border-radius:5px;padding:3px 9px">whoami</span>
+    <span style="color:#e8ede6;border:1px solid #2a352c;border-radius:5px;padding:3px 9px">projects</span>
+    <span style="color:#e8ede6;border:1px solid #2a352c;border-radius:5px;padding:3px 9px">contact</span>
+    <span style="color:#5fb98a;border:1px solid #244a34;border-radius:5px;padding:3px 9px">sudo hire-me</span>
+    <span style="display:inline-block;width:8px;height:15px;background:#5fb98a;vertical-align:middle;animation:blink 1s step-end infinite"></span>
+  </div>
+</div>
+
+<!-- scroll cue -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:40px">
+  <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#74766b">scroll</span>
+  <div style="position:relative;width:16px;height:26px;border:1px solid #b7b09c;border-radius:9px;display:flex;justify-content:center;padding-top:5px"><span style="width:3px;height:6px;border-radius:2px;background:#24543f;animation:cueDot 1.6s ease-in-out infinite"></span></div>
+</div>
+
+<!-- ============ ÜBER-MICH TEASER (next section) ============ -->
+<section id="ueber" style="min-height:92vh;box-sizing:border-box;padding:110px 56px 110px 104px;max-width:1320px;margin:0 auto;border-top:1px solid #d8d3c3">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:40px">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#24543f">01 / Über mich</span>
+    <span style="flex:1;height:1px;background:#d8d3c3"></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start">
+    <h2 style="font-family:'Instrument Serif',serif;font-size:46px;line-height:1.08;margin:0;color:#1c211c">Zwischen <span style="font-style:italic;color:#24543f">Produkt-<br>denken</span> und sauberem Code.</h2>
+    <div>
+      <p style="font-size:17px;line-height:1.7;color:#57534a;margin:0 0 20px">Ich studiere Wirtschaftsinformatik und baue in meiner Freizeit Apps, die echte Probleme lösen. Mich interessiert der ganze Weg — von der ersten Skizze über das UI bis zum Deploy.</p>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#74766b;margin:0">(weitere Sections folgen — Skills, Projekte, Dashboard, Kontakt)</p>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  overlayRef = React.createRef();
+  fillRef = React.createRef();
+  nodeRef = React.createRef();
+  pctRef = React.createRef();
+
+  onScroll() {
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - window.innerHeight;
+    const r = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    const pct = (r * 100).toFixed(2) + '%';
+    if (this.fillRef.current) this.fillRef.current.style.height = pct;
+    if (this.nodeRef.current) this.nodeRef.current.style.top = pct;
+    if (this.pctRef.current) this.pctRef.current.textContent = String(Math.round(r * 100)).padStart(2, '0');
+    if (this._saveRaf) cancelAnimationFrame(this._saveRaf);
+    this._saveRaf = requestAnimationFrame(() => {
+      try { localStorage.setItem('pf_scroll_v1', String(Math.round(window.scrollY))); } catch (e) {}
+    });
+  }
+
+  componentDidMount() {
+    this._onScroll = this.onScroll.bind(this);
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onScroll);
+    requestAnimationFrame(() => {
+      let s = 0;
+      try { s = parseFloat(localStorage.getItem('pf_scroll_v1') || '0'); } catch (e) {}
+      if (s > 0) window.scrollTo(0, s);
+      this.onScroll();
+    });
+
+    let booted = false;
+    try { booted = !!sessionStorage.getItem('pf_booted'); } catch (e) {}
+    if (booted) {
+      if (this.overlayRef.current) this.overlayRef.current.style.display = 'none';
+    } else {
+      this._bootTimer = setTimeout(() => {
+        const o = this.overlayRef.current;
+        if (o) {
+          o.style.opacity = '0';
+          o.style.pointerEvents = 'none';
+          setTimeout(() => { if (this.overlayRef.current) this.overlayRef.current.style.display = 'none'; }, 750);
+        }
+        try { sessionStorage.setItem('pf_booted', '1'); } catch (e) {}
+      }, 2350);
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    window.removeEventListener('resize', this._onScroll);
+    if (this._bootTimer) clearTimeout(this._bootTimer);
+  }
+
+  renderVals() {
+    return {
+      overlayRef: this.overlayRef,
+      fillRef: this.fillRef,
+      nodeRef: this.nodeRef,
+      pctRef: this.pctRef
+    };
+  }
+}
+</script>
+</body>
+</html>

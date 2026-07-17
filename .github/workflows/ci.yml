@@ -1,0 +1,194 @@
+name: CI
+
+# The quality gate for every change. Runs the same four gates as
+# `pnpm lint && pnpm typecheck && pnpm test && pnpm build` (see
+# docs/engineering/quality-and-testing.md) plus the Playwright smoke suite.
+# Must be green before a PR can merge. It gates both integration branches:
+# feature PRs into `develop` and the periodic `develop` -> `master` release PR.
+
+on:
+  pull_request:
+    branches: [develop, master]
+  push:
+    branches: [develop, master]
+
+# Only the latest run per branch/PR matters; cancel superseded runs.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least privilege: CI only needs to read the repository.
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  quality:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # pnpm before setup-node so the Node cache can key off the pnpm store.
+      # Version is read from package.json "packageManager".
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # sharp / unrs-resolver build scripts are pre-approved via the
+      # onlyBuiltDependencies allowlist in pnpm-workspace.yaml, so a frozen
+      # install builds them and exits 0 without an interactive prompt.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+  e2e:
+    name: Playwright smoke
+    runs-on: ubuntu-latest
+    # The chromium project also carries the axe accessibility scan (tests/e2e/axe.spec.ts),
+    # so `pnpm test:e2e` fails the PR on any WCAG A/AA violation. Visual snapshots run
+    # separately in the `visual` job (they need the pinned container for pixel parity).
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Only Chromium is exercised today (see playwright.config.ts); --with-deps
+      # pulls the OS libraries the browser needs on the runner.
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run smoke tests
+        run: pnpm test:e2e
+
+  lighthouse:
+    name: Lighthouse budgets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      # lhci autorun starts the production server (pnpm start), runs Lighthouse
+      # three times against the home page and asserts the budgets in
+      # lighthouserc.json (Performance/Accessibility/Best-Practices/SEO >= 95,
+      # CLS <= 0.1). Chrome is pre-installed on ubuntu-latest.
+      - name: Run Lighthouse budgets
+        run: pnpm lighthouse
+
+      # Keep the reports for debugging a budget miss.
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          if-no-files-found: ignore
+          retention-days: 7
+
+  visual:
+    name: Visual regression
+    runs-on: ubuntu-latest
+    # Runs inside the pinned Playwright image so the browser, fonts and rendering match
+    # the committed baselines pixel-for-pixel (they are generated in this same image by
+    # the update-visual-snapshots workflow). A layout/style regression fails the PR.
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      # Verify each page against its committed baseline. If no baselines exist yet
+      # (the initial bootstrap), generate them in this container and fail: they are
+      # uploaded as the `visual-baselines` artifact for a maintainer to download and
+      # commit, after which this job verifies green. Ongoing regeneration uses the
+      # update-visual-snapshots workflow. test:visual starts the production server
+      # (PW_PROD); the browsers ship with the image.
+      - name: Verify (or bootstrap) visual baselines
+        run: |
+          if ls tests/visual/visual.spec.ts-snapshots/*.png >/dev/null 2>&1; then
+            pnpm test:visual
+          else
+            echo "::notice::No visual baselines committed yet - generating them. Download the 'visual-baselines' artifact, commit it under tests/visual/, and re-run."
+            pnpm test:visual --update-snapshots
+            exit 1
+          fi
+
+      # Bootstrap only: the Linux-rendered baselines to download and commit.
+      - name: Upload generated baselines
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-baselines
+          path: tests/visual/visual.spec.ts-snapshots
+          if-no-files-found: ignore
+          retention-days: 7
+
+      # On a real diff, keep the report (expected/actual/diff PNGs) for review.
+      - name: Upload visual report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-report
+          path: playwright-report
+          if-no-files-found: ignore
+          retention-days: 7

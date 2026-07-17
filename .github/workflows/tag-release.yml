@@ -1,0 +1,115 @@
+name: Tag release
+
+# Automates the two post-merge chores from the release runbook so that cutting a
+# release is just pressing "merge" on the develop -> master release PR:
+#
+#   1. Tag the release. When a version bump lands on master (via the release PR),
+#      read `version` from package.json and, if the matching `vX.Y.Z` tag does not
+#      already exist, create and push it. The tag is the release record; the prod
+#      deploy itself is handled independently by deploy.yml on the same push.
+#   2. Record it. Open a small release-log PR into develop that appends the row to
+#      docs/engineering/releases.md (runbook step 7). develop has required status
+#      checks, so a bot cannot push to it directly - hence a PR the maintainer
+#      merges with one click. The note column is generic (a bot cannot write the
+#      curated summary); refine it in the PR if desired.
+#
+# Only fires when a *new* tag is created, so ordinary master pushes without a
+# version bump are no-ops.
+
+on:
+  push:
+    branches: [master]
+
+# contents: write to push the tag and the release-log branch; pull-requests:
+# write to open the release-log PR.
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  tag-and-record:
+    name: Tag and record the release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          # Full history + tags so the existing-tag check and the promoted-commit
+          # count are accurate.
+          fetch-depth: 0
+
+      - name: Resolve version and tag
+        id: version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag="v${version}"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/${tag}" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Tag ${tag} already exists - nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Tag ${tag} is new - will tag and record."
+          fi
+
+      - name: Create and push the tag
+        if: steps.version.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.version.outputs.tag }}" -m "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
+      - name: Open the release-log PR into develop
+        if: steps.version.outputs.exists == 'false'
+        env:
+          # Prefer a PAT so the PR triggers CI (a GITHUB_TOKEN-opened PR does not,
+          # so its required checks would never run and it could not be merged).
+          GH_TOKEN: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          # The merge commit that triggered this run carries the release PR number
+          # ("Merge pull request #NNN from ..."); fall back to a dash if absent.
+          subject=$(git log -1 --format=%s)
+          if [[ "${subject}" =~ \#([0-9]+) ]]; then
+            pr="#${BASH_REMATCH[1]}"
+          else
+            pr="-"
+          fi
+
+          # Commits promoted in this merge (develop tip is the second parent).
+          if git rev-parse -q --verify HEAD^2 >/dev/null; then
+            promoted=$(git rev-list --count --no-merges HEAD^1..HEAD^2)
+          else
+            promoted=$(git rev-list --count --no-merges HEAD~1..HEAD)
+          fi
+
+          branch="docs/release-log-${TAG}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin develop
+          git checkout -B "${branch}" origin/develop
+
+          RELEASE_DATE="$(date -u +%Y-%m-%d)" \
+          RELEASE_TAG="${TAG}" \
+          RELEASE_PR="${pr}" \
+          RELEASE_NOTE="Automated release record; ${promoted} commit(s) promoted." \
+            node scripts/append-release-log.mjs
+
+          if git diff --quiet -- docs/engineering/releases.md; then
+            echo "No release-log change to record."
+            exit 0
+          fi
+
+          git add docs/engineering/releases.md
+          git commit -m "docs(releases): record the ${TAG} promotion in the release log"
+          git push -u origin "${branch}" --force-with-lease
+
+          gh pr create \
+            --base develop \
+            --head "${branch}" \
+            --title "docs(releases): record the ${TAG} promotion" \
+            --body "Automated release-log entry for ${TAG} (release PR ${pr}). The prod deploy and the \`${TAG}\` tag are already live; this only records the promotion in \`docs/engineering/releases.md\` (runbook step 7). The note column is generic - refine it here if you want the curated one-liner before merging."

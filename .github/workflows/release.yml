@@ -1,0 +1,102 @@
+name: Release PR
+
+# Keeps the develop -> master release train moving on a regular cadence. Once a
+# week (and on demand) this opens - or refreshes - a single `develop -> master`
+# release PR whenever develop has unreleased commits, so promoting to production
+# is never blocked on remembering to open the PR by hand. It never merges: the
+# maintainer still reviews the aggregated diff, runs `pnpm changeset version` and
+# merges (which deploys prod via deploy.yml). See docs/engineering/releases.md.
+#
+# CI note: a PR opened by the built-in GITHUB_TOKEN does not itself trigger the
+# CI workflow. Set a fine-scoped `RELEASE_PAT` secret (contents + pull-requests)
+# to have the release PR's gate run automatically; without it, re-trigger CI on
+# the PR with an empty commit or a close/reopen (see docs/engineering/releases.md).
+
+on:
+  schedule:
+    # Thursday 06:00 UTC (~08:00 Europe/Berlin) - later in the week than
+    # Dependabot's Monday run, so the week's dependency and feature PRs have
+    # landed on develop before the release PR is cut.
+    - cron: "0 6 * * 4"
+  workflow_dispatch:
+
+# Least privilege: read the repo and open/update pull requests.
+permissions:
+  contents: read
+  pull-requests: write
+
+# Never run two release-PR updates at once; let an in-flight one finish.
+concurrency:
+  group: release-pr
+  cancel-in-progress: false
+
+jobs:
+  release-pr:
+    name: Open or update the develop -> master release PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          # Full history for all branches so origin/master..origin/develop can be
+          # compared and summarized.
+          fetch-depth: 0
+          ref: develop
+
+      - name: Open or refresh the release PR
+        env:
+          # Prefer a PAT so the PR triggers CI; fall back to the built-in token.
+          GH_TOKEN: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          base=master
+          head=develop
+
+          # How far is develop ahead of master? Nothing to release -> stop quietly.
+          ahead=$(git rev-list --count "origin/${base}..origin/${head}")
+          if [[ "${ahead}" -eq 0 ]]; then
+            echo "develop is not ahead of master - no release PR needed."
+            exit 0
+          fi
+          echo "develop is ${ahead} commit(s) ahead of master."
+
+          # A readable summary of the commits being promoted (merges dropped).
+          commits=$(git log --oneline --no-merges "origin/${base}..origin/${head}")
+
+          # Build the PR body. Static lines are single-quoted so backticks stay
+          # literal (no command substitution), and no heredoc (its terminator
+          # cannot be indented under YAML). printf -- guards the checklist dashes.
+          {
+            printf '%s\n\n' 'Automated release PR: promote `develop` to `master` (production).'
+            printf 'This promotes **%s** commit(s). Review the aggregated diff as a release - the last gate before production.\n\n' "${ahead}"
+            printf '### Commits since the last release\n\n'
+            printf '```\n%s\n```\n\n' "${commits}"
+            printf '### Before merging\n'
+            printf -- '- [ ] CI is green on this PR (see the release-PR CI note in the runbook if it did not run)\n'
+            printf -- '- [ ] Ran `pnpm changeset version` on develop (bumps `package.json`, folds `.changeset/` fragments into `CHANGELOG.md`)\n'
+            printf -- '- [ ] Aggregated diff reviewed as a release\n\n'
+            printf '### After merging (mostly automatic)\n'
+            printf -- '- [ ] Confirm the prod deploy is healthy (tagging is automatic via `tag-release.yml`)\n'
+            printf -- '- [ ] Merge the auto-opened release-log PR into `develop`\n\n'
+            printf 'Runbook: `docs/engineering/releases.md`. Opened automatically by `.github/workflows/release.yml`.\n'
+          } > release-body.md
+
+          title='release: promote develop to master'
+
+          # Ensure the label exists (idempotent), then open or refresh the single
+          # open develop -> master PR so repeated runs never create duplicates.
+          gh label create release --color 0e8a16 \
+            --description "Release PR promoting develop to master" 2>/dev/null || true
+
+          existing=$(gh pr list --base "${base}" --head "${head}" --state open \
+            --json number --jq '.[0].number // empty')
+
+          if [[ -n "${existing}" ]]; then
+            echo "Updating existing release PR #${existing}."
+            gh pr edit "${existing}" --title "${title}" --body-file release-body.md --add-label release
+          else
+            echo "Opening a new release PR."
+            gh pr create --base "${base}" --head "${head}" \
+              --title "${title}" --body-file release-body.md --label release
+          fi

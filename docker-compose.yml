@@ -1,0 +1,39 @@
+# Local and server runtime for the portfolio container.
+# Build:  docker compose build
+# Run:    docker compose up -d   (serves on http://localhost:3000)
+# On the droplet, Nginx reverse-proxies to this container; see
+# docs/operations/deployment.md.
+#
+# HOST_PORT selects the host-side bind (defaults to 3000). The two server
+# environments run one stack per project directory (portfolio / portfolio-prod)
+# on different ports, so the container is deliberately NOT given a fixed
+# container_name - Compose namespaces it by project instead, which keeps the two
+# stacks from colliding. See docs/operations/two-environment-setup.md.
+
+services:
+  web:
+    build:
+      context: .
+    image: portfolio:latest
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+    # Runtime env (e.g. NEXT_PUBLIC_SITE_URL). Optional locally; on the server
+    # this file holds the real values (mode 600). Copy .env.example to .env.
+    env_file:
+      - path: .env
+        required: false
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s

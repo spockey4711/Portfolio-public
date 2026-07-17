@@ -1,0 +1,35 @@
+# Keep the build context small and reproducible: let the image build its own
+# dependencies and artifacts rather than copying host-local ones.
+
+# dependencies
+node_modules
+.pnp
+.pnp.*
+
+# build output
+.next
+out
+build
+
+# testing / tooling artifacts
+coverage
+test-results
+playwright-report
+playwright/.cache
+
+# version control and CI
+.git
+.github
+
+# local env and secrets (never bake these into an image)
+.env
+.env.*
+
+# editor / OS cruft
+.DS_Store
+*.pem
+.vscode
+.idea
+
+# docs are not needed at runtime
+docs

@@ -1,0 +1,63 @@
+---
+title: "Warum dieses Portfolio kein Baukasten ist"
+date: 2026-07-06
+summary: "Ein kurzer Blick hinter die Kulissen: warum ich diese Seite von Hand gebaut habe, statt einen Baukasten zu nehmen - und was ich dabei bewusst anders mache."
+tags: ["Meta", "Engineering"]
+---
+
+Die schnellste Art, ein Portfolio zu bauen, ist ein Baukasten. Template auswählen,
+Texte einsetzen, fertig. Ich habe mich dagegen entschieden - nicht aus Prinzip,
+sondern weil die Seite selbst das erste Projekt ist, das ich zeigen will.
+
+## Der Baukasten löst das falsche Problem
+
+Ein Baukasten nimmt mir genau die Entscheidungen ab, um die es hier eigentlich
+geht: Wie strukturiere ich Inhalte? Wo endet eine Startseite und wo fängt eine
+Detailseite an? Wann lohnt sich eine Abstraktion und wann ist sie nur Ballast?
+Das sind keine Design-Fragen, das sind Engineering-Fragen - und die Antworten
+sind der eigentliche Inhalt dieses Ports.
+
+Also steht hinter der Seite dieselbe Disziplin, die ich in echten Projekten
+anlege:
+
+- Ein Onepager als Einstieg, der in 60 Sekunden das Wichtigste zeigt.
+- Eigene Seiten erst dann, wenn ein Inhalt aus dem Teaser herauswächst - nicht
+  auf Vorrat.
+- Design-Tokens statt verstreuter Farbwerte, damit eine Änderung an einer Stelle
+  überall greift.
+
+> Code wird öfter gelesen als geschrieben. Also schreibe ich ihn für die Person,
+> die ihn in sechs Monaten anfasst - meistens ich selbst.
+
+## Warum überhaupt ein Blog?
+
+Dieser Blog ist der ehrlichste Teil davon. Projektseiten zeigen das Ergebnis;
+hier ist Platz für den Weg dahin - die Entscheidung, die sich als falsch
+herausgestellt hat, die Bibliothek, die ich wieder rausgeworfen habe, der Trick,
+der mir eine Stunde gespart hat.
+
+Technisch ist ein Beitrag einfach eine `.mdx`-Datei mit ein paar Zeilen
+Frontmatter. Titel, Datum, eine Zusammenfassung - der Rest ist Prosa. Kein CMS,
+keine Datenbank, nichts, was ich pflegen muss, außer dem Text selbst:
+
+```
+---
+title: "..."
+date: 2026-07-06
+summary: "..."
+---
+```
+
+Die Seite liest diese Dateien beim Build, sortiert sie nach Datum und baut
+daraus die Übersicht, die Detailseiten, die Sitemap und den RSS-Feed. Eine
+Quelle, kein Duplikat.
+
+## Was als Nächstes kommt
+
+Ich verspreche keine feste Frequenz. Ich schreibe, wenn ich etwas gebaut habe,
+das eine Erklärung wert ist - und lasse es sonst. Ein leerer Blog mit
+wöchentlichem Pflichtprogramm hilft niemandem; ein paar ehrliche Notizen zu
+echten Problemen vielleicht schon.
+
+Wenn du also über einen Beitrag stolperst: Der ist entstanden, weil mich das
+Thema tatsächlich beschäftigt hat. Das ist die einzige Redaktionsregel hier.

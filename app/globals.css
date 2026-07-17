@@ -1,0 +1,389 @@
+/* Hallmark · genre: editorial · macrostructure: Bento Grid · theme: Carnival (drop: Pressroom)
+ * nav: N7 Brutal slab · footer: Ft4 Dense colophon · enrichment: none
+ * F1 Bento knobs: tiles=12, spans=mosaic, border=2px ink + hard-offset shadow
+ * axes: paper=light-tinted · display=display-heavy (Big Shoulders) · accent=warm amber + slate duo
+ * Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V5 */
+@import "tailwindcss";
+
+/*
+ * Design tokens — "Pressroom" (landing redesign). Warm slate-cream paper, ink-black
+ * text, and a competing duo-tone accent pair: amber-gold (fills, highlights, primary
+ * CTA) against slate-blue (calm text accent, rules, focus). Print-shop register:
+ * square corners, 2px ink borders, hard-offset shadows instead of soft blur.
+ *
+ * Raw values are the single source of truth as CSS custom properties in :root; the
+ * @theme blocks expose them to Tailwind so class names speak the design vocabulary
+ * (bg-bg, text-ink, text-pine, font-display, shadow-widget). Changing a token here
+ * updates everywhere, and dark mode is a variable swap. See ADR-0003.
+ *
+ * Token-name note: --pine and --signal keep their historical names (they are wired
+ * through every component) but now resolve to the Pressroom duo - --pine is the
+ * slate-blue calm accent, --signal the deep amber interaction accent. --accent is
+ * the new amber *fill* (too light to be text; never use it as a text colour).
+ */
+
+:root {
+  /* Color — surfaces & text (all AA-checked against bg and surface) */
+  --bg: oklch(89% 0.025 65);
+  --surface: oklch(92.5% 0.02 68);
+  --ink: oklch(16% 0.02 60);
+  --ink-soft: oklch(32% 0.02 58);
+  --muted: oklch(44% 0.025 55);
+  --line: oklch(76% 0.03 62);
+  /* Slightly darker line for the resting border of interactive controls, so they
+     read as controls rather than mere dividers. */
+  --line-strong: oklch(58% 0.035 58);
+
+  /* Color — the Pressroom duo. Slate carries the calm (text accents, rules, focus);
+     amber carries the heat (interaction hover, highlights). One per surface, never
+     blended in the same block. */
+  --pine: oklch(34% 0.1 240);
+  /* Deep amber-bronze: dark enough to clear AA as text on both bg (4.5:1+) and
+     surface; the hover/glow accent. */
+  --signal: oklch(50% 0.12 68);
+  /* Resting status-label text that sits directly on --bg (a touch darker). */
+  --signal-ink: oklch(47% 0.115 68);
+  --moss: oklch(45% 0.05 240);
+  /* Amber-gold FILL - tiles, marks, the primary CTA. Never a text colour. */
+  --accent: oklch(78% 0.18 80);
+  /* Text/border colour on top of an --accent fill. */
+  --accent-ink: oklch(16% 0.02 60);
+  /* Keyboard focus ring (slate; >=3:1 on both paper tones). */
+  --focus: oklch(34% 0.1 240);
+  /* Hard-offset shadow colour (flat ink; overridden darker in dark mode so the
+     offset never reads as a light glow). */
+  --shadow-ink: oklch(16% 0.02 60);
+
+  /* GitHub contribution ramp (R-5). A single-hue amber sequential scale - the
+     "heat" of activity, on the same hue as --signal/--accent. --heat-0 is the
+     empty cell (a warm near-neutral, kept low-chroma so it reads as "no data");
+     --heat-1..4 hold one hue (72) and step monotonically darker + more saturated
+     as contributions rise. On light paper the ramp darkens; adjacent steps stay
+     >=~9% apart in lightness so they are clearly distinguishable. */
+  --heat-0: oklch(88% 0.012 72);
+  --heat-1: oklch(85% 0.07 72);
+  --heat-2: oklch(76% 0.12 72);
+  --heat-3: oklch(66% 0.155 72);
+  --heat-4: oklch(55% 0.16 72);
+
+  /* Terminal / dark context (boot overlay, terminal strip) — always dark, shared
+     by both themes. */
+  --term-bg: #0f130f;
+  --term-text: #e8ede6;
+  --term-text-muted: #9bb0a2;
+  --term-text-faint: #7c907f;
+  --term-green: #5fb98a;
+  --term-border: #2a352c;
+  --term-border-green: #244a34;
+  --rec: #c0392b;
+
+  /* Layout. --container-max is the single source of truth for the content width:
+     every section and page shell references it as max-w-(--container-max). */
+  --container-max: 1440px;
+  --pad-left: 104px;
+  --pad-right: 56px;
+  /* Height of the fixed nav (18px padding top/bottom + the wordmark line + 2px rule).
+     Used as scroll-padding-top so anchor jumps land below the nav, not under it. */
+  --nav-height: 64px;
+
+  /* Node-dot ring halo — bg-coloured, so it tracks the background token */
+  --shadow-node-ring: 0 0 0 3px var(--bg);
+
+  /* Hero reveal offset: how long the staggered hero rise waits before it starts.
+     0s by default, so a returning visitor (boot skipped) and anyone with no JS
+     reveal immediately. On a first, motion-allowed visit the pre-paint hero-reveal
+     script (components/sections/hero/reveal.ts) freezes this to 2.3s as an inline
+     style on <html>, so the rise follows the boot end (docs/design/animation-and-
+     motion.md). Each hero element adds its own stagger on top with calc(). */
+  --hero-reveal-offset: 0s;
+}
+
+/*
+ * Dark mode — "Pressroom night". The variable swap from ADR-0003: the pre-paint
+ * init script (lib/chrome/theme.ts) writes the resolved theme to data-theme on
+ * <html> before first paint, and this scope overrides only the raw semantic
+ * tokens. Same anchor hues as light (colour recipe: only lightness and chroma
+ * move); every text token clears 4.5:1 on both --bg and --surface. Elevation is
+ * lightness (surface is lighter than bg), and the hard-offset shadow drops to
+ * near-black so it reads as depth, not glow.
+ *
+ * The --term-* tokens are deliberately NOT overridden - the terminal strip and
+ * boot overlay are always-dark contexts and read identically in either theme.
+ */
+html[data-theme="dark"] {
+  --bg: oklch(17% 0.02 60);
+  --surface: oklch(21% 0.022 62);
+  --ink: oklch(91% 0.02 70);
+  --ink-soft: oklch(80% 0.02 68);
+  --muted: oklch(68% 0.02 62);
+  --line: oklch(32% 0.02 60);
+  --line-strong: oklch(42% 0.025 60);
+  /* The duo lifts toward the paper: slate becomes a mist-blue, amber a gold that
+     clears AA as text on the dark surfaces. */
+  --pine: oklch(72% 0.09 240);
+  --signal: oklch(75% 0.13 78);
+  --signal-ink: oklch(75% 0.13 78);
+  --moss: oklch(65% 0.06 240);
+  --accent: oklch(72% 0.15 80);
+  --accent-ink: oklch(17% 0.02 60);
+  --focus: oklch(72% 0.09 240);
+  --shadow-ink: oklch(8% 0.015 60);
+
+  /* On dark paper the same single-hue ramp inverts direction: the empty cell is a
+     dark near-neutral just above the surface, and intensity brightens toward the
+     dark-mode gold. Even ~11-12% lightness steps keep the levels distinct. */
+  --heat-0: oklch(28% 0.012 72);
+  --heat-1: oklch(38% 0.06 72);
+  --heat-2: oklch(50% 0.1 72);
+  --heat-3: oklch(62% 0.13 72);
+  --heat-4: oklch(74% 0.155 72);
+}
+
+/*
+ * Colours are mapped inline so utilities resolve to the semantic var(--token)
+ * directly (e.g. text-pine -> color: var(--pine)); overriding a token in the dark
+ * scope then updates every utility with no duplicated values.
+ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-pine: var(--pine);
+  --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
+  --color-heat-0: var(--heat-0);
+  --color-heat-1: var(--heat-1);
+  --color-heat-2: var(--heat-2);
+  --color-heat-3: var(--heat-3);
+  --color-heat-4: var(--heat-4);
+  --color-moss: var(--moss);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-term-bg: var(--term-bg);
+  --color-term-text: var(--term-text);
+  --color-term-text-muted: var(--term-text-muted);
+  --color-term-text-faint: var(--term-text-faint);
+  --color-term-green: var(--term-green);
+  --color-term-border: var(--term-border);
+  --color-term-border-green: var(--term-border-green);
+  --color-rec: var(--rec);
+}
+
+/*
+ * Fonts, radius and shadows are emitted as real :root variables (non-inline) so they
+ * are available both as Tailwind utilities (font-display, rounded-card, shadow-widget)
+ * and as var(--font-sans) / var(--radius-card) in hand-written CSS. The --font-*-family
+ * variables are provided by next/font on <html> (see app/layout.tsx).
+ */
+@theme {
+  --font-display: var(--font-big-shoulders), ui-sans-serif, "Arial Narrow", sans-serif;
+  --font-sans: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  /* Print register: square corners everywhere except the pill (dots, chips). */
+  --radius-button: 0px;
+  --radius-card: 0px;
+  --radius-visual: 0px;
+  --radius-pill: 999px;
+
+  /* Hard-offset ink shadow — the Pressroom card/CTA signature. Flat, never blurred. */
+  --shadow-widget: 4px 4px 0 0 var(--shadow-ink);
+
+  /* blink (terminal cursor). Exposed as the `animate-blink` utility; callers pair
+     it with `motion-safe:` so the cursor rests solid under reduced motion. Only
+     ever used inside a typed command line (terminal, 404) - never as decoration. */
+  --animate-blink: blink 1.6s step-end infinite;
+
+  @keyframes blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* glowPulse: an expanding amber ring on the status dot. Exposed as the
+     `animate-glow-pulse` utility; callers pair it with
+     `motion-reduce:animate-none` for the reduced-motion fallback. */
+  --animate-glow-pulse: glow-pulse 2.4s ease-in-out infinite;
+
+  @keyframes glow-pulse {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal) 45%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 0%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal) 0%, transparent);
+    }
+  }
+
+  /* bootline: each boot-overlay line fades and rises into place. Exposed as the
+     `animate-bootline` utility; the boot lines rest at opacity 0 and pair it with
+     `motion-safe:` so the staggered reveal only runs when motion is allowed (the
+     overlay itself is skipped entirely under reduced motion, see
+     components/chrome/BootOverlay.tsx). `forwards` holds the final visible state. */
+  --animate-bootline: bootline 0.35s ease forwards;
+
+  @keyframes bootline {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* riseUp: the single orchestrated entrance (hero + bento tiles). Each element
+     fades and rises into place, staggered after the boot end. Exposed as the
+     `animate-rise-up` utility; elements pair it with `motion-safe:opacity-0` so
+     they rest hidden and rise only when motion is allowed, and stay visible (no
+     animation) under reduced motion. `forwards` holds the settled state. */
+  --animate-rise-up: rise-up 0.8s ease forwards;
+
+  @keyframes rise-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* equalize: the four bars of the now-playing widget bounce on offset cycles to
+     fake an audio equalizer. Decorative; exposed as `animate-equalize` and paired
+     with `motion-safe:` so it rests as static bars under reduced motion. */
+  --animate-equalize: equalize 0.9s ease-in-out infinite alternate;
+
+  @keyframes equalize {
+    from {
+      transform: scaleY(0.3);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  /* paletteIn (S2-6): the command palette panel fades and rises into place when the
+     palette opens. Paired with `motion-safe:` so under reduced motion it simply
+     appears. `forwards` holds the settled state after the 0.16s play. */
+  --animate-palette-in: palette-in 0.16s ease forwards;
+
+  @keyframes palette-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+/*
+ * Nav anchors smooth-scroll to their sections; scroll-padding-top keeps the
+ * target below the fixed nav. Reduced motion turns the smooth behaviour off so
+ * jumps are instant (see docs/design/accessibility.md).
+ *
+ * overflow-x is clipped on both html and body (clip, not hidden, so sticky/fixed
+ * descendants keep working): no deliberate overflow may ever cause the document
+ * to scroll horizontally on narrow viewports.
+ */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-height);
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/*
+ * Route view transitions (S2-7). The default full-page cross-fade is driven by
+ * the View Transitions API from components/chrome/view-transitions; here we only
+ * tune the timing to match the site's ~0.2-0.3s motion language. The navigation
+ * wrapper already no-ops under reduced motion, but the rule below also silences
+ * the pseudo-element animations as a belt-and-suspenders fallback (and covers any
+ * future cross-document transitions). See docs/design/animation-and-motion.md.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/*
+ * Boot overlay visibility is gated on the pre-paint guard on <html> (set by the
+ * inline script in app/layout.tsx before first paint), so a returning visitor
+ * within a session and anyone with reduced motion never sees a flash of the
+ * overlay: it stays `display:none` unless this session opted in with
+ * `data-boot="play"`. When the sequence ends the component sets `data-leaving`,
+ * which fades the overlay out over 0.7s before it is unmounted (animation-and-motion.md).
+ */
+[data-boot-overlay] {
+  display: none;
+  transition: opacity 0.7s ease;
+}
+
+html[data-boot="play"] [data-boot-overlay] {
+  display: flex;
+}
+
+[data-boot-overlay][data-leaving] {
+  opacity: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/*
+ * Display headings never overflow a phone: long words (German compounds) wrap
+ * inside the word rather than pushing the layout wide.
+ */
+h1,
+h2 {
+  overflow-wrap: anywhere;
+}
+
+/*
+ * Keyboard focus: a single, consistent slate ring on every element the user tabs
+ * to (links, buttons, the CV/nav anchors). :focus-visible keeps it to keyboard/AT
+ * focus, so a mouse click does not draw the ring. outline-offset lifts it clear
+ * of the element's own border. The ring appears instantly - never animated. We
+ * never remove an outline without this replacement (docs/design/accessibility.md).
+ */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

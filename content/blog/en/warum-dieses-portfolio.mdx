@@ -1,0 +1,57 @@
+---
+title: "Why this portfolio isn't a website builder"
+date: 2026-07-06
+summary: "A quick look behind the scenes: why I built this site by hand instead of reaching for a website builder - and what I deliberately do differently."
+tags: ["Meta", "Engineering"]
+---
+
+The fastest way to build a portfolio is a website builder. Pick a template, drop in
+your text, done. I decided against it - not on principle, but because the site itself
+is the first project I want to show.
+
+## A builder solves the wrong problem
+
+A builder takes exactly the decisions off my hands that this is actually about: How do
+I structure content? Where does a landing page end and a detail page begin? When is an
+abstraction worth it, and when is it just ballast? Those aren't design questions,
+they're engineering questions - and the answers are the real content of this portfolio.
+
+So the same discipline I apply on real projects sits behind this site:
+
+- A onepager as the entry point that shows the essentials in 60 seconds.
+- Dedicated pages only once a piece of content outgrows its teaser - never on spec.
+- Design tokens instead of scattered colour values, so one change takes effect
+  everywhere.
+
+> Code is read more often than it is written. So I write it for the person who touches
+> it in six months - usually me.
+
+## Why a blog at all?
+
+This blog is the most honest part of it. Project pages show the result; here there's
+room for the road to it - the decision that turned out wrong, the library I ripped back
+out, the trick that saved me an hour.
+
+Technically a post is just an `.mdx` file with a few lines of frontmatter. Title, date,
+a summary - the rest is prose. No CMS, no database, nothing I have to maintain except
+the text itself:
+
+```
+---
+title: "..."
+date: 2026-07-06
+summary: "..."
+---
+```
+
+The site reads these files at build time, sorts them by date and builds the index, the
+detail pages, the sitemap and the RSS feed from them. One source, no duplicate.
+
+## What comes next
+
+I'm not promising a fixed cadence. I write when I've built something worth explaining -
+and otherwise I let it be. An empty blog with a weekly quota helps no one; a few honest
+notes on real problems maybe do.
+
+So if you stumble across a post: it exists because the topic actually kept me busy.
+That's the only editorial rule here.

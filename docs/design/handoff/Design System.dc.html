@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#d7d7da; font-family:'Hanken Grotesk',sans-serif; -webkit-font-smoothing:antialiased; }
+  @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+</style>
+</helmet>
+
+<section style="padding:64px 72px 40px;display:flex;flex-direction:column;gap:36px;min-width:1200px">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap">
+    <div style="max-width:680px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#24543f;margin-bottom:14px">Turn 3 · Sand &amp; Pine + Serif</div>
+      <h1 style="font-family:'Instrument Serif',serif;font-size:42px;line-height:1.02;margin:0 0 12px;color:#1a1a1c">Der Sweet Spot</h1>
+      <p style="font-size:15px;line-height:1.6;color:#55555a;margin:0">2c-Palette (Sand + Tannen-Grün), aber mit <strong>Instrument Serif</strong> zurück im Titel. Ruhig und editorial wie 1b — nur der Akzent ist jetzt unverwechselbar deiner. Voller Widget-Satz zum Fühlen.</p>
+    </div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#1a1a1c;border:1px solid #bcbcc0;border-radius:6px;padding:5px 11px;text-decoration:none">Referenz: <a href="#1b" style="color:#24543f;text-decoration:none">1b</a> · <a href="#2c" style="color:#24543f;text-decoration:none">2c</a></span>
+  </div>
+
+  <div id="3a" style="width:640px;flex:0 0 640px;background:#eae6d9;border:1px solid #d8d3c3;border-radius:14px;padding:36px;box-sizing:border-box;display:flex;flex-direction:column;gap:32px;box-shadow:0 30px 60px -30px rgba(40,60,40,0.24)">
+
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#24543f;margin-bottom:12px">Finale Basis?</div>
+        <h2 style="font-family:'Instrument Serif',serif;font-size:40px;line-height:1;margin:0 0 8px;color:#1c211c">Sand &amp; Pine</h2>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#74766b;margin:0">warm · tannen-grün · serif-editorial</p>
+      </div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#f5f1e7;background:#24543f;border-radius:6px;padding:5px 10px">3a</span>
+    </div>
+
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#24543f">01 / Farben</span><span style="flex:1;height:1px;background:#d8d3c3"></span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div><div style="height:54px;border-radius:8px;background:#eae6d9;border:1px solid #d8d3c3"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1c211c;margin-top:8px">bg</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b">#EAE6D9</div></div>
+        <div><div style="height:54px;border-radius:8px;background:#f5f1e7;border:1px solid #d8d3c3"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1c211c;margin-top:8px">surface</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b">#F5F1E7</div></div>
+        <div><div style="height:54px;border-radius:8px;background:#24543f"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1c211c;margin-top:8px">accent</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b">#24543F</div></div>
+        <div><div style="height:54px;border-radius:8px;background:#1c211c"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1c211c;margin-top:8px">ink</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b">#1C211C</div></div>
+        <div><div style="height:54px;border-radius:8px;background:#74766b"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1c211c;margin-top:8px">muted</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b">#74766B</div></div>
+        <div><div style="height:54px;border-radius:8px;background:#d8d3c3"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#1c211c;margin-top:8px">line</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b">#D8D3C3</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#24543f">02 / Typografie</span><span style="flex:1;height:1px;background:#d8d3c3"></span></div>
+      <div style="display:flex;gap:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#74766b;margin-bottom:18px;flex-wrap:wrap">
+        <span>Aa <span style="color:#1c211c">Instrument Serif</span></span>
+        <span>Aa <span style="color:#1c211c">Hanken Grotesk</span></span>
+        <span>Aa <span style="color:#1c211c">IBM Plex Mono</span></span>
+      </div>
+      <div style="font-family:'Instrument Serif',serif;font-size:46px;line-height:1;color:#1c211c;margin-bottom:14px">Bau. Ship. <span style="font-style:italic">Repeat.</span></div>
+      <div style="font-family:'Instrument Serif',serif;font-size:24px;color:#1c211c;margin-bottom:10px">Software, die sich gut anfühlt.</div>
+      <p style="font-size:14px;line-height:1.65;color:#53564d;margin:0 0 12px">Wirtschaftsinformatik-Student, der eigene Apps baut und produktnah denkt — von der ersten Idee bis zum Release im Store.</p>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#24543f">// currently: building v2</span>
+    </div>
+
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#24543f">03 / Komponenten</span><span style="flex:1;height:1px;background:#d8d3c3"></span></div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#f5f1e7;background:#24543f;border:none;border-radius:8px;padding:11px 18px;cursor:pointer">Projekte ansehen</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#1c211c;background:transparent;border:1px solid #c6c1b0;border-radius:8px;padding:11px 18px;cursor:pointer">CV laden</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#24543f;background:transparent;border:none;padding:11px 4px;cursor:pointer">GitHub ↗</button>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#53564d;border:1px solid #d8d3c3;border-radius:999px;padding:6px 13px">Swift</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#53564d;border:1px solid #d8d3c3;border-radius:999px;padding:6px 13px">TypeScript</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#53564d;border:1px solid #d8d3c3;border-radius:999px;padding:6px 13px">React</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#53564d;border:1px solid #d8d3c3;border-radius:999px;padding:6px 13px">Postgres</span>
+      </div>
+
+      <div style="background:#f5f1e7;border:1px solid #d8d3c3;border-radius:10px;overflow:hidden;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid #e3ddce">
+          <span style="width:10px;height:10px;border-radius:50%;background:#d0cbba"></span><span style="width:10px;height:10px;border-radius:50%;background:#d0cbba"></span><span style="width:10px;height:10px;border-radius:50%;background:#24543f"></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#a29e8d;margin-left:8px">~/portfolio — zsh</span>
+        </div>
+        <div style="padding:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7">
+          <div style="color:#74766b"><span style="color:#24543f">$</span> whoami</div>
+          <div style="color:#1c211c">student · builder · sportler</div>
+          <div style="color:#74766b;margin-top:4px"><span style="color:#24543f">$</span> ls projects/</div>
+          <div style="color:#1c211c">app-one&nbsp;&nbsp;app-two&nbsp;&nbsp;app-three</div>
+          <div style="color:#74766b;margin-top:4px"><span style="color:#24543f">$</span> <span style="display:inline-block;width:8px;height:15px;background:#24543f;vertical-align:middle;animation:blink 1s step-end infinite"></span></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+        <div style="background:#f5f1e7;border:1px solid #d8d3c3;border-radius:10px;padding:14px"><div style="font-family:'Instrument Serif',serif;font-size:28px;color:#24543f">312</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b;margin-top:3px">commits / 30d</div></div>
+        <div style="background:#f5f1e7;border:1px solid #d8d3c3;border-radius:10px;padding:14px"><div style="font-family:'Instrument Serif',serif;font-size:28px;color:#24543f">6</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b;margin-top:3px">apps shipped</div></div>
+        <div style="background:#f5f1e7;border:1px solid #d8d3c3;border-radius:10px;padding:14px"><div style="font-family:'Instrument Serif',serif;font-size:28px;color:#24543f">∞</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#74766b;margin-top:3px">coffee</div></div>
+      </div>
+
+      <div style="background:#f5f1e7;border:1px solid #d8d3c3;border-radius:10px;padding:16px;margin-bottom:16px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#74766b;margin-bottom:12px">GitHub · letzte Wochen</div>
+        <div style="display:grid;grid-template-rows:repeat(7,10px);grid-auto-flow:column;grid-auto-columns:10px;gap:3px">
+          <sc-for list="{{ heatD }}" as="c" hint-placeholder-count="98"><div style="width:10px;height:10px;border-radius:2px;background:{{ c.bg }}"></div></sc-for>
+        </div>
+      </div>
+
+      <div style="background:#f5f1e7;border:1px solid #d8d3c3;border-radius:12px;overflow:hidden;margin-bottom:16px">
+        <div style="height:120px;background:repeating-linear-gradient(45deg,#e4dece,#e4dece 1px,transparent 1px,transparent 9px);display:flex;align-items:center;justify-content:center"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#a29e8d">[ cover.png ]</span></div>
+        <div style="padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-family:'Instrument Serif',serif;font-size:20px;color:#1c211c">Projektname</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#74766b">01</span></div>
+          <p style="font-size:13px;line-height:1.55;color:#53564d;margin:0 0 12px">Eine iOS-App, die X löst. Kurzbeschreibung in einer Zeile.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:6px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#74766b">Swift</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#74766b">·</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#74766b">SwiftUI</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#24543f">Case Study →</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <span style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#1c211c;background:#f5f1e7;border:1px solid #d8d3c3;border-radius:999px;padding:7px 14px"><span style="width:8px;height:8px;border-radius:50%;background:#24543f"></span>Verfügbar für Werkstudent</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#74766b">GER · 14:32 · 18°C</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:64px 72px 40px;display:flex;flex-direction:column;gap:40px;min-width:1900px">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap">
+    <div style="max-width:680px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#6a6a6e;margin-bottom:14px">Turn 2 · 1b verfeinert — weg vom Claude-Look</div>
+      <h1 style="font-family:'Instrument Serif',serif;font-size:40px;line-height:1.05;margin:0 0 12px;color:#1a1a1c">Gleiches editorial-Gefühl, eigene Identität</h1>
+      <p style="font-size:15px;line-height:1.6;color:#55555a;margin:0">Serif-Titel + Mono-Akzente bleiben — aber der Terracotta-Akzent (Claudes Signatur) weicht einem eigenen Ton, und das Papier wird ein kühleres „Oat" statt Creme. <strong>2c</strong> zeigt zusätzlich, wie es <em>ohne</em> Serif wirkt.</p>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#55555a;display:flex;gap:8px;align-items:center">
+      <span style="color:#8a8a8e">Springe zu:</span>
+      <a href="#2a" style="color:#1a1a1c;text-decoration:none;border:1px solid #bcbcc0;border-radius:6px;padding:5px 11px">2a</a>
+      <a href="#2b" style="color:#1a1a1c;text-decoration:none;border:1px solid #bcbcc0;border-radius:6px;padding:5px 11px">2b</a>
+      <a href="#2c" style="color:#1a1a1c;text-decoration:none;border:1px solid #bcbcc0;border-radius:6px;padding:5px 11px">2c</a>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:36px;align-items:flex-start;flex-wrap:nowrap">
+
+    <!-- ===== 2a — INK (Oat + Ink Blue) ===== -->
+    <div id="2a" style="width:560px;flex:0 0 560px;background:#ece6da;border:1px solid #ddd4c4;border-radius:14px;padding:34px;box-sizing:border-box;display:flex;flex-direction:column;gap:30px;box-shadow:0 30px 60px -30px rgba(60,60,40,0.22)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#23408e;margin-bottom:12px">Variante · Ink</div>
+          <h2 style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1;margin:0 0 8px;color:#20211f">Oat &amp; Ink</h2>
+          <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7c766a;margin:0">papier · tinten-blau · seriös</p>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#f6f2ea;background:#23408e;border-radius:6px;padding:5px 10px">2a</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+        <div><div style="height:44px;border-radius:7px;background:#ece6da;border:1px solid #ddd4c4"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7c766a;margin-top:6px">bg</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#f6f2ea;border:1px solid #ddd4c4"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7c766a;margin-top:6px">surf</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#23408e"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7c766a;margin-top:6px">acc</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#20211f"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7c766a;margin-top:6px">ink</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#7c766a"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7c766a;margin-top:6px">mut</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#ddd4c4"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7c766a;margin-top:6px">line</div></div>
+      </div>
+
+      <div>
+        <div style="font-family:'Instrument Serif',serif;font-size:40px;line-height:1;color:#20211f;margin-bottom:10px">Bau. Ship. <span style="font-style:italic">Repeat.</span></div>
+        <p style="font-size:13.5px;line-height:1.6;color:#57534a;margin:0 0 8px">Wirtschaftsinformatik-Student, der eigene Apps baut und produktnah denkt.</p>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#23408e">// currently: building v2</span>
+      </div>
+
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f6f2ea;background:#23408e;border:none;border-radius:8px;padding:10px 17px;cursor:pointer">Projekte ansehen</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#20211f;background:transparent;border:1px solid #c9bfad;border-radius:8px;padding:10px 17px;cursor:pointer">CV laden</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#23408e;background:transparent;border:none;padding:10px 4px;cursor:pointer">GitHub ↗</button>
+      </div>
+
+      <div style="background:#f6f2ea;border:1px solid #ddd4c4;border-radius:10px;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:6px;padding:9px 13px;border-bottom:1px solid #e3dacb">
+          <span style="width:9px;height:9px;border-radius:50%;background:#d5cbb8"></span><span style="width:9px;height:9px;border-radius:50%;background:#d5cbb8"></span><span style="width:9px;height:9px;border-radius:50%;background:#23408e"></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#a89e8c;margin-left:6px">~/portfolio</span>
+        </div>
+        <div style="padding:13px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7">
+          <div style="color:#7c766a"><span style="color:#23408e">$</span> whoami</div>
+          <div style="color:#20211f">student · builder · sportler</div>
+          <div style="color:#7c766a;margin-top:3px"><span style="color:#23408e">$</span> <span style="display:inline-block;width:8px;height:14px;background:#23408e;vertical-align:middle;animation:blink 1s step-end infinite"></span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <span style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#20211f;background:#f6f2ea;border:1px solid #ddd4c4;border-radius:999px;padding:7px 13px"><span style="width:8px;height:8px;border-radius:50%;background:#23408e"></span>Verfügbar für Werkstudent</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7c766a">GER · 14:32 · 18°C</span>
+      </div>
+    </div>
+
+    <!-- ===== 2b — OXBLOOD (Greige + Wine) ===== -->
+    <div id="2b" style="width:560px;flex:0 0 560px;background:#e9e3d7;border:1px solid #dbd1c2;border-radius:14px;padding:34px;box-sizing:border-box;display:flex;flex-direction:column;gap:30px;box-shadow:0 30px 60px -30px rgba(60,40,40,0.22)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#7a2733;margin-bottom:12px">Variante · Oxblood</div>
+          <h2 style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1;margin:0 0 8px;color:#241f1d">Greige &amp; Wine</h2>
+          <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7a7167;margin:0">warm · wein-rot · editorial-luxe</p>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#f4efe6;background:#7a2733;border-radius:6px;padding:5px 10px">2b</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+        <div><div style="height:44px;border-radius:7px;background:#e9e3d7;border:1px solid #dbd1c2"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7a7167;margin-top:6px">bg</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#f4efe6;border:1px solid #dbd1c2"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7a7167;margin-top:6px">surf</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#7a2733"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7a7167;margin-top:6px">acc</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#241f1d"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7a7167;margin-top:6px">ink</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#7a7167"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7a7167;margin-top:6px">mut</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#dbd1c2"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#7a7167;margin-top:6px">line</div></div>
+      </div>
+
+      <div>
+        <div style="font-family:'Instrument Serif',serif;font-size:40px;line-height:1;color:#241f1d;margin-bottom:10px">Bau. Ship. <span style="font-style:italic">Repeat.</span></div>
+        <p style="font-size:13.5px;line-height:1.6;color:#5c554b;margin:0 0 8px">Wirtschaftsinformatik-Student, der eigene Apps baut und produktnah denkt.</p>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7a2733">// currently: building v2</span>
+      </div>
+
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f4efe6;background:#7a2733;border:none;border-radius:8px;padding:10px 17px;cursor:pointer">Projekte ansehen</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#241f1d;background:transparent;border:1px solid #c8bdaa;border-radius:8px;padding:10px 17px;cursor:pointer">CV laden</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#7a2733;background:transparent;border:none;padding:10px 4px;cursor:pointer">GitHub ↗</button>
+      </div>
+
+      <div style="background:#f4efe6;border:1px solid #dbd1c2;border-radius:10px;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:6px;padding:9px 13px;border-bottom:1px solid #e2d8c9">
+          <span style="width:9px;height:9px;border-radius:50%;background:#d3c8b6"></span><span style="width:9px;height:9px;border-radius:50%;background:#d3c8b6"></span><span style="width:9px;height:9px;border-radius:50%;background:#7a2733"></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#a79d8b;margin-left:6px">~/portfolio</span>
+        </div>
+        <div style="padding:13px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7">
+          <div style="color:#7a7167"><span style="color:#7a2733">$</span> whoami</div>
+          <div style="color:#241f1d">student · builder · sportler</div>
+          <div style="color:#7a7167;margin-top:3px"><span style="color:#7a2733">$</span> <span style="display:inline-block;width:8px;height:14px;background:#7a2733;vertical-align:middle;animation:blink 1s step-end infinite"></span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <span style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#241f1d;background:#f4efe6;border:1px solid #dbd1c2;border-radius:999px;padding:7px 13px"><span style="width:8px;height:8px;border-radius:50%;background:#7a2733"></span>Verfügbar für Werkstudent</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7a7167">GER · 14:32 · 18°C</span>
+      </div>
+    </div>
+
+    <!-- ===== 2c — PINE, sans-serif (Sand + Deep Green) ===== -->
+    <div id="2c" style="width:560px;flex:0 0 560px;background:#eae6d9;border:1px solid #d8d3c3;border-radius:14px;padding:34px;box-sizing:border-box;display:flex;flex-direction:column;gap:30px;box-shadow:0 30px 60px -30px rgba(40,60,40,0.22)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#24543f;margin-bottom:12px">Variante · Pine · sans</div>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;line-height:1;margin:0 0 8px;color:#1c211c;letter-spacing:-0.02em;font-weight:600">Sand &amp; Pine</h2>
+          <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#74766b;margin:0">warm · tannen-grün · ohne serif</p>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#f5f1e7;background:#24543f;border-radius:6px;padding:5px 10px">2c</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+        <div><div style="height:44px;border-radius:7px;background:#eae6d9;border:1px solid #d8d3c3"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#74766b;margin-top:6px">bg</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#f5f1e7;border:1px solid #d8d3c3"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#74766b;margin-top:6px">surf</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#24543f"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#74766b;margin-top:6px">acc</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#1c211c"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#74766b;margin-top:6px">ink</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#74766b"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#74766b;margin-top:6px">mut</div></div>
+        <div><div style="height:44px;border-radius:7px;background:#d8d3c3"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#74766b;margin-top:6px">line</div></div>
+      </div>
+
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:38px;line-height:1;color:#1c211c;letter-spacing:-0.03em;font-weight:600;margin-bottom:10px">Bau. Ship. Repeat.</div>
+        <p style="font-size:13.5px;line-height:1.6;color:#53564d;margin:0 0 8px">Wirtschaftsinformatik-Student, der eigene Apps baut und produktnah denkt.</p>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#24543f">// currently: building v2</span>
+      </div>
+
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f5f1e7;background:#24543f;border:none;border-radius:8px;padding:10px 17px;cursor:pointer">Projekte ansehen</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#1c211c;background:transparent;border:1px solid #c6c1b0;border-radius:8px;padding:10px 17px;cursor:pointer">CV laden</button>
+        <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#24543f;background:transparent;border:none;padding:10px 4px;cursor:pointer">GitHub ↗</button>
+      </div>
+
+      <div style="background:#f5f1e7;border:1px solid #d8d3c3;border-radius:10px;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:6px;padding:9px 13px;border-bottom:1px solid #e3ddce">
+          <span style="width:9px;height:9px;border-radius:50%;background:#d0cbba"></span><span style="width:9px;height:9px;border-radius:50%;background:#d0cbba"</span><span style="width:9px;height:9px;border-radius:50%;background:#24543f"></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#a29e8d;margin-left:6px">~/portfolio</span>
+        </div>
+        <div style="padding:13px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7">
+          <div style="color:#74766b"><span style="color:#24543f">$</span> whoami</div>
+          <div style="color:#1c211c">student · builder · sportler</div>
+          <div style="color:#74766b;margin-top:3px"><span style="color:#24543f">$</span> <span style="display:inline-block;width:8px;height:14px;background:#24543f;vertical-align:middle;animation:blink 1s step-end infinite"></span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <span style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#1c211c;background:#f5f1e7;border:1px solid #d8d3c3;border-radius:999px;padding:7px 13px"><span style="width:8px;height:8px;border-radius:50%;background:#24543f"></span>Verfügbar für Werkstudent</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#74766b">GER · 14:32 · 18°C</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section style="padding:24px 72px 120px;display:flex;flex-direction:column;gap:40px;min-width:2100px">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap">
+    <div style="max-width:640px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#6a6a6e;margin-bottom:14px">Turn 1 · Design System</div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:38px;line-height:1.1;margin:0 0 12px;color:#1a1a1c;letter-spacing:-0.02em">Drei Richtungen für dein Portfolio</h1>
+      <p style="font-size:15px;line-height:1.6;color:#55555a;margin:0">Jede Richtung zeigt Palette, Typo-Skala und deine Widget-Sprache. Vergleiche und sag mir, welche sich richtig anfühlt — dann arbeiten wir sie voll aus.</p>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#55555a;display:flex;gap:8px;align-items:center">
+      <span style="color:#8a8a8e">Springe zu:</span>
+      <a href="#1a" style="color:#1a1a1c;text-decoration:none;border:1px solid #bcbcc0;border-radius:6px;padding:5px 11px">1a</a>
+      <a href="#1b" style="color:#1a1a1c;text-decoration:none;border:1px solid #bcbcc0;border-radius:6px;padding:5px 11px">1b</a>
+      <a href="#1c" style="color:#1a1a1c;text-decoration:none;border:1px solid #bcbcc0;border-radius:6px;padding:5px 11px">1c</a>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:36px;align-items:flex-start;flex-wrap:nowrap">
+
+    <!-- ============ OPTION 1a — TERMINAL / DARK ============ -->
+    <div id="1a" style="width:620px;flex:0 0 620px;background:#100f0d;border:1px solid #2b2825;border-radius:14px;padding:36px;box-sizing:border-box;display:flex;flex-direction:column;gap:34px;box-shadow:0 30px 60px -30px rgba(0,0,0,0.4)">
+
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c6f24e;margin-bottom:12px">Richtung A</div>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:30px;line-height:1.05;margin:0 0 8px;color:#f4f1e9;letter-spacing:-0.02em">Terminal</h2>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8f8b80;margin:0">dark · retro-tech · boot-sequence energy</p>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#12110d;background:#c6f24e;border-radius:6px;padding:5px 10px">1a</span>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c6f24e">01 / Farben</span><span style="flex:1;height:1px;background:#2b2825"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div><div style="height:54px;border-radius:8px;background:#100f0d;border:1px solid #2b2825"></div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#f4f1e9;margin-top:8px">bg</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80">#100F0D</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#1a1815;border:1px solid #2b2825"></div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#f4f1e9;margin-top:8px">surface</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80">#1A1815</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#c6f24e"></div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#f4f1e9;margin-top:8px">accent</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80">#C6F24E</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#f4f1e9"></div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#f4f1e9;margin-top:8px">ink</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80">#F4F1E9</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#8f8b80"></div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#f4f1e9;margin-top:8px">muted</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80">#8F8B80</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#2b2825"></div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#f4f1e9;margin-top:8px">line</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80">#2B2825</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c6f24e">02 / Typografie</span><span style="flex:1;height:1px;background:#2b2825"></span></div>
+        <div style="display:flex;gap:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8f8b80;margin-bottom:18px;flex-wrap:wrap">
+          <span>Aa <span style="color:#f4f1e9">Space Grotesk</span></span>
+          <span>Aa <span style="color:#f4f1e9">Hanken Grotesk</span></span>
+          <span>Aa <span style="color:#f4f1e9">JetBrains Mono</span></span>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1;color:#f4f1e9;letter-spacing:-0.03em;font-weight:600;margin-bottom:14px">Bau. Ship.<br>Repeat.</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;color:#f4f1e9;margin-bottom:10px;font-weight:500">Software, die sich gut anfühlt.</div>
+        <p style="font-size:14px;line-height:1.6;color:#b7b3a8;margin:0 0 12px">Wirtschaftsinformatik-Student, der eigene Apps baut und produktnah denkt — von der ersten Idee bis zum Release im Store.</p>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#c6f24e">// currently: building v2</span>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c6f24e">03 / Komponenten</span><span style="flex:1;height:1px;background:#2b2825"></span></div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+          <button style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:#12110d;background:#c6f24e;border:none;border-radius:8px;padding:11px 18px;cursor:pointer">Projekte ansehen</button>
+          <button style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f4f1e9;background:transparent;border:1px solid #3a372f;border-radius:8px;padding:11px 18px;cursor:pointer">CV laden</button>
+          <button style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#c6f24e;background:transparent;border:none;padding:11px 4px;cursor:pointer">GitHub ↗</button>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#b7b3a8;border:1px solid #2b2825;border-radius:999px;padding:6px 13px">Swift</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#b7b3a8;border:1px solid #2b2825;border-radius:999px;padding:6px 13px">TypeScript</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#b7b3a8;border:1px solid #2b2825;border-radius:999px;padding:6px 13px">React</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#b7b3a8;border:1px solid #2b2825;border-radius:999px;padding:6px 13px">Postgres</span>
+        </div>
+
+        <!-- terminal widget -->
+        <div style="background:#0a0a08;border:1px solid #2b2825;border-radius:10px;overflow:hidden;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid #1c1a17">
+            <span style="width:10px;height:10px;border-radius:50%;background:#3a372f"></span><span style="width:10px;height:10px;border-radius:50%;background:#3a372f"></span><span style="width:10px;height:10px;border-radius:50%;background:#c6f24e"></span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6a675e;margin-left:8px">~/portfolio — zsh</span>
+          </div>
+          <div style="padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7">
+            <div style="color:#8f8b80"><span style="color:#c6f24e">$</span> whoami</div>
+            <div style="color:#f4f1e9">student · builder · sportler</div>
+            <div style="color:#8f8b80;margin-top:4px"><span style="color:#c6f24e">$</span> ls projects/</div>
+            <div style="color:#f4f1e9">app-one&nbsp;&nbsp;app-two&nbsp;&nbsp;app-three</div>
+            <div style="color:#8f8b80;margin-top:4px"><span style="color:#c6f24e">$</span> <span style="display:inline-block;width:8px;height:15px;background:#c6f24e;vertical-align:middle;animation:blink 1s step-end infinite"></span></div>
+          </div>
+        </div>
+
+        <!-- stat tiles -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+          <div style="background:#1a1815;border:1px solid #2b2825;border-radius:10px;padding:14px"><div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;color:#c6f24e">312</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80;margin-top:3px">commits / 30d</div></div>
+          <div style="background:#1a1815;border:1px solid #2b2825;border-radius:10px;padding:14px"><div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;color:#c6f24e">6</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80;margin-top:3px">apps shipped</div></div>
+          <div style="background:#1a1815;border:1px solid #2b2825;border-radius:10px;padding:14px"><div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;color:#c6f24e">∞</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8f8b80;margin-top:3px">coffee</div></div>
+        </div>
+
+        <!-- heatmap -->
+        <div style="background:#1a1815;border:1px solid #2b2825;border-radius:10px;padding:16px;margin-bottom:16px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8f8b80;margin-bottom:12px">GitHub · letzte Wochen</div>
+          <div style="display:grid;grid-template-rows:repeat(7,10px);grid-auto-flow:column;grid-auto-columns:10px;gap:3px">
+            <sc-for list="{{ heatA }}" as="c" hint-placeholder-count="98"><div style="width:10px;height:10px;border-radius:2px;background:{{ c.bg }}"></div></sc-for>
+          </div>
+        </div>
+
+        <!-- project card -->
+        <div style="background:#1a1815;border:1px solid #2b2825;border-radius:12px;overflow:hidden;margin-bottom:16px">
+          <div style="height:120px;background:repeating-linear-gradient(45deg,#2b2825,#2b2825 1px,transparent 1px,transparent 9px);display:flex;align-items:center;justify-content:center"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6a675e">[ cover.png ]</span></div>
+          <div style="padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;color:#f4f1e9">Projektname</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8f8b80">01</span></div>
+            <p style="font-size:13px;line-height:1.55;color:#b7b3a8;margin:0 0 12px">Eine iOS-App, die X löst. Kurzbeschreibung in einer Zeile.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:6px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8f8b80">Swift</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8f8b80">·</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8f8b80">SwiftUI</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#c6f24e">Case Study →</span></div>
+          </div>
+        </div>
+
+        <!-- status + location -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <span style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#f4f1e9;background:#1a1815;border:1px solid #2b2825;border-radius:999px;padding:7px 14px"><span style="width:8px;height:8px;border-radius:50%;background:#c6f24e;box-shadow:0 0 8px #c6f24e"></span>Verfügbar für Werkstudent</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8f8b80">GER · 14:32 · 18°C</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ OPTION 1b — EDITORIAL / WARM ============ -->
+    <div id="1b" style="width:620px;flex:0 0 620px;background:#f3ede1;border:1px solid #e0d6c6;border-radius:14px;padding:36px;box-sizing:border-box;display:flex;flex-direction:column;gap:34px;box-shadow:0 30px 60px -30px rgba(80,60,30,0.25)">
+
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#bf4d2c;margin-bottom:12px">Richtung B</div>
+          <h2 style="font-family:'Instrument Serif',serif;font-size:38px;line-height:1;margin:0 0 8px;color:#221e17;letter-spacing:-0.01em">Editorial Lab</h2>
+          <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#837b6d;margin:0">warm · ruhig · print-meets-code</p>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#fbf8f1;background:#bf4d2c;border-radius:6px;padding:5px 10px">1b</span>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#bf4d2c">01 / Farben</span><span style="flex:1;height:1px;background:#e0d6c6"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div><div style="height:54px;border-radius:8px;background:#f3ede1;border:1px solid #e0d6c6"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#221e17;margin-top:8px">bg</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d">#F3EDE1</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#fbf8f1;border:1px solid #e0d6c6"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#221e17;margin-top:8px">surface</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d">#FBF8F1</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#bf4d2c"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#221e17;margin-top:8px">accent</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d">#BF4D2C</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#221e17"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#221e17;margin-top:8px">ink</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d">#221E17</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#837b6d"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#221e17;margin-top:8px">muted</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d">#837B6D</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#e0d6c6"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#221e17;margin-top:8px">line</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d">#E0D6C6</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#bf4d2c">02 / Typografie</span><span style="flex:1;height:1px;background:#e0d6c6"></span></div>
+        <div style="display:flex;gap:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#837b6d;margin-bottom:18px;flex-wrap:wrap">
+          <span>Aa <span style="color:#221e17">Instrument Serif</span></span>
+          <span>Aa <span style="color:#221e17">Hanken Grotesk</span></span>
+          <span>Aa <span style="color:#221e17">IBM Plex Mono</span></span>
+        </div>
+        <div style="font-family:'Instrument Serif',serif;font-size:46px;line-height:1;color:#221e17;margin-bottom:14px">Bau. Ship.<br><span style="font-style:italic">Repeat.</span></div>
+        <div style="font-family:'Instrument Serif',serif;font-size:24px;color:#221e17;margin-bottom:10px">Software, die sich gut anfühlt.</div>
+        <p style="font-size:14px;line-height:1.65;color:#5c554a;margin:0 0 12px">Wirtschaftsinformatik-Student, der eigene Apps baut und produktnah denkt — von der ersten Idee bis zum Release im Store.</p>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#bf4d2c">// currently: building v2</span>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#bf4d2c">03 / Komponenten</span><span style="flex:1;height:1px;background:#e0d6c6"></span></div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+          <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:#fbf8f1;background:#bf4d2c;border:none;border-radius:8px;padding:11px 18px;cursor:pointer">Projekte ansehen</button>
+          <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#221e17;background:transparent;border:1px solid #ccbfa9;border-radius:8px;padding:11px 18px;cursor:pointer">CV laden</button>
+          <button style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#bf4d2c;background:transparent;border:none;padding:11px 4px;cursor:pointer">GitHub ↗</button>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5c554a;border:1px solid #e0d6c6;border-radius:999px;padding:6px 13px">Swift</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5c554a;border:1px solid #e0d6c6;border-radius:999px;padding:6px 13px">TypeScript</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5c554a;border:1px solid #e0d6c6;border-radius:999px;padding:6px 13px">React</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5c554a;border:1px solid #e0d6c6;border-radius:999px;padding:6px 13px">Postgres</span>
+        </div>
+
+        <div style="background:#fbf8f1;border:1px solid #e0d6c6;border-radius:10px;overflow:hidden;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid #e0d6c6">
+            <span style="width:10px;height:10px;border-radius:50%;background:#d8ccb8"></span><span style="width:10px;height:10px;border-radius:50%;background:#d8ccb8"></span><span style="width:10px;height:10px;border-radius:50%;background:#bf4d2c"></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#a89e8c;margin-left:8px">~/portfolio — zsh</span>
+          </div>
+          <div style="padding:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.7">
+            <div style="color:#837b6d"><span style="color:#bf4d2c">$</span> whoami</div>
+            <div style="color:#221e17">student · builder · sportler</div>
+            <div style="color:#837b6d;margin-top:4px"><span style="color:#bf4d2c">$</span> ls projects/</div>
+            <div style="color:#221e17">app-one&nbsp;&nbsp;app-two&nbsp;&nbsp;app-three</div>
+            <div style="color:#837b6d;margin-top:4px"><span style="color:#bf4d2c">$</span> <span style="display:inline-block;width:8px;height:15px;background:#bf4d2c;vertical-align:middle;animation:blink 1s step-end infinite"></span></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+          <div style="background:#fbf8f1;border:1px solid #e0d6c6;border-radius:10px;padding:14px"><div style="font-family:'Instrument Serif',serif;font-size:28px;color:#bf4d2c">312</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d;margin-top:3px">commits / 30d</div></div>
+          <div style="background:#fbf8f1;border:1px solid #e0d6c6;border-radius:10px;padding:14px"><div style="font-family:'Instrument Serif',serif;font-size:28px;color:#bf4d2c">6</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d;margin-top:3px">apps shipped</div></div>
+          <div style="background:#fbf8f1;border:1px solid #e0d6c6;border-radius:10px;padding:14px"><div style="font-family:'Instrument Serif',serif;font-size:28px;color:#bf4d2c">∞</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#837b6d;margin-top:3px">coffee</div></div>
+        </div>
+
+        <div style="background:#fbf8f1;border:1px solid #e0d6c6;border-radius:10px;padding:16px;margin-bottom:16px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#837b6d;margin-bottom:12px">GitHub · letzte Wochen</div>
+          <div style="display:grid;grid-template-rows:repeat(7,10px);grid-auto-flow:column;grid-auto-columns:10px;gap:3px">
+            <sc-for list="{{ heatB }}" as="c" hint-placeholder-count="98"><div style="width:10px;height:10px;border-radius:2px;background:{{ c.bg }}"></div></sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fbf8f1;border:1px solid #e0d6c6;border-radius:12px;overflow:hidden;margin-bottom:16px">
+          <div style="height:120px;background:repeating-linear-gradient(45deg,#e6dcca,#e6dcca 1px,transparent 1px,transparent 9px);display:flex;align-items:center;justify-content:center"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#a89e8c">[ cover.png ]</span></div>
+          <div style="padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-family:'Instrument Serif',serif;font-size:20px;color:#221e17">Projektname</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#837b6d">01</span></div>
+            <p style="font-size:13px;line-height:1.55;color:#5c554a;margin:0 0 12px">Eine iOS-App, die X löst. Kurzbeschreibung in einer Zeile.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:6px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#837b6d">Swift</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#837b6d">·</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#837b6d">SwiftUI</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#bf4d2c">Case Study →</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <span style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#221e17;background:#fbf8f1;border:1px solid #e0d6c6;border-radius:999px;padding:7px 14px"><span style="width:8px;height:8px;border-radius:50%;background:#bf4d2c"></span>Verfügbar für Werkstudent</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#837b6d">GER · 14:32 · 18°C</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ OPTION 1c — SPATIAL / COOL ============ -->
+    <div id="1c" style="width:620px;flex:0 0 620px;background:#eef0f3;border:1px solid #e0e3e9;border-radius:14px;padding:36px;box-sizing:border-box;display:flex;flex-direction:column;gap:34px;box-shadow:0 30px 60px -30px rgba(30,40,80,0.22)">
+
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#2f54ff;margin-bottom:12px">Richtung C</div>
+          <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:30px;line-height:1.02;margin:0 0 8px;color:#14161b;letter-spacing:-0.02em;font-weight:700">Spatial Grid</h2>
+          <p style="font-family:'Space Mono',monospace;font-size:12px;color:#6d727b;margin:0">cool · playful · raster + tiefe</p>
+        </div>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#ffffff;background:#2f54ff;border-radius:6px;padding:5px 10px">1c</span>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#2f54ff">01 / Farben</span><span style="flex:1;height:1px;background:#e0e3e9"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div><div style="height:54px;border-radius:8px;background:#eef0f3;border:1px solid #e0e3e9"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#14161b;margin-top:8px">bg</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b">#EEF0F3</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#ffffff;border:1px solid #e0e3e9"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#14161b;margin-top:8px">surface</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b">#FFFFFF</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#2f54ff"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#14161b;margin-top:8px">accent</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b">#2F54FF</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#14161b"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#14161b;margin-top:8px">ink</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b">#14161B</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#6d727b"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#14161b;margin-top:8px">muted</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b">#6D727B</div></div>
+          <div><div style="height:54px;border-radius:8px;background:#e0e3e9"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#14161b;margin-top:8px">line</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b">#E0E3E9</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#2f54ff">02 / Typografie</span><span style="flex:1;height:1px;background:#e0e3e9"></span></div>
+        <div style="display:flex;gap:20px;font-family:'Space Mono',monospace;font-size:11px;color:#6d727b;margin-bottom:18px;flex-wrap:wrap">
+          <span>Aa <span style="color:#14161b">Bricolage Grotesque</span></span>
+          <span>Aa <span style="color:#14161b">Hanken Grotesk</span></span>
+          <span>Aa <span style="color:#14161b">Space Mono</span></span>
+        </div>
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:42px;line-height:0.98;color:#14161b;letter-spacing:-0.03em;font-weight:700;margin-bottom:14px">Bau. Ship.<br>Repeat.</div>
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:21px;color:#14161b;margin-bottom:10px;font-weight:600">Software, die sich gut anfühlt.</div>
+        <p style="font-size:14px;line-height:1.6;color:#4a4e57;margin:0 0 12px">Wirtschaftsinformatik-Student, der eigene Apps baut und produktnah denkt — von der ersten Idee bis zum Release im Store.</p>
+        <span style="font-family:'Space Mono',monospace;font-size:12px;color:#2f54ff">// currently: building v2</span>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#2f54ff">03 / Komponenten</span><span style="flex:1;height:1px;background:#e0e3e9"></span></div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+          <button style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#ffffff;background:#2f54ff;border:none;border-radius:8px;padding:11px 18px;cursor:pointer">Projekte ansehen</button>
+          <button style="font-family:'Space Mono',monospace;font-size:13px;color:#14161b;background:transparent;border:1px solid #cdd2da;border-radius:8px;padding:11px 18px;cursor:pointer">CV laden</button>
+          <button style="font-family:'Space Mono',monospace;font-size:13px;color:#2f54ff;background:transparent;border:none;padding:11px 4px;cursor:pointer">GitHub ↗</button>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:#4a4e57;border:1px solid #e0e3e9;background:#fff;border-radius:999px;padding:6px 13px">Swift</span>
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:#4a4e57;border:1px solid #e0e3e9;background:#fff;border-radius:999px;padding:6px 13px">TypeScript</span>
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:#4a4e57;border:1px solid #e0e3e9;background:#fff;border-radius:999px;padding:6px 13px">React</span>
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:#4a4e57;border:1px solid #e0e3e9;background:#fff;border-radius:999px;padding:6px 13px">Postgres</span>
+        </div>
+
+        <div style="background:#0f1420;border:1px solid #0f1420;border-radius:10px;overflow:hidden;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid #232a3a">
+            <span style="width:10px;height:10px;border-radius:50%;background:#2f3646"></span><span style="width:10px;height:10px;border-radius:50%;background:#2f3646"></span><span style="width:10px;height:10px;border-radius:50%;background:#2f54ff"></span>
+            <span style="font-family:'Space Mono',monospace;font-size:11px;color:#6b7488;margin-left:8px">~/portfolio — zsh</span>
+          </div>
+          <div style="padding:14px;font-family:'Space Mono',monospace;font-size:12px;line-height:1.7">
+            <div style="color:#8b93a5"><span style="color:#5b7bff">$</span> whoami</div>
+            <div style="color:#eef0f3">student · builder · sportler</div>
+            <div style="color:#8b93a5;margin-top:4px"><span style="color:#5b7bff">$</span> ls projects/</div>
+            <div style="color:#eef0f3">app-one&nbsp;&nbsp;app-two&nbsp;&nbsp;app-three</div>
+            <div style="color:#8b93a5;margin-top:4px"><span style="color:#5b7bff">$</span> <span style="display:inline-block;width:8px;height:15px;background:#5b7bff;vertical-align:middle;animation:blink 1s step-end infinite"></span></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+          <div style="background:#ffffff;border:1px solid #e0e3e9;border-radius:10px;padding:14px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;color:#2f54ff">312</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b;margin-top:3px">commits / 30d</div></div>
+          <div style="background:#ffffff;border:1px solid #e0e3e9;border-radius:10px;padding:14px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;color:#2f54ff">6</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b;margin-top:3px">apps shipped</div></div>
+          <div style="background:#ffffff;border:1px solid #e0e3e9;border-radius:10px;padding:14px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;color:#2f54ff">∞</div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#6d727b;margin-top:3px">coffee</div></div>
+        </div>
+
+        <div style="background:#ffffff;border:1px solid #e0e3e9;border-radius:10px;padding:16px;margin-bottom:16px">
+          <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#6d727b;margin-bottom:12px">GitHub · letzte Wochen</div>
+          <div style="display:grid;grid-template-rows:repeat(7,10px);grid-auto-flow:column;grid-auto-columns:10px;gap:3px">
+            <sc-for list="{{ heatC }}" as="c" hint-placeholder-count="98"><div style="width:10px;height:10px;border-radius:2px;background:{{ c.bg }}"></div></sc-for>
+          </div>
+        </div>
+
+        <div style="background:#ffffff;border:1px solid #e0e3e9;border-radius:12px;overflow:hidden;margin-bottom:16px">
+          <div style="height:120px;background:linear-gradient(#ffffff,#ffffff),repeating-linear-gradient(0deg,#e6e9ef,#e6e9ef 1px,transparent 1px,transparent 22px),repeating-linear-gradient(90deg,#e6e9ef,#e6e9ef 1px,transparent 1px,transparent 22px);background-blend-mode:normal;display:flex;align-items:center;justify-content:center;position:relative"><div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,#e6e9ef,#e6e9ef 1px,transparent 1px,transparent 22px),repeating-linear-gradient(90deg,#e6e9ef,#e6e9ef 1px,transparent 1px,transparent 22px)"></div><span style="font-family:'Space Mono',monospace;font-size:11px;color:#9aa0ab;position:relative">[ cover.png ]</span></div>
+          <div style="padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:600;color:#14161b">Projektname</span><span style="font-family:'Space Mono',monospace;font-size:12px;color:#6d727b">01</span></div>
+            <p style="font-size:13px;line-height:1.55;color:#4a4e57;margin:0 0 12px">Eine iOS-App, die X löst. Kurzbeschreibung in einer Zeile.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:6px"><span style="font-family:'Space Mono',monospace;font-size:11px;color:#6d727b">Swift</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#6d727b">·</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:#6d727b">SwiftUI</span></div><span style="font-family:'Space Mono',monospace;font-size:12px;color:#2f54ff">Case Study →</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:12px;color:#14161b;background:#ffffff;border:1px solid #e0e3e9;border-radius:999px;padding:7px 14px"><span style="width:8px;height:8px;border-radius:50%;background:#2f54ff"></span>Verfügbar für Werkstudent</span>
+          <span style="font-family:'Space Mono',monospace;font-size:11px;color:#6d727b">GER · 14:32 · 18°C</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  gen(seed) {
+    let a = [], x = seed >>> 0;
+    for (let i = 0; i < 98; i++) {
+      x = (Math.imul(x, 1103515245) + 12345) & 0x7fffffff;
+      const r = (x >> 8) % 100;
+      const lvl = r < 46 ? 0 : r < 66 ? 1 : r < 83 ? 2 : r < 94 ? 3 : 4;
+      a.push(lvl);
+    }
+    return a;
+  }
+  cells(seed, r, g, b, dark) {
+    const alpha = [null, 0.28, 0.5, 0.72, 1];
+    const empty = dark ? 'rgba(255,255,255,0.06)' : 'rgba(20,22,27,0.05)';
+    return this.gen(seed).map(l => ({ bg: l === 0 ? empty : `rgba(${r},${g},${b},${alpha[l]})` }));
+  }
+  renderVals() {
+    return {
+      heatA: this.cells(7, 198, 242, 78, true),
+      heatB: this.cells(19, 191, 77, 44, false),
+      heatC: this.cells(31, 47, 84, 255, false),
+      heatD: this.cells(43, 36, 84, 63, false)
+    };
+  }
+}
+</script>
+</body>
+</html>

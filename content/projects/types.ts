@@ -1,0 +1,155 @@
+/**
+ * The project data model shared by every per-project file and the barrel that
+ * aggregates them (content/projects/index.ts). One project lives in one file;
+ * this module only holds the type and the localized status labels. See
+ * docs/content/projects.md for the model and the per-project source material.
+ */
+
+import { type Locale } from "@/lib/i18n/locale";
+
+export type ProjectStatus = "live" | "mvp" | "concept" | "experiment";
+
+/** Build state of a single feature in a case study's feature list. */
+export type FeatureStatus = "done" | "in-progress" | "planned";
+
+/** One feature line, shown with a status dot and an optional tier tag. */
+export interface ProjectFeature {
+  /** Short German label, e.g. "Coach-Portal". */
+  label: string;
+  status: FeatureStatus;
+  /** Optional tier/context, e.g. "Pro" or "Coach". */
+  tag?: string;
+}
+
+/** A named layer of the tech stack (e.g. "Backend") and its technologies. */
+export interface TechLayer {
+  name: string;
+  items: string[];
+}
+
+/** One engineering challenge and how it was solved. */
+export interface ProjectChallenge {
+  title: string;
+  problem: string;
+  solution: string;
+}
+
+/** A single headline number (e.g. value "269", label "Commits"). */
+export interface ProjectMetric {
+  value: string;
+  label: string;
+}
+
+/** One phase on the project timeline. */
+export interface TimelinePhase {
+  /** Period label, e.g. "März 2026". */
+  period: string;
+  title: string;
+  description: string;
+}
+
+/**
+ * The optional long-form story for a project's detail page. Every field is
+ * optional so the detail page degrades gracefully: a project with only a
+ * `summary` shows just that, fuelivo fills the whole thing. Kept as a nested
+ * object so the flat Project fields (used by the onepager card and the index)
+ * stay small and stable.
+ */
+export interface CaseStudy {
+  /** Lead paragraph under the cover - a fuller version of the tagline. */
+  summary?: string;
+  /** The core idea and how the calculation works. */
+  solution?: {
+    intro: string;
+    highlights?: string[];
+  };
+  features?: ProjectFeature[];
+  /** Tech stack grouped by layer; when set, replaces the flat `stack` pills. */
+  techStack?: TechLayer[];
+  architecture?: {
+    intro: string;
+    points?: string[];
+  };
+  challenges?: ProjectChallenge[];
+  /** Headline numbers (scope of the project). */
+  metrics?: ProjectMetric[];
+  timeline?: TimelinePhase[];
+  /**
+   * When true, the detail page mounts the project's bespoke interactive proof
+   * widget under the solution (S4-5). Only fuelivo has one today; the widget is
+   * wired in ProjectDetail.tsx.
+   */
+  interactiveProof?: boolean;
+}
+
+export interface Project {
+  /** URL-safe id, no umlaut, e.g. "fuelivo". */
+  slug: string;
+  /** Display name. */
+  name: string;
+  /** One line, German, plain. */
+  tagline: string;
+  /** Shown as a labelled badge (text + color); see projectStatusLabels. */
+  status: ProjectStatus;
+  /** fuelivo = true. Exactly one project is featured. */
+  featured?: boolean;
+  /** Sort key; fuelivo = 1, the rest by maturity and interest. */
+  order: number;
+  /** What real problem it solves. */
+  problem?: string;
+  /** What Yannik did. */
+  role?: string;
+  /** Technologies (confirm before publishing). */
+  stack?: string[];
+  /** Honest takeaways. */
+  learnings?: string[];
+  links?: {
+    live?: string;
+    repo?: string;
+    demo?: string;
+  };
+  media?: {
+    /** Path in public/images; a placeholder is allowed. */
+    cover?: string;
+    /**
+     * Cover orientation. "landscape" (default) renders the cover in a browser
+     * window frame (a web-app product shot); "portrait" renders it in a phone
+     * frame instead, so a native iOS screenshot shows in its real proportions
+     * rather than cropped to the landscape frame.
+     */
+    orientation?: "landscape" | "portrait";
+    screenshots?: string[];
+  };
+  /** Gets its own /projekte/<slug> page later (P3-3). */
+  detailPage?: boolean;
+  /** Long-form story for the detail page; only warranted projects fill it. */
+  caseStudy?: CaseStudy;
+}
+
+/**
+ * Localized status labels. The text is always shown, not just the color, so the
+ * badge stays legible without relying on color alone (accessibility).
+ */
+const projectStatusLabelsByLocale: Record<Locale, Record<ProjectStatus, string>> = {
+  de: { live: "Live", mvp: "MVP", concept: "Konzept", experiment: "Experiment" },
+  en: { live: "Live", mvp: "MVP", concept: "Concept", experiment: "Experiment" },
+};
+
+/** The project status labels for a locale. */
+export function getProjectStatusLabels(locale: Locale): Record<ProjectStatus, string> {
+  return projectStatusLabelsByLocale[locale];
+}
+
+/**
+ * Localized labels for a feature's build state. Like the status badge, the text is
+ * always shown next to the color dot so the state does not rely on color alone.
+ */
+const featureStatusLabelsByLocale: Record<Locale, Record<FeatureStatus, string>> = {
+  de: { done: "fertig", "in-progress": "in Arbeit", planned: "geplant" },
+  en: { done: "done", "in-progress": "in progress", planned: "planned" },
+};
+
+/** The feature build-state labels for a locale. */
+export function getFeatureStatusLabels(locale: Locale): Record<FeatureStatus, string> {
+  return featureStatusLabelsByLocale[locale];
+}
