@@ -24,7 +24,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.61.1-noble
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
