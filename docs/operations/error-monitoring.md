@@ -5,11 +5,11 @@ for the site (S6-2) and wire the error SDK into the app. The tools are
 [GlitchTip](https://glitchtip.com) (Sentry-API compatible error tracking) and
 [Uptime Kuma](https://github.com/louislam/uptime-kuma) (uptime checks + a public status
 page), both self-hosted on the same Contabo VPS. The decision and its trade-offs live in
-[ADR-0009](../architecture/decisions/0009-error-and-uptime-monitoring.md).
+[ADR-0009](../../private-docs/docs/architecture/decisions/0009-error-and-uptime-monitoring.md).
 
-Related: [analytics](analytics.md) · [deployment](deployment.md) ·
-[server-setup](server-setup.md) · [environment variables](environment-variables.md) ·
-[ADR-0002 hosting](../architecture/decisions/0002-hosting.md)
+Related: [analytics](analytics.md) · [deployment](../../private-docs/docs/operations/deployment.md) ·
+[server-setup](../../private-docs/docs/operations/server-setup.md) · [environment variables](../../private-docs/docs/operations/environment-variables.md) ·
+[ADR-0002 hosting](../../private-docs/docs/architecture/decisions/0002-hosting.md)
 
 > **Why this exists.** The widget failures already log a greppable `[widget:<name>]` line
 > (S6-1), but that is the only signal: no client-error capture, no dashboard, no alert when
@@ -44,7 +44,7 @@ Browser errors ──▶ https://<app>/monitoring (same-origin tunnel) ──▶
   GlitchTip host never appears client-side and ad-blockers do not drop reports.
 
 The steps below assume the box is already provisioned per
-[server-setup](server-setup.md) (Docker, Nginx, certbot, ufw, the `yannik` user).
+[server-setup](../../private-docs/docs/operations/server-setup.md) (Docker, Nginx, certbot, ufw, the `yannik` user).
 
 ## 1. DNS
 
@@ -113,7 +113,7 @@ docker compose ps                         # "healthy" after ~40s
 
 Add a server block per subdomain, proxying to the loopback port, then let certbot add TLS
 (same approach as [analytics step 3](analytics.md#3-nginx-reverse-proxy--tls) and
-[server-setup step 8-9](server-setup.md#8-nginx-reverse-proxy)):
+[server-setup step 8-9](../../private-docs/docs/operations/server-setup.md#8-nginx-reverse-proxy)):
 
 ```nginx
 # /etc/nginx/sites-available/errors.yannikwuenker.de  → proxy_pass http://127.0.0.1:3003;

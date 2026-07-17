@@ -3,11 +3,11 @@
 **Purpose:** the runbook to stand up privacy-friendly, cookieless web analytics for the
 site (S2-5) and wire the tracking tag into the app. The tool is
 [Umami](https://umami.is), self-hosted on the same Contabo VPS. The decision and its
-trade-offs live in [ADR-0008](../architecture/decisions/0008-analytics.md).
+trade-offs live in [ADR-0008](../../private-docs/docs/architecture/decisions/0008-analytics.md).
 
-Related: [deployment](deployment.md) · [server-setup](server-setup.md) ·
-[environment variables](environment-variables.md) ·
-[ADR-0002 hosting](../architecture/decisions/0002-hosting.md)
+Related: [deployment](../../private-docs/docs/operations/deployment.md) · [server-setup](../../private-docs/docs/operations/server-setup.md) ·
+[environment variables](../../private-docs/docs/operations/environment-variables.md) ·
+[ADR-0002 hosting](../../private-docs/docs/architecture/decisions/0002-hosting.md)
 
 > **Why this exists.** Server logfiles answer "is the box up", not "which projects do
 > people actually open". Umami gives that in aggregate - cookieless, no personal profiles,
@@ -30,7 +30,7 @@ analytics.yannikwuenker.de ──TLS──▶ Nginx ──▶ 127.0.0.1:3001 ─
   cookieless and stores no IP; see the Datenschutz section (`content/legal.ts`).
 
 The steps below assume the box is already provisioned per
-[server-setup](server-setup.md) (Docker, Nginx, certbot, ufw, the `yannik` user).
+[server-setup](../../private-docs/docs/operations/server-setup.md) (Docker, Nginx, certbot, ufw, the `yannik` user).
 
 ## 1. DNS
 
@@ -87,7 +87,7 @@ curl -sSf http://127.0.0.1:3001/api/heartbeat && echo " umami up"
 ## 3. Nginx reverse proxy + TLS
 
 Add a server block that proxies the subdomain to the container, then let certbot add TLS
-(same approach as the app in [server-setup step 8-9](server-setup.md#8-nginx-reverse-proxy)):
+(same approach as the app in [server-setup step 8-9](../../private-docs/docs/operations/server-setup.md#8-nginx-reverse-proxy)):
 
 ```bash
 sudo nano /etc/nginx/sites-available/analytics.yannikwuenker.de

@@ -25,7 +25,7 @@ before non-trivial work.
   **advance the task's Plane work item to Done in that same step** - the moment only the merge
   is left, never wait for the merge - then hand the PR to the user to confirm and merge (the
   main clone never moved). Never self-merge; the PR waits for the user's approval. Tasks live
-  in Plane, not in checkboxes - see [`docs/project/plane.md`](docs/project/plane.md).
+  in Plane, not in checkboxes - see [`docs/project/plane.md`](private-docs/docs/project/plane.md).
   Full steps: [`docs/engineering/git-workflow.md#task-lifecycle`](docs/engineering/git-workflow.md#task-lifecycle).
 - **Fetch before starting work.** Always `git fetch` at the beginning of a session and before creating a new branch to ensure you have the latest state from remote (prevents missing files and stale branches).
 - **English** in code, comments, docs, commits. Site copy is **German** (`de-DE`).
@@ -115,8 +115,8 @@ The project-specific rules that make "professional" concrete here already live i
   [`docs/engineering/git-workflow.md`](docs/engineering/git-workflow.md)
 - Code style / TS rules: [`docs/engineering/conventions.md`](docs/engineering/conventions.md)
 - Quality bar & tests: [`docs/engineering/quality-and-testing.md`](docs/engineering/quality-and-testing.md)
-- What to build next / task status: [Plane](docs/project/plane.md) (authoritative tracker);
-  each task's scope + acceptance criteria live in [`docs/project/backlog.md`](docs/project/backlog.md)
+- What to build next / task status: [Plane](private-docs/docs/project/plane.md) (authoritative tracker);
+  each task's scope + acceptance criteria live in [`docs/project/backlog.md`](private-docs/docs/project/backlog.md)
 - Stack & structure: [`docs/architecture/`](docs/architecture/)
 - Visual truth: [`docs/design/handoff/`](docs/design/handoff/README.md),
   [`docs/design/`](docs/design/design-system.md)
@@ -127,14 +127,14 @@ authoritative for task status and what to do next (the backlog holds each task's
 ## Agent skills
 
 Per-repo configuration the installed engineering skills read. Edit the files under
-`docs/agents/` directly to change these.
+`private-docs/docs/agents/` directly to change these.
 
 ### Issue tracker
 
 Issues and tasks live in Plane (project `PORT`), the authoritative tracker; GitHub is
-the delivery surface only (PRs into `develop`). See `docs/agents/issue-tracker.md`.
+the delivery surface only (PRs into `develop`). See `private-docs/docs/agents/issue-tracker.md`.
 
 ### Domain docs
 
 Single-context: `CONTEXT.md` at the root (created lazily) plus ADRs under
-`docs/architecture/decisions/`. See `docs/agents/domain.md`.
+`private-docs/docs/architecture/decisions/`. See `private-docs/docs/agents/domain.md`.

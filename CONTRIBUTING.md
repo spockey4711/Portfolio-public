@@ -20,7 +20,7 @@ deploys to the dev subdomain), and `develop` is promoted to the always-deployabl
 a periodic release PR. Tasks are tracked in Plane (project `PORT`), the authoritative tracker -
 move a task's work item to In Progress when you start and to Done when its PR is open. Full
 detail: [git workflow](docs/engineering/git-workflow.md#branching-model) and
-[task tracking (Plane)](docs/project/plane.md).
+[task tracking (Plane)](private-docs/docs/project/plane.md).
 
 1. **Branch** off `develop` into its own worktree: `pnpm wt new <type>/<slug>`. Never commit
    directly to `develop` or `master`; the main clone stays on `master` and each feature branch

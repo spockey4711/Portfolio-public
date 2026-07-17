@@ -48,7 +48,7 @@ contains everything needed to build the site **except the site itself**:
   maintainable product.
 
 The application code (Next.js app) will live in `app/`, `components/`, `lib/` etc. and
-is introduced in [Phase 0 of the roadmap](docs/project/roadmap.md).
+is introduced in [Phase 0 of the roadmap](private-docs/docs/project/roadmap.md).
 
 The site is meant to be maintained for years as a personal product, not shipped once as
 a landing page. Structure, docs and conventions are set up accordingly.
@@ -57,12 +57,12 @@ a landing page. Structure, docs and conventions are set up accordingly.
 
 | Layer | Choice | Why |
 |---|---|---|
-| Framework | **Next.js (App Router)** + React + TypeScript | Interactivity (terminal, live widgets, boot), API routes for live data, strong DX. See [ADR-0001](docs/architecture/decisions/0001-framework.md). |
-| Styling | **Tailwind CSS** + CSS variables for design tokens | Fast, consistent, tokens map 1:1 to the design system. See [ADR-0003](docs/architecture/decisions/0003-styling.md). |
+| Framework | **Next.js (App Router)** + React + TypeScript | Interactivity (terminal, live widgets, boot), API routes for live data, strong DX. See [ADR-0001](private-docs/docs/architecture/decisions/0001-framework.md). |
+| Styling | **Tailwind CSS** + CSS variables for design tokens | Fast, consistent, tokens map 1:1 to the design system. See [ADR-0003](private-docs/docs/architecture/decisions/0003-styling.md). |
 | Motion | **Framer Motion** + `IntersectionObserver` / `requestAnimationFrame` | Scroll spine, reveals, boot sequence. See [animation spec](docs/design/animation-and-motion.md). |
 | Fonts | Instrument Serif · Hanken Grotesk · IBM Plex Mono (Google Fonts, self-hosted via `next/font`) | Defined by the design system. |
-| Hosting | **Contabo VPS** (self-managed), Docker + Nginx reverse proxy + Let's Encrypt | Own the stack, generous RAM. See [ADR-0002](docs/architecture/decisions/0002-hosting.md). |
-| CI/CD | **GitHub Actions** → build image → deploy to the VPS | Reproducible deploys. See [deployment](docs/operations/deployment.md). |
+| Hosting | **Contabo VPS** (self-managed), Docker + Nginx reverse proxy + Let's Encrypt | Own the stack, generous RAM. See [ADR-0002](private-docs/docs/architecture/decisions/0002-hosting.md). |
+| CI/CD | **GitHub Actions** → build image → deploy to the VPS | Reproducible deploys. See [deployment](private-docs/docs/operations/deployment.md). |
 | Analytics | Optional, privacy-friendly (Plausible/Umami), self-hosted, only if it drives real decisions | Per owner preference. |
 
 Exact versions are pinned in [`docs/architecture/tech-stack.md`](docs/architecture/tech-stack.md).
@@ -93,7 +93,7 @@ Everything lives under [`docs/`](docs/). Start at the [docs index](docs/README.m
 | Architecture | [`architecture/tech-stack.md`](docs/architecture/tech-stack.md) | Pinned stack, versions, rationale |
 | Architecture | [`architecture/project-structure.md`](docs/architecture/project-structure.md) | Where every file goes and why |
 | Architecture | [`architecture/rendering-and-data.md`](docs/architecture/rendering-and-data.md) | SSG/SSR strategy, live-data API routes |
-| Architecture | [`architecture/decisions/`](docs/architecture/decisions/README.md) | Architecture Decision Records (ADRs) |
+| Architecture | [`architecture/decisions/`](private-docs/docs/architecture/decisions/README.md) | Architecture Decision Records (ADRs) |
 | Design | [`design/design-system.md`](docs/design/design-system.md) | Tokens, type scale, spacing, components |
 | Design | [`design/animation-and-motion.md`](docs/design/animation-and-motion.md) | Boot, scroll spine, keyframes, timings |
 | Design | [`design/accessibility.md`](docs/design/accessibility.md) | a11y rules, reduced motion, contrast |
@@ -104,10 +104,10 @@ Everything lives under [`docs/`](docs/). Start at the [docs index](docs/README.m
 | Engineering | [`engineering/git-workflow.md`](docs/engineering/git-workflow.md) | Branching, commits, PRs, releases |
 | Engineering | [`engineering/quality-and-testing.md`](docs/engineering/quality-and-testing.md) | Testing, linting, performance budgets |
 | Operations | [`operations/local-development.md`](docs/operations/local-development.md) | Run and develop locally |
-| Operations | [`operations/deployment.md`](docs/operations/deployment.md) | Docker + Contabo VPS + CI/CD |
-| Operations | [`operations/environment-variables.md`](docs/operations/environment-variables.md) | Every env var and secret |
-| Project | [`project/roadmap.md`](docs/project/roadmap.md) | Phases and milestones |
-| Project | [`project/backlog.md`](docs/project/backlog.md) | The concrete, prioritized task list |
+| Operations | [`operations/deployment.md`](private-docs/docs/operations/deployment.md) | Docker + Contabo VPS + CI/CD |
+| Operations | [`operations/environment-variables.md`](private-docs/docs/operations/environment-variables.md) | Every env var and secret |
+| Project | [`project/roadmap.md`](private-docs/docs/project/roadmap.md) | Phases and milestones |
+| Project | [`project/backlog.md`](private-docs/docs/project/backlog.md) | The concrete, prioritized task list |
 
 ## Getting started (once code exists)
 
@@ -128,17 +128,17 @@ pnpm format           # Prettier write
 ```
 
 Copy `.env.example` to `.env.local` and fill in the values documented in
-[environment variables](docs/operations/environment-variables.md).
+[environment variables](private-docs/docs/operations/environment-variables.md).
 
 ## How work is organized
 
-- Work is broken into **phases** (see the [roadmap](docs/project/roadmap.md)); each phase
+- Work is broken into **phases** (see the [roadmap](private-docs/docs/project/roadmap.md)); each phase
   has a clear deliverable and exit criteria.
-- Concrete, pickup-ready tasks live in the [backlog](docs/project/backlog.md), each with
+- Concrete, pickup-ready tasks live in the [backlog](private-docs/docs/project/backlog.md), each with
   an ID (`P0-1`, `P1-3`, …), scope, acceptance criteria and doc references.
 - Every meaningful change is recorded in [`CHANGELOG.md`](CHANGELOG.md).
 - Non-trivial technical decisions are captured as
-  [ADRs](docs/architecture/decisions/README.md).
+  [ADRs](private-docs/docs/architecture/decisions/README.md).
 
 ## Roadmap in one screen
 
@@ -149,7 +149,7 @@ Copy `.env.example` to `.env.local` and fill in the values documented in
 | **P2 — Signature widgets** | Interactive terminal, live time/weather/location, GitHub activity | Widgets degrade gracefully, no layout shift, respect reduced motion |
 | **P3 — Depth** | Now-playing, hero video/mini-character, project detail pages, optional blog | Content complete, assets replaced, analytics reviewed |
 
-Full detail in [`docs/project/roadmap.md`](docs/project/roadmap.md).
+Full detail in [`docs/project/roadmap.md`](private-docs/docs/project/roadmap.md).
 
 ## Task handoff — where to start
 
@@ -157,8 +157,8 @@ If you are picking this up (future me, or a collaborator):
 
 1. Read [`docs/00-overview.md`](docs/00-overview.md) and the
    [design handoff](docs/design/handoff/README.md) — 20 minutes, non-negotiable.
-2. Skim the [roadmap](docs/project/roadmap.md) to see the shape of the work.
-3. Open the [backlog](docs/project/backlog.md) and take the top unblocked task in the
+2. Skim the [roadmap](private-docs/docs/project/roadmap.md) to see the shape of the work.
+3. Open the [backlog](private-docs/docs/project/backlog.md) and take the top unblocked task in the
    current phase. Start with **`P0-1` (scaffold the Next.js app)**.
 4. Follow the [git workflow](docs/engineering/git-workflow.md): branch, small commits,
    update the changelog, open a PR against the checklist.

@@ -86,7 +86,7 @@ add its own widget and its own mapping. See
 
 ## Where projects appear (three levels)
 
-Projects follow the site's information architecture ([ADR-0005](../architecture/decisions/0005-information-architecture.md)):
+Projects follow the site's information architecture ([ADR-0005](../../private-docs/docs/architecture/decisions/0005-information-architecture.md)):
 one model, surfaced at up to three levels of depth.
 
 | Level | Where | Route | Shows |

@@ -4,7 +4,7 @@
 hurting performance.
 
 Related: [tech stack](tech-stack.md) · [project structure](project-structure.md) ·
-[environment variables](../operations/environment-variables.md)
+[environment variables](../../private-docs/docs/operations/environment-variables.md)
 
 ## Rendering strategy
 
@@ -98,6 +98,6 @@ minimal hook for the widgets; a full error/uptime dashboard is a later, separate
 
 No secret is ever imported into a client component or exposed via `NEXT_PUBLIC_*`. All
 keys/tokens are server-only and documented in
-[environment variables](../operations/environment-variables.md). A build must succeed
+[environment variables](../../private-docs/docs/operations/environment-variables.md). A build must succeed
 with **no** live-data secrets present (widgets fall back), so previews and CI do not need
 production keys.

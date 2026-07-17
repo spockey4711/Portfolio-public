@@ -64,9 +64,9 @@ docs/
 - Each document states its **purpose** at the top and links to related docs.
 - When a decision changes, update the relevant doc **and** record it in
   [`../CHANGELOG.md`](../CHANGELOG.md); if it is a significant technical decision, add an
-  [ADR](architecture/decisions/README.md).
+  [ADR](../private-docs/docs/architecture/decisions/README.md).
 - Docs and the code they describe change in the same pull request.
 - Source-of-truth precedence: an **ADR** overrides a general doc; the
   [design handoff](design/handoff/README.md) is authoritative for visual
-  detail; [Plane](project/plane.md) is authoritative for task status and what to do next
-  (the [backlog](project/backlog.md) holds each task's groomed scope and acceptance criteria).
+  detail; [Plane](../private-docs/docs/project/plane.md) is authoritative for task status and what to do next
+  (the [backlog](../private-docs/docs/project/backlog.md) holds each task's groomed scope and acceptance criteria).

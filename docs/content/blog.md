@@ -3,7 +3,7 @@
 **Purpose:** how to write a blog post and how the `/blog` pipeline turns it into
 pages. Posts are MDX files under `content/blog/` - one post per file (e.g.
 `content/blog/warum-dieses-portfolio.mdx`). The blog is IA level 2/3 per
-[ADR-0005](../architecture/decisions/0005-information-architecture.md): reached
+[ADR-0005](../../private-docs/docs/architecture/decisions/0005-information-architecture.md): reached
 from the footer (a page-level link), never the scroll-only primary nav.
 
 Related: [content & voice](content-and-voice.md) · [seo](seo.md)

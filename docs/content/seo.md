@@ -3,11 +3,11 @@
 **Purpose:** the SEO/metadata contract - what tags ship, what signals matter, and how
 they map to Next's metadata API. Consolidates the earlier SEO and deployment discovery
 notes (deployment detail now lives in
-[operations/deployment.md](../operations/deployment.md)).
+[operations/deployment.md](../../private-docs/docs/operations/deployment.md)).
 
 Related: [content & voice](content-and-voice.md) ·
 [rendering & data](../architecture/rendering-and-data.md) ·
-[deployment](../operations/deployment.md)
+[deployment](../../private-docs/docs/operations/deployment.md)
 
 ## Goals
 
@@ -126,7 +126,7 @@ English) and carries the per-route `keywords`/`author`, at parity with the Germa
   - Core Web Vitals feed SEO; hit the performance budget in
   [quality & testing](../engineering/quality-and-testing.md).
 - Canonical host decision: pick `https://yannikwuenker.de` (with or without `www`) and
-  301 the other at the Nginx layer (see [deployment](../operations/deployment.md)).
+  301 the other at the Nginx layer (see [deployment](../../private-docs/docs/operations/deployment.md)).
 
 ## What recruiters / technical viewers must find
 

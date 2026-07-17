@@ -3,7 +3,7 @@
 **Purpose:** get the site running locally and know the everyday commands. These become
 valid in **P0** when the app is scaffolded; until then this is the target contract.
 
-Related: [deployment](deployment.md) · [environment variables](environment-variables.md)
+Related: [deployment](../../private-docs/docs/operations/deployment.md) · [environment variables](../../private-docs/docs/operations/environment-variables.md)
 · [quality & testing](../engineering/quality-and-testing.md)
 
 ## Prerequisites

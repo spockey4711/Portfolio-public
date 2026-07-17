@@ -48,7 +48,7 @@
   `blogIndex` (not `blogPost`) lit up the reciprocal `de-DE`/`en`/`x-default` hreflang on both
   index pages (the German page previously carried only a bare canonical) and the `/en/blog`
   sitemap entry. Decision recorded in
-  [ADR-0006](docs/architecture/decisions/0006-i18n-and-localization.md); see also
+  [ADR-0006](private-docs/docs/architecture/decisions/0006-i18n-and-localization.md); see also
   [`docs/content/i18n.md`](docs/content/i18n.md).
 - **English legal pages (S5-1e).** `/en/imprint` and `/en/privacy` now render a full English
   translation of the Impressum and Datenschutzerklärung. `content/legal.ts` becomes
@@ -58,7 +58,7 @@
   (§ 5 DDG, § 18 MStV) are kept verbatim. Both locales are noindex/follow and now advertise the
   reciprocal `de-DE`/`en`/`x-default` hreflang pair, but stay out of the sitemap. `imprint` and
   `privacy` join `translatedRoutes`. Decision recorded in
-  [ADR-0006](docs/architecture/decisions/0006-i18n-and-localization.md); see also
+  [ADR-0006](private-docs/docs/architecture/decisions/0006-i18n-and-localization.md); see also
   [`docs/content/i18n.md`](docs/content/i18n.md).
 - **English /now page (S5-1d).** The "now" snapshot now renders in English at `/en/now`, the
   fifth route to light up on the English tree. `content/now.ts` moves from a single German-only
@@ -116,7 +116,7 @@
   the fragments in and bumps the version at release. The Keep a Changelog / SemVer note moved to
   the [release runbook](docs/engineering/releases.md#changelog-format). This `[Unreleased]` block
   is the last hand-written one (see the one-time transition there). Rationale:
-  [ADR-0010](docs/architecture/decisions/0010-changelog-via-changesets.md).
+  [ADR-0010](private-docs/docs/architecture/decisions/0010-changelog-via-changesets.md).
 - **CI: bump `actions/checkout` from v4 to v5 across all workflows.** v4 runs on the
   Node 20 action runtime, which GitHub is deprecating on its runners; v5 runs on Node 24
   and clears the runner advisory. Pre-empts the Dependabot `github-actions` major bump.
@@ -125,7 +125,7 @@
   task lifecycle advances a Plane work item (Todo -> In Progress -> Done) instead of checking
   a box in `docs/project/backlog.md`, which is reframed as the groomed sprint overview and the
   home of each task's scope and acceptance criteria. New reference:
-  [`docs/project/plane.md`](docs/project/plane.md); the lifecycle in
+  [`docs/project/plane.md`](private-docs/docs/project/plane.md); the lifecycle in
   [`docs/engineering/git-workflow.md`](docs/engineering/git-workflow.md) and `CLAUDE.md` is
   updated to match. Task ids stay `S<n>-<m>` / `P<phase>-<n>`.
 
@@ -169,7 +169,7 @@
   (inlined at build time, off when unset), and the processing is disclosed in a new Datenschutz
   section under Art. 6 Abs. 1 lit. f DSGVO. See
   [`docs/operations/error-monitoring.md`](docs/operations/error-monitoring.md) and
-  [ADR-0009](docs/architecture/decisions/0009-error-and-uptime-monitoring.md).
+  [ADR-0009](private-docs/docs/architecture/decisions/0009-error-and-uptime-monitoring.md).
 - **Test depth for the live widgets and interactive surfaces (S6-4).** Hardened the tests
   where logic can silently break, without chasing markup coverage. The live-widget data
   adapters now cover their defensive normalization paths: WakaTime clamps an out-of-range or
@@ -222,7 +222,7 @@
   done state and requires checking a backlog task off the moment its PR is open and only the
   merge remains (never waiting for the merge); `[~]` is reserved for in-progress work or a
   real follow-up action beyond the merge. Done inbox items may be deleted since `CHANGELOG.md`
-  carries the record. Documented in [`docs/project/backlog.md`](docs/project/backlog.md),
+  carries the record. Documented in [`docs/project/backlog.md`](private-docs/docs/project/backlog.md),
   [`docs/engineering/git-workflow.md`](docs/engineering/git-workflow.md), the inbox and
   `CLAUDE.md`. Process/docs only.
 - **Two-environment deploy: `master` -> production apex, `develop` -> preview subdomain.** The
@@ -236,7 +236,7 @@
   (`prod-sha-<sha>` / `dev-sha-<sha>`, plus `prod-latest` / `dev-latest`). `docker-compose.yml`
   drops the fixed `container_name` (Compose namespaces by project dir instead) and takes a
   `HOST_PORT`; `docker-compose.prod.yml` and `scripts/deploy-remote.sh` bind and health-check
-  that port. New runbook [`docs/operations/two-environment-setup.md`](docs/operations/two-environment-setup.md)
+  that port. New runbook [`docs/operations/two-environment-setup.md`](private-docs/docs/operations/two-environment-setup.md)
   documents the DNS, Nginx apex block, TLS and server steps; `deployment.md` and
   `server-setup.md` are updated (the old single-environment "go-live switch" is superseded).
   Repo-side config and docs only; the server/DNS steps are applied manually.
@@ -326,7 +326,7 @@
   script that stores no IP and builds no personal profiles; the Datenschutz page
   (`content/legal.ts`) discloses the processing under Art. 6 Abs. 1 lit. f DSGVO, with no
   cookie banner. Decision and trade-offs (Umami over Plausible CE) in
-  [ADR-0008](docs/architecture/decisions/0008-analytics.md); the stand-up procedure in the
+  [ADR-0008](private-docs/docs/architecture/decisions/0008-analytics.md); the stand-up procedure in the
   [analytics runbook](docs/operations/analytics.md).
 - **Interactive fuelivo proof (S4-5).** A self-contained live calculator on the fuelivo
   detail page that turns its strongest claim - deterministic, explainable output - into
@@ -354,7 +354,7 @@
   toggles from the command palette and from a dedicated button in the nav "Mehr" and phone
   menus, both wired through a `useTheme` hook; the choice persists in `localStorage`. The dark
   palette is derived from the site's own terminal greens and verified against WCAG AA on both
-  `--bg` and `--surface`. Documented in [ADR-0007](docs/architecture/decisions/0007-theming-dark-mode.md),
+  `--bg` and `--surface`. Documented in [ADR-0007](private-docs/docs/architecture/decisions/0007-theming-dark-mode.md),
   [design-system](docs/design/design-system.md) and [accessibility](docs/design/accessibility.md).
 - **Motion & micro-interaction polish (S4-6).** Deliberate hover/focus choreography across
   the signature surfaces, with hover and keyboard focus kept in step and a reduced-motion path
@@ -410,7 +410,7 @@
   layout shift, and degrades to a static German/English fallback caption on any failure -
   logged through `logWidgetFailure` unless the key is simply unset. Documented in
   [`rendering-and-data.md`](docs/architecture/rendering-and-data.md) and
-  [`environment-variables.md`](docs/operations/environment-variables.md).
+  [`environment-variables.md`](private-docs/docs/operations/environment-variables.md).
 - **DevBlueprint project detail page (S3-6).** Promotes DevBlueprint - a reusable,
   stack-agnostic engineering-setup kit - to a full `/projekte/devblueprint` case study with a
   genuine problem -> approach -> learnings story (summary, solution, features, tech stack,
@@ -444,7 +444,7 @@
   keeps untranslated English routes hidden (the toggle falls back to the English home), so
   translation can land route-by-route; only the onepager is live today. The `/en` onepager is
   in the sitemap with absolute hreflang. Documented in
-  [ADR-0006](docs/architecture/decisions/0006-i18n-and-localization.md) and
+  [ADR-0006](private-docs/docs/architecture/decisions/0006-i18n-and-localization.md) and
   [`docs/content/i18n.md`](docs/content/i18n.md). Also fixes two bugs surfaced en route: a
   half-migrated `NotFoundTerminal` and a `usePathname()` null crash in the language toggle.
 - **Command palette (⌘K) (S2-6).** A keyboard-first launcher that unifies section/route
@@ -513,7 +513,7 @@
   prerendered HTML unless the flag is explicitly set to `true`/`1` and the site is rebuilt -
   the site does not advertise a job search until that switch is flipped. The flag is
   server-only (never `NEXT_PUBLIC_*`, so it stays out of the client bundle) and is catalogued
-  in [environment variables](docs/operations/environment-variables.md) and `.env.example`.
+  in [environment variables](private-docs/docs/operations/environment-variables.md) and `.env.example`.
 - **fuelivo project detail page turned into a full case study.** The `Project` model gains
   an optional `caseStudy` object (`content/projects/types.ts`), and `ProjectDetail` renders
   it section by section: a lead summary, the solution with its calculation highlights, a
@@ -532,7 +532,7 @@
   blog, legal, ...). Documentation only; no runtime change.
 - **Blog (P3-7).** An MDX-based blog at `/blog` (index) and `/blog/[slug]` (post pages),
   reached from a new page-level "explore" nav in the footer rather than the scroll-only
-  primary nav (IA level 2/3, [ADR-0005](docs/architecture/decisions/0005-information-architecture.md)).
+  primary nav (IA level 2/3, [ADR-0005](private-docs/docs/architecture/decisions/0005-information-architecture.md)).
   Posts are authored as `content/blog/*.mdx` with a small, validated frontmatter block
   (`title`, `date`, `summary`, optional `tags` and `draft`); `lib/content/blog.ts` reads
   and validates them at build time and is the single source of truth behind the index, the
@@ -543,7 +543,7 @@
   first post; authoring and pipeline documented in [blog](docs/content/blog.md).
 - **Blog reachable from the primary nav.** The header now carries the blog as a page-level
   destination alongside the scroll anchors, so a visitor no longer has to reach the footer to
-  find it. Per [ADR-0005](docs/architecture/decisions/0005-information-architecture.md) a page
+  find it. Per [ADR-0005](private-docs/docs/architecture/decisions/0005-information-architecture.md) a page
   link must not look like a section anchor, so `copy.nav.pageLinks` is kept separate from the
   scroll `links` and the Nav renders it past a divider with a trailing arrow - on desktop and
   in the phone menu (`components/chrome/Nav.tsx`). The footer's `explore` link stays as-is.
@@ -649,7 +649,7 @@
   triggers on `develop` and release tags. Both long-lived branches are protected, so GitHub's
   auto-delete-on-merge cleans up feature branches without ever removing `develop` or `master`.
   Documented in [git-workflow](docs/engineering/git-workflow.md),
-  [CONTRIBUTING](CONTRIBUTING.md) and [deployment](docs/operations/deployment.md).
+  [CONTRIBUTING](CONTRIBUTING.md) and [deployment](private-docs/docs/operations/deployment.md).
 - **Projects section is now a curated teaser.** The onepager section
   (`components/sections/projects/Projects.tsx`) shows the featured project plus `TEASER_COUNT`
   (2) more by `order` instead of every project, and gains an "Alle Projekte ansehen" link into
@@ -705,7 +705,7 @@
   last-played fallback needed a hand-rolled OAuth flow; a token minted without
   `user-read-recently-played` silently degraded the widget to the static "Lofi & Commits"
   placeholder. Documented in
-  [environment variables](docs/operations/environment-variables.md#spotify-now-playing-scopes).
+  [environment variables](private-docs/docs/operations/environment-variables.md#spotify-now-playing-scopes).
 - **P3-9 — Projects index page.** A dedicated `/projekte` route (`app/projekte/page.tsx`)
   lists every project, not just the onepager teaser - the IA level-2 index from ADR-0005.
   It reuses `FeaturedProject` and `ProjectCard` and the standalone-page chrome (mono eyebrow,
@@ -755,7 +755,7 @@
   server-only. The recently-played read needs the `user-read-recently-played` scope on the
   refresh token; until the token is regenerated with it Spotify returns 403 and the widget
   degrades cleanly to the placeholder, so nothing breaks. See
-  [environment variables](docs/operations/environment-variables.md#spotify-now-playing-scopes).
+  [environment variables](private-docs/docs/operations/environment-variables.md#spotify-now-playing-scopes).
 - **fuelivo cover screenshot.** Gave the featured project a real cover visual instead of the
   striped placeholder by setting `media.cover` to `public/images/fuelivo_screen.png`
   (`content/projects.ts`). `ProjectMedia` already rendered `media.cover` when present, so no
@@ -763,7 +763,7 @@
   projects without a cover.
 - **Inbox doc for raw capture.** Added `docs/project/inbox.md`, a low-friction scratch list
   for feature ideas, bugs and open questions, kept separate from the groomed
-  [backlog](docs/project/backlog.md) so the authoritative task list stays clean. Items get
+  [backlog](private-docs/docs/project/backlog.md) so the authoritative task list stays clean. Items get
   triaged from the inbox into real backlog tasks (or dropped); the backlog now links it.
 - **P3-2 — Hero character walk-through.** Replaced the hero's placeholder visual panel (the
   striped card, REC badge and `[ hero-video.mp4 ]` caption) with a small character that walks

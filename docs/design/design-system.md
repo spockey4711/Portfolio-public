@@ -31,7 +31,7 @@ the essentials and states how they map into code.
 
 Related: [responsive & mobile](responsive-and-mobile.md) ·
 [animation & motion](animation-and-motion.md) ·
-[accessibility](accessibility.md) · [ADR-0003 styling](../architecture/decisions/0003-styling.md)
+[accessibility](accessibility.md) · [ADR-0003 styling](../../private-docs/docs/architecture/decisions/0003-styling.md)
 
 ## Design tokens
 

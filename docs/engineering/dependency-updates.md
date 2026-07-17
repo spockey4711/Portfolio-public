@@ -5,14 +5,14 @@ they raise. Configured for [Dependabot](https://docs.github.com/code-security/de
 [`.github/dependabot.yml`](../../.github/dependabot.yml).
 
 Related: [git workflow](git-workflow.md) · [releases](releases.md) ·
-[quality & testing](quality-and-testing.md) · [deployment](../operations/deployment.md)
+[quality & testing](quality-and-testing.md) · [deployment](../../private-docs/docs/operations/deployment.md)
 
 ## Why Dependabot
 
 Dependabot is native to GitHub, so it needs no external app install and ties into GitHub's
 security advisories out of the box. For a single-package portfolio its grouped PRs are
 enough; Renovate's extra power (lockfile maintenance, per-package rules) would be more
-machinery than the repo needs. See the [S2-10 backlog task](../project/backlog.md).
+machinery than the repo needs. See the [S2-10 backlog task](../../private-docs/docs/project/backlog.md).
 
 ## What is watched
 

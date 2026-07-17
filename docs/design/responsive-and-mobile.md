@@ -10,7 +10,7 @@ checklist.
 Related: [design system](design-system.md) · [accessibility](accessibility.md) ·
 [animation & motion](animation-and-motion.md) ·
 [handoff "Responsive behavior"](handoff/README.md) ·
-[ADR-0003 styling](../architecture/decisions/0003-styling.md)
+[ADR-0003 styling](../../private-docs/docs/architecture/decisions/0003-styling.md)
 
 The handoff is authoritative for the desktop visual; this doc is authoritative for how it
 adapts below that. If they disagree on adaptation, this doc wins and the handoff note gets
@@ -174,6 +174,6 @@ device via the dev subdomain, `portfolio.yannikwuenker.de`):
 ## Current gaps
 
 Documented so the doc stays honest; these are the known deltas between this policy and the
-code, tracked in the [backlog](../project/backlog.md#responsive--mobile-hardening):
+code, tracked in the [backlog](../../private-docs/docs/project/backlog.md#responsive--mobile-hardening):
 
 - None currently.

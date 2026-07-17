@@ -3,8 +3,8 @@
 **Purpose:** the exact technology choices, pinned versions and the reasoning. When a
 version or tool changes, update this file and the changelog.
 
-Related: [ADR-0001 framework](decisions/0001-framework.md) ·
-[ADR-0003 styling](decisions/0003-styling.md) ·
+Related: [ADR-0001 framework](../../private-docs/docs/architecture/decisions/0001-framework.md) ·
+[ADR-0003 styling](../../private-docs/docs/architecture/decisions/0003-styling.md) ·
 [rendering & data](rendering-and-data.md)
 
 ## Summary
@@ -59,21 +59,21 @@ build on Node 22.
   server-side API routes for live data (weather, GitHub activity, now-playing) so we do
   not leak API keys to the client. Next covers both without gluing tools together.
   Static sections are rendered at build time; live data goes through route handlers with
-  caching. See [ADR-0001](decisions/0001-framework.md).
+  caching. See [ADR-0001](../../private-docs/docs/architecture/decisions/0001-framework.md).
 - **TypeScript, strict.** The project is meant to last; types are the cheapest
   documentation and the cheapest bug prevention.
 - **Tailwind + CSS variables.** The design system is token-driven. Tokens live as CSS
   variables (`--pine`, `--signal`, …) and are exposed to Tailwind's theme, so class
   names map to the design vocabulary and there is a single source of truth. See
-  [ADR-0003](decisions/0003-styling.md).
+  [ADR-0003](../../private-docs/docs/architecture/decisions/0003-styling.md).
 - **Framer Motion, sparingly.** Reveal/stagger animations and orchestration. The
   performance-critical, per-frame work (scroll spine fill, nav percentage) does **not**
   go through React state — it mutates a CSS variable / transform via a ref in a
   `requestAnimationFrame` loop. See [animation & motion](../design/animation-and-motion.md).
 - **pnpm.** Fast, strict, disk-efficient; good with a single-package repo and CI cache.
 - **Docker + Nginx on a Contabo VPS.** Self-managed box with generous RAM; full control
-  over TLS, caching and the domain. See [ADR-0002](decisions/0002-hosting.md) and
-  [deployment](../operations/deployment.md).
+  over TLS, caching and the domain. See [ADR-0002](../../private-docs/docs/architecture/decisions/0002-hosting.md) and
+  [deployment](../../private-docs/docs/operations/deployment.md).
 
 ## Explicitly not used (for now)
 
@@ -86,4 +86,4 @@ build on Node 22.
 - **Self-hosted, cookieless analytics (Umami), off by default.** No third-party analytics
   vendor. A self-hosted Umami tag (S2-5) attaches only when a build supplies the two public
   `NEXT_PUBLIC_ANALYTICS_*` values, else nothing loads. See
-  [ADR-0008](decisions/0008-analytics.md) and the [analytics runbook](../operations/analytics.md).
+  [ADR-0008](../../private-docs/docs/architecture/decisions/0008-analytics.md) and the [analytics runbook](../operations/analytics.md).

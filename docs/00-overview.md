@@ -3,7 +3,7 @@
 **Purpose:** the shared mental model for the project — what we are building, for whom,
 and how we know it is good. Read this before anything else.
 
-Related: [roadmap](project/roadmap.md) · [content & voice](content/content-and-voice.md)
+Related: [roadmap](../private-docs/docs/project/roadmap.md) · [content & voice](content/content-and-voice.md)
 · [design system](design/design-system.md)
 
 ## What it is
@@ -116,7 +116,7 @@ Quality bars (see [quality-and-testing](engineering/quality-and-testing.md)):
 - **Analytics:** minimal and privacy-friendly, only if it produces insights that
   actually change decisions.
 - **Launch date:** none fixed.
-- **Curation & prioritization (see [ADR-0011](architecture/decisions/0011-lean-onepager-and-substance-gate.md)):**
+- **Curation & prioritization (see [ADR-0011](../private-docs/docs/architecture/decisions/0011-lean-onepager-and-substance-gate.md)):**
   playground-first, recruiting a valued side effect. The one-pager stays lean - a single
   signature widget (GitHub heatmap); other widgets live in the depth layer. New feature work
   is gated behind genuinely *carried* projects (fuelivo, then DevBlueprint) on a 1:1

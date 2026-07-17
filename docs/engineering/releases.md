@@ -6,8 +6,8 @@ and versioning rules live in [git workflow](git-workflow.md); this is the operat
 that sits on top of them.
 
 Related: [git workflow](git-workflow.md) · [dependency updates](dependency-updates.md) ·
-[deployment](../operations/deployment.md) · [`CHANGELOG.md`](../../CHANGELOG.md) ·
-[ADR-0010: changelog via changesets](../architecture/decisions/0010-changelog-via-changesets.md)
+[deployment](../../private-docs/docs/operations/deployment.md) · [`CHANGELOG.md`](../../CHANGELOG.md) ·
+[ADR-0010: changelog via changesets](../../private-docs/docs/architecture/decisions/0010-changelog-via-changesets.md)
 
 ## Cadence
 
@@ -106,7 +106,7 @@ time. Write the full prose entry - the "what and why", with doc links - into the
 Changesets keeps the multi-line text verbatim. It groups a version's entries by bump level
 ("Minor Changes" / "Patch Changes") rather than Added/Changed/Fixed, and its generated headings
 carry no date (add one by hand if wanted). Rationale and trade-offs:
-[ADR-0010](../architecture/decisions/0010-changelog-via-changesets.md).
+[ADR-0010](../../private-docs/docs/architecture/decisions/0010-changelog-via-changesets.md).
 
 **One-time transition.** The `## [Unreleased]` block that existed when Changesets was adopted
 (the S5 sprint) is the last hand-written one. Release it once by renaming `## [Unreleased]` to

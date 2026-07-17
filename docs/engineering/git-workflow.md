@@ -5,7 +5,7 @@
 
 Related: [quality & testing](quality-and-testing.md) ·
 [dependency updates](dependency-updates.md) ·
-[deployment](../operations/deployment.md) · [changelog](../../CHANGELOG.md)
+[deployment](../../private-docs/docs/operations/deployment.md) · [changelog](../../CHANGELOG.md)
 
 ## Task lifecycle
 
@@ -14,14 +14,14 @@ the main clone stays on `master`, so its working tree is always clean and ready 
 task. Sections below are the reference detail for each step.
 
 Trigger: a request like "do task S5-2". Tasks are tracked in Plane, not in checkboxes - see
-[task tracking (Plane)](../project/plane.md).
+[task tracking (Plane)](../../private-docs/docs/project/plane.md).
 
 1. **Create the task's worktree.** `pnpm wt new <type>/<short-slug>` (e.g.
    `pnpm wt new feat/hero-section`). This branches off `origin/develop` into its own
    directory and prints the path; do all the work there. The main clone stays on `master` -
    never `git checkout` a feature branch in it. See [Worktrees](#worktrees).
 2. **Set the Plane work item to In Progress.** Find the task's item (by its `S<n>-<m>` id in
-   the title) and move it to In Progress. See [task tracking (Plane)](../project/plane.md).
+   the title) and move it to In Progress. See [task tracking (Plane)](../../private-docs/docs/project/plane.md).
 3. **Do the work in small commits.** One logical change per commit, Conventional Commits,
    each commit building green. See [Commits](#commits--conventional-commits).
 4. **Keep docs and changelog in sync** in the same branch - update the affected docs and
@@ -35,9 +35,9 @@ Trigger: a request like "do task S5-2". Tasks are tracked in Plane, not in check
 8. **Advance the Plane work item to Done.** The moment the PR is open and only the merge is
    left, set the item to Done. Do not wait for the merge - a ready PR must already read Done,
    never In Progress. Leave it In Progress only if a real follow-up beyond the merge is still
-   outstanding. See [task tracking (Plane)](../project/plane.md).
+   outstanding. See [task tracking (Plane)](../../private-docs/docs/project/plane.md).
 9. **Hand the PR to the user**, who reviews and merges into `develop`. Merging deploys the
-   updated `develop` to the dev subdomain (see [deployment](../operations/deployment.md)). The
+   updated `develop` to the dev subdomain (see [deployment](../../private-docs/docs/operations/deployment.md)). The
    main clone never moved, so there is nothing to switch back. Once the PR is merged,
    `pnpm wt gc` removes the now-merged worktree and its branch.
 
@@ -52,7 +52,7 @@ Two long-lived branches with short-lived feature branches integrating on `develo
   pushes, PRs only, CI must pass. It moves only via the periodic release PR from `develop`
   (see [Releases](#releases-promoting-develop-to-master)), never by merging feature branches
   directly. Pre-MVP it is not auto-deployed; release tags cut on `master` become the
-  production deploy path at go-live (see [deployment](../operations/deployment.md)).
+  production deploy path at go-live (see [deployment](../../private-docs/docs/operations/deployment.md)).
 - **`develop`** is the integration branch. Feature branches merge here first, and every merge
   deploys to the dev subdomain (`portfolio.yannikwuenker.de`) so a change can be tested across
   devices and browsers before it is promoted. It is protected too: PRs only, CI must pass.
@@ -175,9 +175,9 @@ release PR. If `master` ever moves independently (e.g. a hotfix), merge `master`
 - Record anything user- or developer-visible as a changeset (`pnpm changeset`) - a
   uniquely-named fragment in `.changeset/`, so parallel branches never conflict on
   `CHANGELOG.md`. The release folds fragments into the changelog. See
-  [ADR-0010](../architecture/decisions/0010-changelog-via-changesets.md) and
+  [ADR-0010](../../private-docs/docs/architecture/decisions/0010-changelog-via-changesets.md) and
   [releases](releases.md#changelog-format).
-- Significant technical decisions get an [ADR](../architecture/decisions/README.md).
+- Significant technical decisions get an [ADR](../../private-docs/docs/architecture/decisions/README.md).
 
 ## Versioning & releases
 
@@ -189,7 +189,7 @@ release PR. If `master` ever moves independently (e.g. a hotfix), merge `master`
      [runbook](releases.md#runbook-cutting-a-release).
   2. Tag: `git tag -a vX.Y.Z -m "vX.Y.Z"` and push tags.
   3. The deploy workflow ships the tagged build (see
-     [deployment](../operations/deployment.md)).
+     [deployment](../../private-docs/docs/operations/deployment.md)).
 - Bump rules (the level chosen in each changeset): `feat` → minor, `fix`/`perf` → patch,
   `BREAKING CHANGE` → major.
 
@@ -198,7 +198,7 @@ release PR. If `master` ever moves independently (e.g. a hotfix), merge `master`
 - `.gitignore` excludes `node_modules`, `.next`, `.env*` (except `.env.example`), build
   artifacts, OS cruft.
 - Never commit secrets. If one leaks, rotate it and scrub - see
-  [environment variables](../operations/environment-variables.md).
+  [environment variables](../../private-docs/docs/operations/environment-variables.md).
 - No large binaries in git without reason; optimize images before committing.
 - Dependency bumps are automated: [Dependabot](dependency-updates.md) opens weekly PRs into
   `develop`, gated by CI like any other change.

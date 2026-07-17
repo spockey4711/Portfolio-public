@@ -15,7 +15,7 @@ Related: [project structure](../architecture/project-structure.md) ·
 - **ESLint** (Next config + `jsx-a11y` + import ordering) is the lint gate. Warnings are
   not acceptable in CI; fix or explicitly disable with a justification comment.
 - **English** for all identifiers, comments and docs. German only inside `content/`
-  strings. See [ADR-0004](../architecture/decisions/0004-docs-language.md).
+  strings. See [ADR-0004](../../private-docs/docs/architecture/decisions/0004-docs-language.md).
 
 ## Naming
 
@@ -43,7 +43,7 @@ Related: [project structure](../architecture/project-structure.md) ·
 
 - Tailwind utilities + design tokens only. **No raw hex values in components** - always a
   token (`text-ink`, `bg-pine`, …). See
-  [ADR-0003](../architecture/decisions/0003-styling.md).
+  [ADR-0003](../../private-docs/docs/architecture/decisions/0003-styling.md).
 - No inline magic-number spacing that contradicts the scale; use the spacing tokens.
 - Per-frame animation writes a CSS variable via a ref, not React state (see
   [animation & motion](../design/animation-and-motion.md)).
@@ -69,7 +69,7 @@ Related: [project structure](../architecture/project-structure.md) ·
   Widgets degrade gracefully (see
   [rendering & data](../architecture/rendering-and-data.md)).
 - No secrets in client bundles or `NEXT_PUBLIC_*`. See
-  [environment variables](../operations/environment-variables.md).
+  [environment variables](../../private-docs/docs/operations/environment-variables.md).
 
 ## Dependencies
 
