@@ -60,3 +60,6 @@ next-env.d.ts
 
 # scripts/generate-assets.mjs reshoot previews (inspected by eye, never committed)
 /.asset-preview/
+
+# nested private docs repo (separate git repo, never part of the public repo)
+/private-docs/
