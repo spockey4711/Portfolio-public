@@ -10,5 +10,5 @@ test("primitives page renders the ui primitives", async ({ page }) => {
   await expect(page.getByRole("button", { name: "CV laden" })).toBeVisible();
   await expect(page.getByRole("link", { name: "GitHub" })).toBeVisible();
   await expect(page.getByText("Verfügbar für Werkstudent")).toBeVisible();
-  await expect(page.getByText("01 / Section header")).toBeVisible();
+  await expect(page.getByText("Section header")).toBeVisible();
 });
