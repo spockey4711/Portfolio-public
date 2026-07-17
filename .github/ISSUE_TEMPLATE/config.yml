@@ -1,0 +1,11 @@
+# Blank issues are disabled: bug reports go through the template, and everything
+# else (feature planning, security, general contact) is routed below. Task
+# planning lives in a private tracker, not in GitHub issues.
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/spockey4711/Portfolio-public/security/advisories/new
+    about: Please report vulnerabilities privately. See SECURITY.md for details.
+  - name: General questions or reuse requests
+    url: mailto:mail@yannikwuenker.de
+    about: For anything that is not a bug report - including reusing a component.
