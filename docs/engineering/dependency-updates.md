@@ -30,8 +30,8 @@ Two ecosystems, both scanned weekly (Monday 06:00 Europe/Berlin):
 Every Dependabot PR targets **`develop`**, the integration branch - never `master`, which
 only moves via the periodic release PR (see
 [Releases](git-workflow.md#releases-promoting-develop-to-master)). This means a dependency
-bump rides the same path as any feature: it lands on `develop`, deploys to the dev subdomain,
-and is later promoted to `master` in the next release PR.
+bump rides the same path as any feature: it lands on `develop`, ships with the next preview
+rollout, and is later promoted to `master` in the next release PR.
 
 Each PR runs the full [CI gate](quality-and-testing.md) (lint, typecheck, unit tests, build,
 Playwright smoke, Lighthouse budgets) before it can merge, so a bump that breaks the build or

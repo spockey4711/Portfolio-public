@@ -16,7 +16,8 @@ years. This file is the short version; the full detail lives in
 ## Workflow
 
 The branching model has two long-lived branches: feature work integrates on `develop` (which
-deploys to the dev subdomain), and `develop` is promoted to the always-deployable `master` via
+publishes the dev subdomain's preview image; the server rollout is a manual step), and
+`develop` is promoted to the always-deployable `master` via
 a periodic release PR. Tasks are tracked in Plane (project `PORT`), the authoritative tracker -
 move a task's work item to In Progress when you start and to Done when its PR is open. Full
 detail: [git workflow](docs/engineering/git-workflow.md#branching-model) and
