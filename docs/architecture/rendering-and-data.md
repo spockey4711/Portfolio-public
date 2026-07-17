@@ -21,6 +21,11 @@ The site is content-first, so default to the cheapest thing that works:
 
 Rule of thumb: **static content, client islands, server-only secrets.**
 
+Since the lean one-pager (ADR-0011) the GitHub contribution heatmap is the only live
+widget rendered on the home page. The terminal, now-playing, signals-of-life and
+WakaTime widgets - and their `/api` routes - remain in the codebase but are parked
+off the one-pager until they get a home in the depth layer.
+
 ### Self-contained widgets (no live data)
 
 Not every widget talks to a route. The interactive fuelivo proof
