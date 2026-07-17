@@ -29,13 +29,22 @@ test("keyboard focus shows the signal focus-visible ring", async ({ page }) => {
   await page.keyboard.press("Tab");
   await expect(skipLink).toBeFocused();
 
-  // The global :focus-visible rule draws a 2px solid ring in the signal accent
-  // (#157a45 = rgb(21, 122, 69)).
+  // The global :focus-visible rule draws a 2px solid ring in the --focus accent.
+  // We resolve --focus through a probe element rather than hard-coding a color
+  // string: the token is an oklch() value, which browsers serialize as lab(), so
+  // an exact literal would be brittle across engine versions. Reading both the
+  // outline and the probe through getComputedStyle keeps the assertion pinned to
+  // the token itself.
   const ring = await skipLink.evaluate((el) => {
     const s = getComputedStyle(el);
-    return { style: s.outlineStyle, width: s.outlineWidth, color: s.outlineColor };
+    const probe = document.createElement("span");
+    probe.style.color = "var(--focus)";
+    document.body.appendChild(probe);
+    const focusColor = getComputedStyle(probe).color;
+    probe.remove();
+    return { style: s.outlineStyle, width: s.outlineWidth, color: s.outlineColor, focusColor };
   });
   expect(ring.style).toBe("solid");
   expect(ring.width).toBe("2px");
-  expect(ring.color).toBe("rgb(21, 122, 69)");
+  expect(ring.color).toBe(ring.focusColor);
 });
