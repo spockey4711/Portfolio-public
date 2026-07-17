@@ -233,13 +233,9 @@ export const enCopy: Copy = {
       eyebrow: "Selected work",
       lead: "A few things I have built - from the first problem to a running app.",
     },
-    live: {
-      eyebrow: "Right now",
-      lead: "Not a static portfolio: what runs here updates on its own - music, commits, the latest post.",
-    },
-    stats: {
+    github: {
       eyebrow: "The work, in numbers",
-      lead: "What I have been working on lately - straight from WakaTime and GitHub, not guessed.",
+      lead: "A year of commits, straight from GitHub - not guessed, not curated.",
     },
   },
 

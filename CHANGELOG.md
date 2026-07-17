@@ -1,10 +1,117 @@
 # Changelog
 
+## 0.4.0 - 2026-07-17
+
+### Minor Changes
+
+- 4377651: Break the landing page out of one wall-to-wall bento grid into a vertical stack of
+  bands that alternate two registers, so the page breathes instead of reading as
+  box-on-box. Open editorial bands - about, experience, skills - now sit as plain prose
+  straight on the paper background, separated by whitespace and a hairline rule.
+  Framed instrument clusters - the projects poster + teasers, the terminal, the
+  live-status/signals pair, and the WakaTime + GitHub stats - keep their borders,
+  because for a real-UI widget (a terminal window, a contribution heatmap) the frame is
+  the metaphor. Each cluster is introduced by an editorial lead-in on the background
+  (new `landing.*` copy, de + en), the "background with text" beat before the boxes
+  resume. Two new layout primitives (`Band`, `BandIntro`) own the shared measure and the
+  interstitial. DOM order, the five section anchors (#projekte, #ueber, #werdegang,
+  #skills, #kontakt) and the amber contact band are unchanged; every band collapses to a
+  single column on mobile with no horizontal overflow at 320-768px.
+- 4377651: Give the featured landing project its own full-width row so it no longer towers over
+  the two teasers beside it. fuelivo now leads as a "wide" card (cover beside the story
+  instead of a half-width poster), and the two teaser projects (Aurelian, DevBlueprint)
+  drop below it one per column, rendering the same flat `problem`/`role`/`learnings` story
+  their data already held instead of a bare tagline. `FeaturedProject` grew a `layout`
+  prop ("poster" default, "wide" for the lead), so the projects index page is unchanged;
+  grid stretch keeps the two teasers equal height whatever the copy length.
+- 4377651: Redesign the landing page with the "Pressroom" print system: new design tokens (warm slate-cream paper, amber/slate duo-tone accents, square corners, hard-offset ink shadows), new type pairing (Big Shoulders display + IBM Plex Sans body), the onepager restructured as a bento grid with the live widgets as first-class tiles, a slab nav and a mono colophon footer. The walking hero character and the scroll spine are removed; the project-cover fake browser chrome becomes a typographic caption bar.
+
+### Patch Changes
+
+- 4377651: Fix the nav scroll percentage reaching 100% before the true bottom of the onepager. The redesign
+  added `overflow-x: clip` to the root, which turns `html` into a scroll container whose own box is
+  pinned to the viewport height, so the `ResizeObserver` on `document.documentElement` stopped firing
+  when the document grew after mount (fonts settling, media loading) and the cached scrollable height
+  went stale. The observer now watches `document.body`, whose box tracks content height, so progress
+  stays exact all the way to the end.
+- ec9a8c1: Realign the end-to-end and visual-regression suites with the shipped landing redesign so CI runs
+  green again. The a11y focus-ring test now pins the outline to the `--focus` token (resolved through
+  a probe element) instead of a hard-coded green literal, since the redesigned tokens are `oklch()`
+  values that browsers serialize as `lab()`; the primitives test expects the renumbered
+  `SectionHeader` copy ("Section header", the redesign dropped the chapter number); and the
+  `scroll-spine` spec is removed because the redesign folded scroll progress into the nav percentage
+  and no longer renders a standalone spine. The Linux visual baselines are regenerated to match the
+  redesign's current layout heights.
+- 4377651: Fix the Aurelian and DevBlueprint project teasers rendering as tall, mostly empty boxes on the
+  onepager. In the `lg` bento grid the featured project poster (a two-column lead cell) shares its row
+  with the two single-column teaser cells, and the grid's default `align-items: stretch` blew each
+  light teaser card up to the poster's full height, leaving its cover, name and summary stranded at the
+  top of a stretched, empty card. The teaser cells now opt out of that stretch at `lg` (`lg:self-start`),
+  so each card keeps its own content height beside the poster while still stretching to match its
+  sibling teaser at `md`.
+- 4377651: Give the GitHub contribution heatmap a proper single-hue sequential colour scale (R-5).
+  The old ramp stepped through amber for levels 1-3 and then jumped to slate-blue (--pine)
+  at level 4, a hue break that is not a valid sequential scale. It is replaced by a
+  dedicated `--heat-0..4` amber ramp defined per theme in `globals.css`: one hue, stepping
+  monotonically darker on light paper and brighter in dark mode, with a near-neutral empty
+  cell and clearly distinguishable (~9-12% lightness) steps. The widget and legend now
+  reference the ramp tokens instead of inline opacity values.
+- 4377651: Density pass on the landing bento grid (R-3). The interactive terminal moves from a half-width
+  cell to a full-width anchor with a reserved min-height, a higher scroll cap and larger mono text,
+  so it is comfortably usable and gives the page a strong horizontal beat instead of reading as
+  box-on-box. The row it vacated is rebalanced (view-all and live-status each span two columns), and
+  the grid gap and tile padding open up (gap 16 -> 24px across breakpoints, tile padding 20/24 ->
+  24/32px). DOM order, section anchors and the amber contact band are unchanged; no horizontal
+  overflow at 320-768px.
+- 4377651: Rebalance the landing "live" cluster. The now-playing tile and the signals-of-life feed
+  move from a 1:1 to a 2:3 split so the compact now-playing box no longer floats
+  half-empty beside the denser feed, and the signals feed drops its duplicated now-playing
+  row - it sits right beside the dedicated now-playing tile on the onepager, so the second
+  copy (and its extra poll of `/api/now-playing`) was redundant.
+- b63587e: Trim the one-pager to the seven lean bands of ADR-0011: Hero -> Projects -> About ->
+  Experience -> Skills -> GitHub heatmap -> Contact. The terminal, now-playing,
+  signals-of-life and WakaTime widgets move off the one-pager into the depth layer -
+  their components and API routes stay in the codebase, parked, until they get a depth
+  home (building a new showcase page is itself gated playground work). The heatmap
+  becomes a full-width band with its own lead-in; the landing copy loses the live and
+  stats lead-ins and gains a github one; the home visual snapshot now masks only the
+  GitHub activity region.
+- 4377651: Refresh the generated project covers and default OG image onto the Pressroom palette (R-7). The
+  asset generator still hardcoded the retired Sand & Pine tokens (green pine, Instrument Serif),
+  so every regenerated cover clashed with the redesigned site. Port `scripts/generate-assets.mjs`
+  to the current tokens and typefaces - warm slate-cream paper, the slate/amber duo, and the Big
+  Shoulders display over IBM Plex Sans/Mono - and regenerate all covers plus the OG share image.
+  fuelivo's unconvincing product screenshot is replaced by an on-brand generated headline cover,
+  and the now-orphaned `fuelivo_screen.png` is removed. Each cover's status label now carries the
+  same colour as the site's `ProjectStatusBadge`.
+- 4377651: Rebalance the onepager grid bottom (R-4). The GitHub heatmap and the WakaTime strip used to sit
+  side by side at lg, where the tall, narrow WakaTime column forced the wide-but-short heatmap card
+  to stretch and left a large empty area under the heatmap. They now stack as two full-width rows,
+  GitHub above WakaTime, so neither has a mismatched-height neighbour. The heatmap grid grows to fill
+  its full-width row (columns use `minmax(11px, 1fr)` with square cells) instead of sitting at a fixed
+  width, so the wider row has no dead space to its right; on narrow screens the 11px floor keeps the
+  existing horizontal scroll. DOM and mobile order stay sensible: the two live-coding signals remain
+  adjacent, heatmap first.
+- 4377651: Record the lean-one-pager and substance-first working model as ADR-0011. The one-pager
+  keeps a single signature widget (the GitHub heatmap) while the terminal, now-playing,
+  signals-of-life and WakaTime move to the depth layer; a curation test (must-see vs
+  rewards-curiosity) governs what lives on the one-pager. New feature work is gated behind
+  two genuinely carried projects (fuelivo, then DevBlueprint) on a 1:1 unlock-ratio, with a
+  strict "carried" definition (problem -> approach -> learnings, real screenshots, at least
+  one hard decision with a trade-off). The English variant (PR #139) is parked until the two
+  projects are carried, then scoped to the stable surface only. Adds the ADR, its index
+  entry, a roadmap gate note and an overview pointer; refines ADR-0005 and ADR-0006.
+- 4377651: Automate the post-merge release chores. A new `tag-release.yml` workflow runs on the `master`
+  push from the release PR: it tags `vX.Y.Z` from `package.json` (if not already tagged) and opens
+  a release-log PR into `develop` recording the promotion. Cutting a release is now just merging
+  the release PR - the deploy, the tag and the release-log entry follow automatically.
+
 ## [Unreleased]
 
 ## [0.3.0] - 2026-07-09
 
 ### Added
+
 - **English project detail metadata parity (S5-5).** The English detail route
   `/en/projects/<slug>` now ships the branded per-project Open Graph and Twitter cards (its own
   `opengraph-image.tsx`/`twitter-image.tsx`, reusing the S5-3 `lib/og/card` template with English
@@ -109,7 +216,9 @@
   the `/en/projects` entry, and both index pages advertise the `de-DE`/`en`/`x-default`
   hreflang pair. The English project detail links stay hidden until their route ships (S5-1b).
   Documented in [i18n](docs/content/i18n.md).
+
 ### Changed
+
 - **Changelog now uses Changesets (build).** Unreleased changes are recorded as uniquely-named
   `.changeset/` fragments via `pnpm changeset`, not by editing this file's `[Unreleased]`
   section, so parallel worktrees never conflict on the changelog; `pnpm changeset version` folds
@@ -132,6 +241,7 @@
 ## [0.2.0] - 2026-07-08
 
 ### Added
+
 - **Regular release cadence: a develop -> master release-PR bot (S6-5).** Builds on the
   S2-10 dependency automation with an exercised release rhythm. A new scheduled workflow
   (`.github/workflows/release.yml`) runs weekly (Thursday, and on demand via
@@ -218,6 +328,7 @@
   [`docs/content/seo.md`](docs/content/seo.md).
 
 ### Changed
+
 - **Backlog check-off convention made explicit.** The task lifecycle now spells out a `[x]`
   done state and requires checking a backlog task off the moment its PR is open and only the
   merge remains (never waiting for the merge); `[~]` is reserved for in-progress work or a
@@ -242,6 +353,7 @@
   Repo-side config and docs only; the server/DNS steps are applied manually.
 
 ### Fixed
+
 - **Scroll progress now reaches a full 100% on short pages.** The nav percentage and the
   scroll spine read `scrollY / (scrollHeight - innerHeight)`, but the browser rests `scrollY`
   a hair below that denominator (sub-pixel on Retina displays, a few pixels after a momentum
@@ -270,12 +382,13 @@
   (`postgresql://umami:<password>@umami-db:5432/umami`); base64's `+`, `/` and `=` are not
   URL-safe, so a generated `/` produced `TypeError: Invalid URL` in Umami's `check-db` and
   the container restart-looped while Postgres stayed healthy. The guidance now uses `openssl
-  rand -hex 24` (URL-safe) across `docs/operations/analytics.md`,
+rand -hex 24` (URL-safe) across `docs/operations/analytics.md`,
   `deploy/analytics/.env.example` and a note by `DATABASE_URL` in
   `deploy/analytics/docker-compose.yml`, plus a troubleshooting entry for the crash-loop.
   `APP_SECRET` is unchanged (it is never placed in a URL). Docs-and-config only; no app code.
 
 ### Changed
+
 - **Dependency maintenance (consolidated Dependabot updates).** Rolled up the passing weekly
   Dependabot PRs into one change: application deps (`next` 16.2.10, `react`/`react-dom`
   19.2.7), tooling (`typescript` 6, `@types/node` 26, `vitest`/`@vitest/coverage-v8` 4.1.10,
@@ -300,6 +413,7 @@
   [responsive-and-mobile](docs/design/responsive-and-mobile.md).
 
 ### Added
+
 - **Real project covers and share image (S2-1).** Every project card and detail page now
   shows a real cover instead of the striped slug placeholder: the two live products keep
   their curated screenshots (a re-shoot of the live sites regressed - fuelivo's homepage
@@ -480,7 +594,7 @@
   their static fallback on any upstream error, but a genuine failure is no longer swallowed
   silently: a new server-only `logWidgetFailure` (`lib/observability/widget-failure.ts`)
   records it as a single greppable `[widget:<name>] upstream unavailable, serving fallback:
-  ...` line on stderr, the lightweight error signal ahead of full monitoring (S6-2). An
+...` line on stderr, the lightweight error signal ahead of full monitoring (S6-2). An
   intentionally unconfigured optional feature (no `GITHUB_TOKEN`, no Spotify secrets) throws
   the new `WidgetNotConfiguredError` and is skipped, so CI builds and secret-less previews do
   not spam the signal. Only the widget name and the error message are logged, never a token.
@@ -562,10 +676,11 @@
   each engine downloads just the one clip it can render transparently.
 
 ### Changed
+
 - **WakaTime widget shows projects, not languages.** The coding-activity strip now breaks the
   last-7-days coding time down by project rather than by programming language, reading the
   `projects` array from the same `stats/last_7_days` payload (same shape: name, share, duration).
-  This surfaces *what* was being built over *which* language it was written in, which reads as a
+  This surfaces _what_ was being built over _which_ language it was written in, which reads as a
   stronger signal on a portfolio. No new scopes or requests - the swap is a different slice of the
   response already fetched. Documented in
   [rendering-and-data](docs/architecture/rendering-and-data.md).
@@ -669,6 +784,7 @@
   non-empty CV exists in `public/`, otherwise it degrades to nothing.
 
 ### Removed
+
 - **Dead hero CV CTA.** Dropped the never-rendered `copy.hero.ctas.cv` entry ("CV laden") and
   the stale comment in `components/sections/hero/Hero.tsx` that promised to wire it into the
   contact section (P1-12). The CV download instead ships in the Werdegang section
@@ -676,6 +792,7 @@
   `tests/unit/hero.test.tsx` was removed with it.
 
 ### Fixed
+
 - **Dark-mode toggle state stays on one line.** In the nav "Mehr" and phone menus the
   `[ aus ]` / `[ ein ]` state indicator beside "Dunkelmodus" could wrap between its bracket
   and word under the toggle's `justify-between` layout, so the button looked broken. The
@@ -689,6 +806,7 @@
   change, keeping the ratio exact all the way to the bottom.
 
 ### Added
+
 - **Responsive & mobile-optimization guide.** New
   [`docs/design/responsive-and-mobile.md`](docs/design/responsive-and-mobile.md) defines how
   the desktop handoff degrades from 1320px down to a 320px phone: the shared section shell,
@@ -715,7 +833,7 @@
   dynamic segment).
 - **ADR-0005 — Information architecture.** Recorded the one-pager-hub-with-opt-in-drill-down
   model that already governs the site: a fixed three-level hierarchy (section → index page →
-  detail page), the rule that the primary nav always *scrolls* and never navigates, and
+  detail page), the rule that the primary nav always _scrolls_ and never navigates, and
   summary-to-depth as a separate in-section gesture. Documents the existing
   `detailPage`-flag pattern as the canonical opt-in and names `/projekte` (a level-2 index) as
   the intended next step (`docs/architecture/decisions/0005-information-architecture.md`).
@@ -836,19 +954,19 @@
   full content-width dark strip below the hero (`components/widgets/terminal/Terminal.tsx`,
   mounted in `app/page.tsx` between the hero and the first numbered section) echoes typed
   input and paints the output of a pure, DOM-free command core (`lib/terminal/commands.ts`
-  + `lib/terminal/run.ts`). Commands: `help`, `whoami`, `projects` (from the project
-  data), `contact`, `sudo hire-me`, `clear`, plus hidden easter eggs (`ls`, `coffee`,
-  `echo`, bare `sudo`); unknown input returns a "command not found - tippe 'help'" hint,
-  and Arrow up/down recalls entered commands. All German copy lives in `content/copy.ts`
-  (`copy.terminal`), so components and lib hold no literals. Focus-safe per
-  [accessibility](docs/design/accessibility.md): the input is a normal tab stop with a
-  visible signal focus ring, is never autofocused (the strip is below the fold), `Escape`
-  blurs it and `Tab` moves on - no focus trap; the log is an `aria-live` region. The block
-  cursor is custom (a transparent input over a monospace mirror span) and blinks only
-  under `motion-safe`, so reduced-motion users get a static cursor. Covered by unit tests
-  for the command core (parsing, every command, `sudo` dispatch, unknown/blank input,
-  `clear`) and the component (echo, clear, unknown-command hint, history recall, Escape
-  blur, reduced-motion cursor class).
+  - `lib/terminal/run.ts`). Commands: `help`, `whoami`, `projects` (from the project
+    data), `contact`, `sudo hire-me`, `clear`, plus hidden easter eggs (`ls`, `coffee`,
+    `echo`, bare `sudo`); unknown input returns a "command not found - tippe 'help'" hint,
+    and Arrow up/down recalls entered commands. All German copy lives in `content/copy.ts`
+    (`copy.terminal`), so components and lib hold no literals. Focus-safe per
+    [accessibility](docs/design/accessibility.md): the input is a normal tab stop with a
+    visible signal focus ring, is never autofocused (the strip is below the fold), `Escape`
+    blurs it and `Tab` moves on - no focus trap; the log is an `aria-live` region. The block
+    cursor is custom (a transparent input over a monospace mirror span) and blinks only
+    under `motion-safe`, so reduced-motion users get a static cursor. Covered by unit tests
+    for the command core (parsing, every command, `sudo` dispatch, unknown/blank input,
+    `clear`) and the component (echo, clear, unknown-command hint, history recall, Escape
+    blur, reduced-motion cursor class).
 - **P1-15 — Accessibility + performance pass.** Wired the Lighthouse budget check deferred
   from P0-5: `@lhci/cli` plus a `lighthouserc.json` that asserts Performance, Accessibility,
   Best-Practices and SEO all `>= 0.95` and `cumulative-layout-shift <= 0.1` on a production
@@ -973,9 +1091,9 @@
   before first paint by a small inline script (`components/sections/hero/reveal.ts` in
   `app/layout.tsx`), delays the rise until the boot end on a first visit and to 0s on a reload
   - frozen as an inline style so the boot overlay removing `data-boot` mid-rise never snaps
-  it. Added the decorative `equalize` keyframe for the widget bars. The section carries the
-  `#top` anchor the nav wordmark links to. Covered by unit tests (headline/kicker/sub from the
-  content model, primary/GitHub CTA targets, CV withheld, availability status, `#top` anchor).
+    it. Added the decorative `equalize` keyframe for the widget bars. The section carries the
+    `#top` anchor the nav wordmark links to. Covered by unit tests (headline/kicker/sub from the
+    content model, primary/GitHub CTA targets, CV withheld, availability status, `#top` anchor).
 - **P1-6 — Added the content model.** Introduced the German content layer under `content/`,
   the single source of truth the section components read from so no German literals live in
   components: `content/copy.ts` (nav, hero, section titles, about, way-of-working, contact
@@ -1122,6 +1240,7 @@
   performance pass (P1-15).
 
 ### Fixed
+
 - **Header links now work from the project detail pages.** The nav is mounted in the root
   layout, so it also renders on `/projekte/<slug>`, where the linked home sections do not
   exist - the bare `#projekte` / `#ueber` / `#kontakt` / `#top` anchors resolved to nothing
@@ -1137,6 +1256,7 @@
   home and jumps to the projects section.
 
 ### Changed
+
 - **Projects split into one file per project.** Replaced the single `content/projects.ts`
   with a `content/projects/` directory - the `Project` type and status labels in
   `types.ts`, one file per project (e.g. `fuelivo.ts`), and `index.ts` aggregating them into
@@ -1186,6 +1306,7 @@
   all links.
 
 ### Fixed
+
 - **P1-5 — Silenced the boot-guard hydration warning.** The pre-paint boot guard
   (`BOOT_GUARD_SCRIPT`) sets `data-boot="play"` on `<html>` before React hydrates, so the
   server HTML (no marker) intentionally differs from the client DOM and React logged a
@@ -1201,11 +1322,13 @@
   published on loopback only.
 
 ### Removed
+
 - Deleted the historical discovery material now fully captured in `docs/` (`idee.md`,
   `08-seo-deployment.md`, `info/`, `other/`). The raw notes remain available in git
   history; `docs/` is the living source of truth.
 
 ### Notes
+
 - The app skeleton is live, themed, gated, containerized and CI-checked (P0-1 through P0-5
   done). P0-6 (provision the Contabo VPS) is done — the box serves
   `https://portfolio.yannikwuenker.de` over TLS with auto-renewing certificates. P0-7 (deploy
