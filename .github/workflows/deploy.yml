@@ -1,34 +1,28 @@
-name: Deploy
+name: Build and publish image
 
-# Continuous deployment: build the Docker image, push it to GHCR, then deploy it
-# to the Contabo VPS and health-check the running container. Two long-lived
-# environments run in parallel on the same box, selected by the pushed branch:
-#   - master  -> production, apex https://yannikwuenker.de           (container :3002)
-#   - develop -> preview,    https://portfolio.yannikwuenker.de      (container :3000)
-# (Port 3001 is taken by the Umami analytics stack, so prod uses 3002.)
-# Each gets its own image build, because NEXT_PUBLIC_SITE_URL is inlined into the
-# client bundle at build time and the two environments must not share it. See
-# docs/operations/two-environment-setup.md and docs/operations/deployment.md.
+# Continuous delivery for the public repo: build the production Docker image and
+# publish it to the GitHub Container Registry (GHCR). The two long-lived branches
+# each get their own image, because NEXT_PUBLIC_SITE_URL is inlined into the
+# client bundle at build time and the environments must not share it:
+#   - master  -> production image  (built for the apex domain)
+#   - develop -> preview image     (built for the preview subdomain)
+# This repo only builds and publishes the image. Rolling it out to a server is
+# handled outside the public repo, so no deploy credentials (SSH keys, host,
+# server paths) live here.
 #
-# Required GitHub Actions secrets: SSH_HOST, SSH_USER, SSH_KEY (a private key
-# whose public half is in the deploy user's authorized_keys on the VPS) - both
-# environments share the one box, so the SSH access is shared too.
-# Optional variables: NEXT_PUBLIC_ANALYTICS_SRC and NEXT_PUBLIC_ANALYTICS_WEBSITE_ID
-# (cookieless Umami tag, baked in at build time; unset leaves analytics off - see
-# docs/operations/analytics.md) and NEXT_PUBLIC_SENTRY_DSN (self-hosted GlitchTip
-# error tracking, baked in at build time; unset leaves error tracking off - see
-# docs/operations/error-monitoring.md). The per-environment site URL, deploy path
-# and host port are derived from the branch below, not from repo variables.
+# Optional repository variables, baked in at build time; unset leaves the
+# feature out of the build: NEXT_PUBLIC_ANALYTICS_SRC and
+# NEXT_PUBLIC_ANALYTICS_WEBSITE_ID (cookieless analytics tag) and
+# NEXT_PUBLIC_SENTRY_DSN (error tracking).
 
 on:
   push:
     branches: [develop, master]
 
-# Serialize deploys: never run two at once, and never cancel one mid-flight
-# (a half-applied deploy is worse than a queued one).
+# Only the latest build per branch matters; cancel superseded runs.
 concurrency:
-  group: deploy-${{ github.workflow }}
-  cancel-in-progress: false
+  group: build-image-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 # Least privilege: read the repo, and write the image to GHCR.
 permissions:
@@ -39,10 +33,6 @@ jobs:
   build:
     name: Build and push image
     runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.resolve.outputs.image_tag }}
-      deploy_path: ${{ steps.resolve.outputs.deploy_path }}
-      host_port: ${{ steps.resolve.outputs.host_port }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -58,34 +48,25 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Resolve the target environment from the pushed branch. Production
-      # (master -> apex) and preview (develop -> subdomain) each get their own
-      # image, tagged under a distinct prefix so they never overwrite each
-      # other; a per-env moving `latest` tags the newest build. The image path
-      # must be lowercase for GHCR.
+      # (master) and preview (develop) each get their own image, tagged under a
+      # distinct prefix so they never overwrite each other; a per-env moving
+      # `latest` tags the newest build. The image path is derived from the
+      # repository name and must be lowercase for GHCR.
       - name: Resolve environment
         id: resolve
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
             name=prod
             site_url=https://yannikwuenker.de
-            deploy_path=/opt/containers/portfolio-prod
-            host_port=3002
           else
             name=dev
             site_url=https://portfolio.yannikwuenker.de
-            deploy_path=/opt/containers/portfolio
-            host_port=3000
           fi
           image="ghcr.io/${GITHUB_REPOSITORY,,}"
-          image_tag="${name}-sha-${GITHUB_SHA::7}"
           {
-            echo "name=${name}"
             echo "site_url=${site_url}"
-            echo "deploy_path=${deploy_path}"
-            echo "host_port=${host_port}"
-            echo "image_tag=${image_tag}"
             printf 'tags<<EOF\n%s\nEOF\n' \
-              "${image}:${image_tag}"$'\n'"${image}:${name}-latest"
+              "${image}:${name}-sha-${GITHUB_SHA::7}"$'\n'"${image}:${name}-latest"
           } >> "${GITHUB_OUTPUT}"
 
       - name: Build and push
@@ -97,8 +78,8 @@ jobs:
           # NEXT_PUBLIC_* is inlined at build time, so these must be build args
           # (see the Dockerfile builder stage). The site URL is per-environment
           # (resolved from the branch above). The analytics and Sentry DSN vars
-          # are optional: unset leaves the tracking tag (S2-5) / error tracking
-          # (S6-2) out of the build.
+          # are optional: unset leaves the tracking tag / error tracking out of
+          # the build.
           build-args: |
             NEXT_PUBLIC_SITE_URL=${{ steps.resolve.outputs.site_url }}
             NEXT_PUBLIC_ANALYTICS_SRC=${{ vars.NEXT_PUBLIC_ANALYTICS_SRC }}
@@ -106,61 +87,3 @@ jobs:
             NEXT_PUBLIC_SENTRY_DSN=${{ vars.NEXT_PUBLIC_SENTRY_DSN }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-  deploy:
-    name: Deploy to VPS
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      # Fail fast with an actionable message if the box has not been wired up
-      # yet, instead of a cryptic ssh/scp error further down.
-      - name: Check deploy secrets
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: |
-          missing=()
-          [[ -z "${SSH_HOST}" ]] && missing+=(SSH_HOST)
-          [[ -z "${SSH_USER}" ]] && missing+=(SSH_USER)
-          [[ -z "${SSH_KEY}" ]] && missing+=(SSH_KEY)
-          if (( ${#missing[@]} )); then
-            echo "::error::Missing deploy secrets: ${missing[*]}. Set them in the repo settings and complete the one-time server prep (docs/operations/server-setup.md step 12)."
-            exit 1
-          fi
-
-      - name: Configure SSH
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${SSH_KEY}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
-
-      # Ship the compose files and the deploy script so the box needs no git
-      # clone: it only pulls the image and runs compose.
-      - name: Copy compose files and deploy script
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          DEPLOY_PATH: ${{ needs.build.outputs.deploy_path }}
-        run: |
-          scp -i ~/.ssh/deploy_key \
-            docker-compose.yml docker-compose.prod.yml scripts/deploy-remote.sh \
-            "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
-
-      - name: Deploy and health-check
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          DEPLOY_PATH: ${{ needs.build.outputs.deploy_path }}
-          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
-          HOST_PORT: ${{ needs.build.outputs.host_port }}
-        run: |
-          ssh -i ~/.ssh/deploy_key "${SSH_USER}@${SSH_HOST}" \
-            "cd '${DEPLOY_PATH}' && IMAGE_TAG='${IMAGE_TAG}' HOST_PORT='${HOST_PORT}' bash deploy-remote.sh"
