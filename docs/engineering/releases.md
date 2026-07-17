@@ -19,7 +19,7 @@ A **weekly release train**, aligned with the dependency cadence so the two move 
   `develop -> master` release PR with the week's promoted commits.
 - **Thursday/Friday** - the maintainer cuts the release from that PR (see the
   [runbook](#runbook-cutting-a-release)): review the aggregated diff, bump the version, merge,
-  tag, verify the prod deploy.
+  tag, roll out and verify production.
 
 Weekly is the default rhythm, not a rule: a week with nothing worth shipping skips the release
 (the bot opens no PR when `develop` is not ahead of `master`), and an urgent change can be
@@ -77,16 +77,20 @@ From the open `develop -> master` release PR:
    [`CHANGELOG.md`](../../CHANGELOG.md) under the new version and deletes them. Add the date to
    the new heading if wanted, then commit. See [Changelog format](#changelog-format).
 4. **Merge** the release PR into `master` with a merge commit. `master` is protected and not
-   auto-deleted; `develop` keeps living. This merge is the only manual action left - it triggers
-   the deploy, the tag and the release-log PR (steps 5-7).
+   auto-deleted; `develop` keeps living. This merge triggers the image build, the tag and the
+   release-log PR (steps 5-7); the server rollout in step 6 stays manual.
 5. **Tagging is automatic.** On the `master` push, [`tag-release.yml`](../../.github/workflows/tag-release.yml)
    reads `version` from [`package.json`](../../package.json) and, if the matching `vX.Y.Z` tag
    does not yet exist, creates and pushes it - the tag is the human-facing release record.
    (Nothing depends on it mechanically: the release-PR bot measures `master..develop` by commit,
    and the deploy uses its own image tags.)
-6. **Verify the deploy.** [`deploy.yml`](../../.github/workflows/deploy.yml) ships the
-   `master` build to production; confirm https://yannikwuenker.de serves it and the health
-   check is green.
+6. **Roll out and verify.** [`deploy.yml`](../../.github/workflows/deploy.yml) only builds the
+   production image and publishes it to GHCR (`prod-sha-<sha>` / `prod-latest`); this public
+   repo holds no deploy credentials, so shipping the image to the server is a manual step (see
+   the private deployment runbook). SSH to the box and run `deploy-remote.sh` in the production
+   compose project with `IMAGE_TAG=prod-sha-<sha>` of the merge commit, then confirm
+   https://yannikwuenker.de serves the release. The preview environment updates the same way
+   from the `dev-sha-<sha>` image on `develop` pushes.
 7. **Merge the release-log PR.** `tag-release.yml` also opens a small PR into `develop` that
    appends the row to the [release log](#release-log) below (a PR, not a direct commit, because
    `develop` is protected). Its note column is generic - refine it if you want the curated
