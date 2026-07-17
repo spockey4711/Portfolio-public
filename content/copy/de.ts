@@ -568,10 +568,6 @@ export const deCopy = {
   footer: {
     // The year is rendered dynamically by the footer component.
     owner: "Yannik Wünker",
-    // The colophon line (print-style sign-off): typefaces and stack, honest and
-    // concrete. Version and year are composed around it by the component.
-    colophon:
-      "Gesetzt in Big Shoulders Display, IBM Plex Sans und IBM Plex Mono. Gebaut mit Next.js, TypeScript und Tailwind CSS.",
     // Accessible name for the footer's legal navigation landmark.
     label: "Rechtliches",
     legal: [
