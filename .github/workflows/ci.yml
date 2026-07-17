@@ -35,7 +35,7 @@ jobs:
       # pnpm before setup-node so the Node cache can key off the pnpm store.
       # Version is read from package.json "packageManager".
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Set up Node
         uses: actions/setup-node@v6
@@ -72,7 +72,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Set up Node
         uses: actions/setup-node@v6
@@ -99,7 +99,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Set up Node
         uses: actions/setup-node@v6
@@ -143,7 +143,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Set up Node
         uses: actions/setup-node@v6
