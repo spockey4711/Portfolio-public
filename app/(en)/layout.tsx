@@ -20,7 +20,7 @@ export { viewport } from "@/lib/seo/metadata";
 
 export default function EnRootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // suppressHydrationWarning: see app/(de)/layout.tsx - the pre-paint boot guard
+    // suppressHydrationWarning: see app/(de)/layout.tsx - the pre-paint theme init
     // mutates <html> before hydration, so the server and client markup differ here.
     <html
       lang={localeTag[locale]}

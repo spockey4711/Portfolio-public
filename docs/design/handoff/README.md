@@ -98,6 +98,12 @@ Type-Skala (aus Hero & System):
 - **Rechts:** Nav-Links (Projekte, Über, Blog, Kontakt) — IBM Plex Mono 13px, Farbe `#57534A`, **Hover → `accent-signal`**. Danach, durch `border-left: 1px solid line` abgetrennt: **Live-Scroll-Prozent** `NN%` (muted mono), das beim Scrollen hochzählt.
 
 ### 2. Boot Overlay (Ladeanimation, einmal pro Session)
+
+> **Entfernt (Juli 2026):** Die Boot-Sequenz wurde bewusst aus der Live-Seite entfernt -
+> ein mehrsekündiger Splash vor dem Inhalt schadet dem ersten Eindruck bei neuen
+> Besuchern. Der Hero-Reveal startet jetzt direkt beim ersten Paint. Die Spezifikation
+> bleibt hier als Referenz erhalten.
+
 - **Fullscreen** `position: fixed; inset:0`, z-index 100, bg `#0F130F`.
 - Zentrierter Mono-Block (max 520px), zeigt 6 Zeilen einer fake Boot-Sequenz, die **nacheinander einfaden** (`bootline`-Keyframe, staggered `animation-delay` 0.10 / 0.45 / 0.80 / 1.15 / 1.5 / 1.85s):
   ```
