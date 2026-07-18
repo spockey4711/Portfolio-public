@@ -36,13 +36,10 @@ fallback (see [accessibility](accessibility.md)).
 - Hero elements rise in after the boot sequence (`riseUp`: opacity 0→1 + translateY
   16px→0, ~0.8s ease forwards), offset by `--hero-reveal-offset` so the reveal follows the
   boot end (~2.3s) on a first visit and plays immediately when boot is skipped (guard set).
-- Two stages (S2-2). Stage one is the text column, staggered top-to-bottom (0-0.36s on top
-  of the offset). Stage two is the live-status module (`LiveStatus`), revealed as one unit a
-  clear beat later (~1.1s) so the copy lands first and the live surface settles in beside it,
-  roughly following the character's walk-in. The second-stage delay is a fixed CSS
-  approximation, not synced to the character's actual end: the character's timing differs
-  between a first and a returning visit and it is absent under reduced motion, so nothing in
-  the reveal may depend on it having played. Under reduced motion every element is settled
+- The text column rises top-to-bottom (kicker, headline, lede, CTAs) staggered 0-0.36s on
+  top of the offset. The pixel-art character beside the copy (`Hero.tsx`,
+  `public/images/hero-avatar.png`) reveals last, one beat later (0.48s), so the words land
+  first and the figure settles in beside them. Under reduced motion every element is settled
   from first paint (it rests hidden only under `motion-safe`).
 
 ### Scroll spine (the signature)

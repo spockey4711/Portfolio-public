@@ -119,6 +119,9 @@ export const deCopy = {
     // is the now-playing widget's live Spotify data (P3-1, P3-8). Kept here so the
     // section holds no language literals.
     visual: {
+      // Alt text for the pixel-art character beside the hero copy. Identity-
+      // bearing (it is me), so it carries a real description, not empty alt.
+      portraitAlt: "Yannik als Pixel-Art-Figur",
       nowPlaying: {
         // Shown while a track is playing, and over the static placeholder.
         label: "// now playing",

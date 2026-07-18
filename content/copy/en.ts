@@ -73,6 +73,7 @@ export const enCopy: Copy = {
       },
     },
     visual: {
+      portraitAlt: "Yannik as a pixel-art character",
       nowPlaying: {
         label: "// now playing",
         lastPlayedLabel: "// last played",
