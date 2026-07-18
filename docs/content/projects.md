@@ -98,7 +98,9 @@ one model, surfaced at up to three levels of depth.
 The section (`components/sections/projects/Projects.tsx`) is a curated teaser, not the
 full list - `TEASER_COUNT` caps how many non-featured cards it shows. The featured
 project leads a full-width row as a "wide" card (cover beside the story via
-`FeaturedProject`'s `layout` prop); the teaser projects share the row beneath it, one
+`FeaturedProject`'s `layout` prop; on lg+ the media column fills the space below the
+cover with the project's case-study metrics in the detail rail's tile voice, so the
+column doesn't sit empty next to the taller story); the teaser projects share the row beneath it, one
 per column, and render the same flat `problem`/`role`/`learnings` story the featured one
 does (grid stretch keeps them equal height regardless of copy length). The `/projekte`
 index (`app/projekte/page.tsx`) is the full list and the parent of every detail page: a
@@ -219,8 +221,10 @@ screenshot reads as a real product shot; `portrait` renders it in a phone frame 
 native iOS screenshot (e.g. Aurelian, `aurelian_screen.png`) keeps its real proportions rather
 than being cropped to the landscape box.
 
-Only Aurelian still leads with a real screenshot. Every other project - including fuelivo,
-DevBlueprint (a CLI) and the projects not yet publicly deployed - uses a deliberate, on-brand
+Aurelian and fuelivo lead with real screenshots - fuelivo's is a 2400x1520 shot of the
+fuelivo.de landing page (its earlier generated headline cover only duplicated the card's
+own title and tagline sitting right next to it). Every other project - DevBlueprint (a
+CLI) and the projects not yet publicly deployed - uses a deliberate, on-brand
 generated cover (`<slug>_cover.png`) with the project name, tagline, status and slug tag on the
 Pressroom palette, rather than faking a UI. These covers and the default OG image are generated
 from committed HTML templates by `scripts/generate-assets.mjs` (`pnpm assets:generate`), which
