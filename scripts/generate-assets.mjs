@@ -159,15 +159,10 @@ function coverTemplate({ name, tagline, slug, status }) {
 
 // Projects that show a generated on-brand cover rather than a live screenshot; their
 // taglines and status mirror content/projects/*.ts (German, the canonical base).
-// fuelivo joins the set (R-7): its old product screenshot no longer convinced, so it
-// now leads with a generated headline cover in the Pressroom system like the rest.
+// fuelivo left the set again: the generated headline cover only duplicated the
+// card's own title/tagline next to it, so it leads with a live product shot once
+// more (see `reshoots` below) now that fuelivo.de's landing page carries it.
 const covers = [
-  {
-    slug: "fuelivo",
-    name: "fuelivo",
-    status: { key: "live", label: "Live" },
-    tagline: "Fueling für Ausdauerathleten - konkrete Strategien aus wenigen Eingaben.",
-  },
   {
     slug: "devblueprint",
     name: "DevBlueprint",
@@ -197,13 +192,22 @@ const covers = [
 
 // Live product shots re-captured at a consistent viewport. Written to the preview
 // dir first so a regression against the curated originals can be caught by eye
-// before anything in public/ is overwritten. Only Aurelian still leads with a real
-// screenshot; fuelivo moved to a generated cover (see `covers` above).
+// before anything in public/ is overwritten. Aurelian and fuelivo lead with real
+// screenshots; `dismiss` names a button (e.g. a cookie banner's decline) that is
+// clicked before the shot so no overlay ends up in the capture.
 const reshoots = [
   {
     name: "aurelian_screen",
     url: "https://aurelian.yannikwuenker.de",
     viewport: { width: 430, height: 932 },
+  },
+  {
+    // 1200x760 at deviceScaleFactor 2 matches the generated covers' 2400x1520,
+    // so the card's 16/10 box crops nothing meaningful.
+    name: "fuelivo_cover",
+    url: "https://fuelivo.de",
+    viewport: { width: 1200, height: 760 },
+    dismiss: "Alle ablehnen",
   },
 ];
 
@@ -251,6 +255,10 @@ async function main() {
     for (const shot of reshoots) {
       await page.setViewportSize(shot.viewport);
       await page.goto(shot.url, { waitUntil: "networkidle", timeout: 30000 }).catch(() => {});
+      if (shot.dismiss) {
+        const button = page.getByRole("button", { name: shot.dismiss });
+        if (await button.isVisible().catch(() => false)) await button.click();
+      }
       await page.waitForTimeout(1500);
       const out = join(previewDir, `${shot.name}.png`);
       await page.screenshot({ path: out });
