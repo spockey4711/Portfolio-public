@@ -65,7 +65,7 @@ const de: NowPage = {
   title: "Woran ich gerade arbeite",
   intro:
     "Eine kurze Momentaufnahme: woran ich gerade baue, was ich lerne und was ich lese. " +
-    "Diese Seite halte ich absichtlich aktuell - sie zeigt das Jetzt, nicht das Archiv.",
+    "Diese Seite halte ich stets aktuell. In welche Richtung gehen meine aktuellen Interessen?",
   description: "Momentaufnahme: woran ich gerade baue, was ich lerne und was ich gerade lese.",
   sections: [
     {
@@ -73,14 +73,12 @@ const de: NowPage = {
       entries: [
         {
           label: "fuelivo",
-          detail:
-            "Meine iOS-App für Fueling-Empfehlungen im Ausdauersport - laufend im Feintuning.",
-          href: localizedPath("projectDetail", "de", "fuelivo"),
+          detail: "Meine iOS-App für Fueling-Empfehlungen im Ausdauersport.",
+          href: "https://fuelivo.de",
         },
         {
           label: "Dieses Portfolio",
-          detail:
-            "Von Hand gebaut und Schritt für Schritt erweitert - zuletzt Command-Palette und diese Seite.",
+          detail: "Hoffentlich eine Webseite, die widerspiegelt, wer ich bin und wie ich arbeite.",
         },
       ],
     },
@@ -88,12 +86,8 @@ const de: NowPage = {
       heading: "Was ich gerade lerne",
       entries: [
         {
-          label: "Sauberes Frontend mit Next.js und TypeScript",
-          detail: "App Router, Server Components und ein Testaufbau, der Fehler früh fängt.",
-        },
-        {
-          label: "KI als Werkzeug im Alltag",
-          detail: "Wie ich Modelle und lokale Tools sinnvoll in echte Arbeit einbaue.",
+          label: "Weiterführende Java-Konzepte",
+          detail: "Alles von Vererbung und Interfaces bis zu Generics und Threads.",
         },
       ],
     },
@@ -101,9 +95,9 @@ const de: NowPage = {
       heading: "Was ich gerade lese",
       entries: [
         {
-          label: "Refactoring - Martin Fowler",
-          detail: "Code-Smells erkennen und in kleinen, sicheren Schritten aufräumen.",
-          href: "https://refactoring.com/",
+          label: "Mr. Parnassus' Heim für magisch Begabte - T. J. Klune",
+          detail: "Fantasy-Roman über magisch begabte Kinder und die Suche nach einem Zuhause.",
+          href: "https://en.wikipedia.org/wiki/The_House_in_the_Cerulean_Sea",
         },
       ],
     },
@@ -116,7 +110,7 @@ const en: NowPage = {
   title: "What I am working on",
   intro:
     "A short snapshot: what I am building right now, what I am learning and what I am reading. " +
-    "I keep this page deliberately current - it shows the now, not the archive.",
+    "I keep this page always current. Which direction are my current interests heading?",
   description:
     "A snapshot: what I am building right now, what I am learning and what I am reading.",
   sections: [
@@ -125,14 +119,12 @@ const en: NowPage = {
       entries: [
         {
           label: "fuelivo",
-          detail:
-            "My iOS app for fueling recommendations in endurance sport - continually fine-tuned.",
-          href: localizedPath("projectDetail", "en", "fuelivo"),
+          detail: "My iOS app for fueling recommendations in endurance sport.",
+          href: "https://fuelivo.de",
         },
         {
           label: "This portfolio",
-          detail:
-            "Built by hand and extended step by step - most recently the command palette and this page.",
+          detail: "Hopefully a website that reflects who I am and how I work.",
         },
       ],
     },
@@ -140,12 +132,8 @@ const en: NowPage = {
       heading: "What I am learning",
       entries: [
         {
-          label: "Clean frontend with Next.js and TypeScript",
-          detail: "App Router, Server Components and a test setup that catches bugs early.",
-        },
-        {
-          label: "AI as an everyday tool",
-          detail: "How I fit models and local tools sensibly into real work.",
+          label: "Advanced Java concepts",
+          detail: "Everything from inheritance and interfaces to generics and threads.",
         },
       ],
     },
@@ -153,9 +141,9 @@ const en: NowPage = {
       heading: "What I am reading",
       entries: [
         {
-          label: "Refactoring - Martin Fowler",
-          detail: "Spotting code smells and cleaning up in small, safe steps.",
-          href: "https://refactoring.com/",
+          label: "The House in the Cerulean Sea - T. J. Klune",
+          detail: "A fantasy novel about magically gifted children and the search for a home.",
+          href: "https://en.wikipedia.org/wiki/The_House_in_the_Cerulean_Sea",
         },
       ],
     },
