@@ -22,7 +22,10 @@ import { cn } from "@/lib/utils/cn";
  * - "wide": on lg+ the cover sits beside the story instead of above it. The
  *   onepager's full-row lead tile (fuelivo) uses this so it reads as the section
  *   anchor without towering over the two cards beneath it the way a full-width
- *   poster would.
+ *   poster would. Because the story column runs much taller than the 16/10
+ *   cover, the media column fills the space below the cover with the project's
+ *   case-study metrics - real numbers in the same tile voice as the detail
+ *   page's rail - instead of leaving the column blank.
  */
 export type FeaturedProjectProps = {
   project: Project;
@@ -46,6 +49,9 @@ export function FeaturedProject({ project, locale, layout = "poster" }: Featured
   // the "view details" link is hidden on the English tree (translatedRoutes).
   const showDetailLink = Boolean(project.detailPage) && isRouteTranslated("projectDetail", locale);
   const wide = layout === "wide";
+  // The metrics tiles only exist to balance the wide layout's media column
+  // against the taller story column; poster cards stay cover-only.
+  const metrics = wide ? (project.caseStudy?.metrics ?? []) : [];
 
   return (
     // In "wide" the Card becomes a two-column grid on lg (cover | story); until
@@ -58,7 +64,37 @@ export function FeaturedProject({ project, locale, layout = "poster" }: Featured
         wide && "lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,5fr)] lg:items-start lg:gap-8",
       )}
     >
-      <ProjectMedia project={project} locale={locale} className="aspect-[16/10] w-full" />
+      <div className="flex min-w-0 flex-col gap-6">
+        <ProjectMedia project={project} locale={locale} className="aspect-[16/10] w-full" />
+
+        {/* Only on lg+, where the wide grid actually leaves the media column
+            short: below that breakpoint the card is a single stacked column and
+            the tiles would just push the story further down. The numbers repeat
+            on the detail page, so nothing is lost on small screens. The tile
+            markup mirrors ProjectDetail's metrics rail so both read as one
+            system. */}
+        {metrics.length > 0 ? (
+          <div className="hidden lg:block">
+            <Field label={labels.metrics}>
+              <dl className="grid grid-cols-2 gap-3">
+                {metrics.map((metric) => (
+                  <div
+                    key={metric.label}
+                    className="flex flex-col-reverse gap-1 rounded-xl border border-line bg-bg p-4"
+                  >
+                    <dt className="font-mono text-[11px] leading-snug text-ink-soft">
+                      {metric.label}
+                    </dt>
+                    <dd className="font-display text-[1.5rem] leading-none text-ink">
+                      {metric.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </Field>
+          </div>
+        ) : null}
+      </div>
 
       {/* The story is one column so the wide grid can place it opposite the cover;
           in poster layout it is simply the stacked body below the cover. `flex-1`

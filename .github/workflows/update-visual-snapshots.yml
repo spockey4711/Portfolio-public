@@ -42,7 +42,12 @@ jobs:
         run: pnpm build
 
       - name: Update snapshots
-        run: pnpm test:visual --update-snapshots
+        # "all" rewrites every baseline, not just the ones whose diff exceeds
+        # maxDiffPixelRatio: an intended change can sit just under the tolerance
+        # (a large page dilutes the ratio) and the default "changed" mode would
+        # keep the stale baseline. Unchanged renders produce byte-identical PNGs,
+        # so this causes no commit churn.
+        run: pnpm test:visual --update-snapshots all
 
       - name: Commit baselines
         run: |
