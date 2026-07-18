@@ -391,8 +391,6 @@ export const enCopy: Copy = {
 
   footer: {
     owner: "Yannik Wünker",
-    colophon:
-      "Set in Big Shoulders Display, IBM Plex Sans and IBM Plex Mono. Built with Next.js, TypeScript and Tailwind CSS.",
     label: "Legal",
     legal: [
       { href: localizedPath("imprint", locale), label: "Imprint", route: "imprint" },
