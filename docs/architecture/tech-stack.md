@@ -55,7 +55,7 @@ build on Node 22.
 ## Why these
 
 - **Next.js (App Router).** The site is mostly static content but needs real
-  interactivity (boot sequence, scroll spine, an interactive terminal later) and
+  interactivity (scroll spine, an interactive terminal later) and
   server-side API routes for live data (weather, GitHub activity, now-playing) so we do
   not leak API keys to the client. Next covers both without gluing tools together.
   Static sections are rendered at build time; live data goes through route handlers with

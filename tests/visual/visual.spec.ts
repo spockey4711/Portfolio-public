@@ -7,7 +7,7 @@ import { expect, test, type Page } from "@playwright/test";
 // docs/engineering/quality-and-testing.md. Run locally with `pnpm test:visual` (needs a
 // prior `pnpm build`); regenerate baselines via the update-visual-snapshots workflow.
 //
-// Reduced motion is emulated (boot overlay skipped, hero settled) and toHaveScreenshot
+// Reduced motion is emulated (hero rise-up settled) and toHaveScreenshot
 // disables CSS animations, so pages are stable from the first frame.
 
 // German accessible-names of the home page's live-data widgets - mirrors

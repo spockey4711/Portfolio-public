@@ -23,19 +23,18 @@ import { cn } from "@/lib/utils/cn";
  * without weighing on the LCP - `priority` loads it eagerly since it is above the
  * fold. It reveals last in the entrance sequence.
  *
- * Reveal: every element rises in via the `rise-up` keyframe, offset by
- * `--hero-reveal-offset` so the sequence follows the boot end on a first visit and
- * plays immediately for a returning visitor (globals.css). This is the page's one
- * orchestrated entrance. Each element rests hidden only under `motion-safe`, so
- * reduced-motion users see the settled hero with no animation. It is pure CSS, so
- * nothing here runs on the React render path.
+ * Reveal: every element rises in via the `rise-up` keyframe, staggered from first
+ * paint (globals.css). This is the page's one orchestrated entrance. Each element
+ * rests hidden only under `motion-safe`, so reduced-motion users see the settled
+ * hero with no animation. It is pure CSS, so nothing here runs on the React
+ * render path.
  */
 
-// Per-element reveal stagger in seconds, added on top of `--hero-reveal-offset`.
+// Per-element reveal stagger in seconds.
 function reveal(delay: number, className?: string) {
   return {
     className: cn("motion-safe:animate-rise-up motion-safe:opacity-0", className),
-    style: { animationDelay: `calc(var(--hero-reveal-offset) + ${delay}s)` },
+    style: { animationDelay: `${delay}s` },
   };
 }
 

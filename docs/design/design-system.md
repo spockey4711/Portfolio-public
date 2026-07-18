@@ -162,7 +162,7 @@ Build once as `components/ui/SectionHeader.tsx`; every section uses it.
 
 - **ui:** `SectionHeader`, `Button` (3 variants), `Pill`, `Card`, `MonoLabel`,
   `Divider`.
-- **chrome:** `Nav` (fixed, fade-out gradient, live scroll %), `ScrollSpine`, `BootOverlay`,
+- **chrome:** `Nav` (fixed, fade-out gradient, live scroll %), `ScrollSpine`,
   `Footer`.
 - **sections:** `Hero`, `Projects`, `About`, `Skills`, `Experience`, `Contact`.
 - **widgets (Phase 2+):** `Terminal`, `Weather`, `GithubActivity`, `NowPlaying`,
