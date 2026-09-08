@@ -88,6 +88,65 @@ describe("ProjectDetail", () => {
     expect(screen.queryByText(copy.projects.proof.eyebrow)).toBeNull();
   });
 
+  // ADR-0011: a carried project shows real screenshots between the features and
+  // the architecture. The list is empty everywhere today, so these render from a
+  // fixture case study spread onto the real project.
+  describe("screenshots section (ADR-0011)", () => {
+    const screenshots = [
+      { src: "/images/shot-a.png", alt: "Der Rechner mit Beispielwerten", caption: "Der Rechner." },
+      { src: "/images/shot-b.png", alt: "Das Coach-Portal mit Kaderliste", caption: "Das Portal." },
+    ];
+    const withShots = {
+      ...project,
+      caseStudy: { ...project.caseStudy, screenshots },
+    };
+
+    it("renders a captioned figure per screenshot", () => {
+      render(<ProjectDetail project={withShots} locale="de" />);
+
+      expect(screen.getByText(copy.projects.labels.screenshots)).toBeInTheDocument();
+      for (const shot of screenshots) {
+        // The alt text carries the image for assistive tech, the caption says
+        // what the shot proves - both are required, and they differ.
+        expect(screen.getByRole("img", { name: shot.alt })).toBeInTheDocument();
+        expect(screen.getByText(shot.caption)).toBeInTheDocument();
+      }
+    });
+
+    it("sits between the features and the architecture", () => {
+      render(<ProjectDetail project={withShots} locale="de" />);
+      const { labels } = copy.projects;
+
+      const order = [labels.features, labels.screenshots, labels.architecture].map((label) =>
+        screen.getByText(label),
+      );
+      for (const [index, heading] of order.slice(1).entries()) {
+        expect(
+          order[index]!.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING,
+        ).toBeTruthy();
+      }
+    });
+
+    it("renders nothing when the list is empty", () => {
+      render(
+        <ProjectDetail
+          project={{ ...project, caseStudy: { ...project.caseStudy, screenshots: [] } }}
+          locale="de"
+        />,
+      );
+
+      expect(screen.queryByText(copy.projects.labels.screenshots)).toBeNull();
+    });
+
+    it("renders nothing when the field is missing", () => {
+      // The real content today: a case study with no screenshots key at all.
+      render(<ProjectDetail project={project} locale="de" />);
+
+      expect(project.caseStudy?.screenshots).toBeUndefined();
+      expect(screen.queryByText(copy.projects.labels.screenshots)).toBeNull();
+    });
+  });
+
   // S5-1b: the English detail route renders the same body with locale="en", so
   // its chrome (back link, eyebrow) and interactive proof must read in English
   // with no German leakage.
