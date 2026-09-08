@@ -1,0 +1,4 @@
+# Der Stop-Hook laesst den Turn erst enden, wenn diese Zeile mit Status 0 durchlaeuft.
+# Gemessen am 2026-07-31: 2,8 s.
+# Der Linter ist hier aus demselben Grund wie im Quell-Repo Portfolio2 nicht drin.
+npm run typecheck
