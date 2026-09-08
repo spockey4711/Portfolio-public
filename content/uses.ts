@@ -2,12 +2,12 @@
  * The "uses" inventory for the /uses page (S3-4): the hardware, editor, stack and
  * tools actually in use, grouped and honest in the spirit of uses.tech - no
  * affiliate links, no aspirational kit. Every entry here is grounded in what this
- * repo and machine really run (macOS, pnpm, Next.js, Docker, a Contabo VPS); an
+ * repo and machine really run (macOS, Zed, Docker, a Contabo VPS); an
  * optional one-line note says why it earns its place.
  *
  * Like content/skills.ts, the group titles and notes are translatable, so the
  * locales are kept as two parallel lists rather than a base plus overrides;
- * language-neutral product names (Next.js, TypeScript, Docker, pnpm) stay
+ * language-neutral product names (Zed, Warp, Docker, MDX) stay
  * identical across both. Read via getUsesGroups(locale). See docs/content/i18n.md.
  *
  * This is a living list, kept honest and current by hand - refine the exact
@@ -33,36 +33,32 @@ export interface UsesGroup {
 const de: readonly UsesGroup[] = [
   {
     title: "Hardware",
-    items: [{ name: "MacBook", note: "täglicher Rechner, macOS" }],
+    items: [
+      { name: "MacBook Pro M4 Pro", note: "täglicher Rechner, macOS" },
+      { name: "Contabo VPS", note: "für Builds und Hosting" },
+    ],
   },
   {
     title: "Editor",
     items: [
-      { name: "VS Code", note: "Haupt-Editor" },
-      { name: "Claude Code", note: "KI-Pair-Programming im Terminal" },
-      { name: "zsh", note: "Shell im Terminal" },
+      { name: "Zed", note: "Haupt-Editor" },
+      { name: "Warp", note: "Terminal-of-Choice" },
     ],
   },
   {
     title: "Stack",
     items: [
-      { name: "Next.js", note: "App Router" },
-      { name: "TypeScript", note: "strikt, keine any-Ausnahmen" },
-      { name: "React" },
-      { name: "Tailwind CSS", note: "CSS-first, Version 4" },
+      { name: "Java", note: "Uniprojekte" },
       { name: "MDX", note: "für die Blog-Beiträge" },
     ],
   },
   {
     title: "Werkzeuge",
     items: [
-      { name: "pnpm", note: "Paketmanager" },
       { name: "Git & GitHub", note: "Versionierung und Reviews" },
-      { name: "Docker", note: "reproduzierbare Builds" },
+      { name: "Claude Code", note: "KI-Pair-Programming im Terminal" },
+      { name: "Docker", note: "Builds auf dem VPS" },
       { name: "GitHub Actions", note: "CI und Deploy" },
-      { name: "Vitest & Playwright", note: "Unit- und E2E-Tests" },
-      { name: "ESLint & Prettier", note: "Lint und Format" },
-      { name: "Nginx & Contabo VPS", note: "Hosting" },
     ],
   },
 ] as const;
@@ -70,36 +66,32 @@ const de: readonly UsesGroup[] = [
 const en: readonly UsesGroup[] = [
   {
     title: "Hardware",
-    items: [{ name: "MacBook", note: "daily driver, macOS" }],
+    items: [
+      { name: "MacBook Pro M4 Pro", note: "daily driver, macOS" },
+      { name: "Contabo VPS", note: "for builds and hosting" },
+    ],
   },
   {
     title: "Editor",
     items: [
-      { name: "VS Code", note: "main editor" },
-      { name: "Claude Code", note: "AI pair programming in the terminal" },
-      { name: "zsh", note: "shell in the terminal" },
+      { name: "Zed", note: "main editor" },
+      { name: "Warp", note: "terminal of choice" },
     ],
   },
   {
     title: "Stack",
     items: [
-      { name: "Next.js", note: "App Router" },
-      { name: "TypeScript", note: "strict, no any escape hatches" },
-      { name: "React" },
-      { name: "Tailwind CSS", note: "CSS-first, version 4" },
+      { name: "Java", note: "university projects" },
       { name: "MDX", note: "for the blog posts" },
     ],
   },
   {
     title: "Tools",
     items: [
-      { name: "pnpm", note: "package manager" },
       { name: "Git & GitHub", note: "version control and reviews" },
-      { name: "Docker", note: "reproducible builds" },
+      { name: "Claude Code", note: "AI pair programming in the terminal" },
+      { name: "Docker", note: "builds on the VPS" },
       { name: "GitHub Actions", note: "CI and deploy" },
-      { name: "Vitest & Playwright", note: "unit and E2E tests" },
-      { name: "ESLint & Prettier", note: "lint and format" },
-      { name: "Nginx & Contabo VPS", note: "hosting" },
     ],
   },
 ] as const;
