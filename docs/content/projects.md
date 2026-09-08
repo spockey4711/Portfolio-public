@@ -81,6 +81,12 @@ architecture explains how - as a one-column grid that becomes two columns from `
 An omitted or empty list renders no section at all, so a project without shots simply
 skips it.
 
+Every shot gets the same landscape frame, and the image is *contained* in it rather than
+cropped, so a portrait native-app screenshot shows whole (matted by the frame) instead of
+being cut off at the top. That is the difference from `media.cover`, which picks a frame
+per project via `media.orientation`: a gallery mixes shapes, so it takes the treatment
+that is right for either.
+
 ```ts
 interface ProjectScreenshot {
   src: string;      // path in public/images, e.g. '/images/fuelivo_calculator.png'

@@ -60,11 +60,20 @@ function BulletList({ items }: { items: readonly string[] }) {
 
 /**
  * One screenshot with its caption. It reuses ProjectMedia's landscape frame -
- * the same bordered surface with the shot cropped from the top - so a gallery
- * shot and the cover above it read as one family. The caption sits under the
- * frame as a print caption, never as an overlay on the image, and `alt` and
- * `caption` say different things: the first replaces the image for a screen
- * reader, the second tells every reader what the shot proves.
+ * the same bordered surface, one fixed aspect for every shot so the grid stays
+ * a grid - so a gallery shot and the cover above it read as one family. The
+ * caption sits under the frame as a print caption, never as an overlay on the
+ * image, and `alt` and `caption` say different things: the first replaces the
+ * image for a screen reader, the second tells every reader what the shot
+ * proves.
+ *
+ * The shot is contained rather than cropped: a landscape web screenshot fills
+ * the frame either way, but a native app screenshot is portrait, and cropping
+ * one to a landscape box would cut off the very thing the caption promises. The
+ * leftover frame reads as a mat around the shot. Unlike the cover, which knows
+ * its shape from `media.orientation`, a gallery mixes both, so it takes the
+ * treatment that is right for either instead of asking the content to declare
+ * it.
  */
 function ScreenshotFigure({ screenshot }: { screenshot: ProjectScreenshot }) {
   return (
@@ -74,7 +83,7 @@ function ScreenshotFigure({ screenshot }: { screenshot: ProjectScreenshot }) {
           src={screenshot.src}
           alt={screenshot.alt}
           fill
-          className="object-cover object-top"
+          className="object-contain"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw"
         />
       </div>
