@@ -372,6 +372,8 @@ export const deCopy = {
       stack: "Stack",
       solution: "Die Lösung",
       features: "Features",
+      // Heading for the real-screenshot section on a detail page (ADR-0011).
+      screenshots: "Screenshots",
       techStack: "Tech-Stack",
       architecture: "Architektur",
       challenges: "Herausforderungen",
