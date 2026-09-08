@@ -40,6 +40,22 @@ export interface ProjectMetric {
   label: string;
 }
 
+/**
+ * One real screenshot of the running product, shown in the detail page's
+ * screenshot section. `alt` and `caption` are both required: the alt text is
+ * what a screen reader gets instead of the image, and the caption is what the
+ * shot is meant to prove. A shot without either would be decoration, and
+ * ADR-0011 asks for evidence.
+ */
+export interface ProjectScreenshot {
+  /** Path in public/images, e.g. "/images/fuelivo_calculator.png". */
+  src: string;
+  /** Describes the image itself for assistive tech; never empty. */
+  alt: string;
+  /** Short line under the shot saying what it shows. */
+  caption: string;
+}
+
 /** One phase on the project timeline. */
 export interface TimelinePhase {
   /** Period label, e.g. "März 2026". */
@@ -64,6 +80,13 @@ export interface CaseStudy {
     highlights?: string[];
   };
   features?: ProjectFeature[];
+  /**
+   * Real screenshots of the running product, rendered between the features and
+   * the architecture. ADR-0011 makes them part of what "carried" means, so they
+   * are evidence and never placeholders or generated art. Omitted or empty
+   * renders no section at all.
+   */
+  screenshots?: readonly ProjectScreenshot[];
   /** Tech stack grouped by layer; when set, replaces the flat `stack` pills. */
   techStack?: TechLayer[];
   architecture?: {

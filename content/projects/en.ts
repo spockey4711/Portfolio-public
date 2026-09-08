@@ -10,9 +10,10 @@
  * onepager and projects index. The long-form `caseStudy` prose is translated for
  * the English project detail route (S5-1b): a `CaseStudyOverride` carries the
  * translated prose and `mergeCaseStudy` (in ./index.ts) overlays it onto the
- * German base. Only two facts are inherited from the base - each feature's
- * `status` and the `interactiveProof` flag - because those are the only truly
- * locale-invariant parts. The tech stack is translated (its layer names and
+ * German base. Only three facts are inherited from the base - each feature's
+ * `status`, each screenshot's `src` and the `interactiveProof` flag - because
+ * those are the only truly locale-invariant parts (the same image file serves
+ * both languages). The tech stack is translated (its layer names and
  * descriptive items are German prose) and so are the metric values (German uses
  * "." as the thousands separator, e.g. "16.100" -> "16,100").
  */
@@ -22,13 +23,16 @@ import type { Project, ProjectChallenge, ProjectMetric, TechLayer, TimelinePhase
 /**
  * The translatable half of a project's `caseStudy`. A feature override carries
  * only its `label` (and optional `tag`); its `status` is overlaid from the German
- * base, so it is not repeated here. The fully translated lists (tech stack,
+ * base, so it is not repeated here. A screenshot override works the same way: it
+ * translates `alt` and `caption` and inherits `src`, which points at one image
+ * file shared by both languages. The fully translated lists (tech stack,
  * challenges, metrics, timeline) replace the base wholesale.
  */
 export interface CaseStudyOverride {
   summary?: string;
   solution?: { intro?: string; highlights?: string[] };
   features?: { label: string; tag?: string }[];
+  screenshots?: { alt: string; caption: string }[];
   techStack?: TechLayer[];
   architecture?: { intro?: string; points?: string[] };
   challenges?: ProjectChallenge[];
