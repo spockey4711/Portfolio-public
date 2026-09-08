@@ -249,6 +249,7 @@ export const enCopy: Copy = {
       stack: "Stack",
       solution: "The solution",
       features: "Features",
+      screenshots: "Screenshots",
       techStack: "Tech stack",
       architecture: "Architecture",
       challenges: "Challenges",

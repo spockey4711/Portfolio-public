@@ -31,7 +31,7 @@ interface Project {
   };
   media?: {
     cover?: string;         // path in public/images (placeholder allowed)
-    screenshots?: string[];
+    orientation?: 'landscape' | 'portrait';  // which frame the cover gets
   };
   detailPage?: boolean;     // renders its own /projekte/<slug> page (P3-3)
   caseStudy?: CaseStudy;    // long-form story for the detail page (see below)
@@ -54,6 +54,7 @@ interface CaseStudy {
     highlights?: string[];
   };
   features?: ProjectFeature[]; // { label, status, tag? } - status shows as text + dot
+  screenshots?: readonly ProjectScreenshot[]; // { src, alt, caption } - real product shots
   techStack?: TechLayer[];     // { name, items[] }; replaces the flat `stack` pills
   architecture?: {
     intro: string;
@@ -70,6 +71,47 @@ Feature `status` (`'done' | 'in-progress' | 'planned'`) maps to a German label v
 `featureStatusLabels`, shown next to the color dot so the state never relies on color
 alone. Section headings and the inline challenge labels live in `content/copy.ts`
 (`projects.labels`).
+
+### Screenshots (ADR-0011)
+
+`screenshots` is the real-product evidence [ADR-0011](../../private-docs/docs/architecture/decisions/0011-lean-onepager-and-substance-gate.md)
+requires of a *carried* project. `ProjectDetail` renders it between the features and the
+architecture - the features claim what the product does, the shots show it, the
+architecture explains how - as a one-column grid that becomes two columns from `sm` up.
+An omitted or empty list renders no section at all, so a project without shots simply
+skips it.
+
+Every shot gets the same landscape frame, and the image is *contained* in it rather than
+cropped, so a portrait native-app screenshot shows whole (matted by the frame) instead of
+being cut off at the top. That is the difference from `media.cover`, which picks a frame
+per project via `media.orientation`: a gallery mixes shapes, so it takes the treatment
+that is right for either.
+
+```ts
+interface ProjectScreenshot {
+  src: string;      // path in public/images, e.g. '/images/fuelivo_calculator.png'
+  alt: string;      // required: describes the image for assistive tech
+  caption: string;  // required: says what the shot proves
+}
+```
+
+Both `alt` and `caption` are **required**, and they carry different text. The alt text is
+what a screen reader gets *instead of* the image; the caption is what every reader gets
+*next to* it. An optional field here would make an undescribed screenshot the path of
+least resistance, which the a11y suite (`tests/e2e/a11y.spec.ts`, `tests/e2e/axe.spec.ts`)
+exists to prevent.
+
+Only **real** shots of the running product belong here - no placeholders and no generated
+art. That is the point of the field: the generated on-brand covers under
+[Assets](#assets) are fine as a card cover, but they prove nothing about a product, and
+ADR-0011 gates further playground work on exactly that proof.
+
+English follows the same overlay rule as the feature list (`mergeCaseStudy` in
+`content/projects/index.ts`): `content/projects/en.ts` supplies only the translated `alt`
+and `caption` per shot, in the same order as the German list, and `src` is inherited from
+the German base - one image file serves both languages, so repeating the path would only
+let the two locales drift. A shot with no English entry keeps its German text rather than
+disappearing from `/en/projects/<slug>`. See [i18n](i18n.md).
 
 ### Interactive proof (S4-5)
 
@@ -230,7 +272,9 @@ Pressroom palette, rather than faking a UI. These covers and the default OG imag
 from committed HTML templates by `scripts/generate-assets.mjs` (`pnpm assets:generate`), which
 renders them through Playwright's Chromium using the site's own tokens and fonts, so
 regenerating is reproducible. The component-level diagonal striped placeholder in
-`ProjectMedia` remains the fallback for any future project that has no `media.cover` set. The
+`ProjectMedia` remains the fallback for any future project that has no `media.cover` set.
+Detail-page screenshots (`caseStudy.screenshots`) live in the same `public/images/`
+directory and are referenced by path; unlike the covers they are never generated. The
 script can also re-shoot the live screenshots at a consistent viewport
 (`node scripts/generate-assets.mjs reshoot`); those land in a git-ignored `.asset-preview/`
 for review before replacing the curated originals.

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Link } from "@/components/chrome/view-transitions";
 import { ProjectMedia } from "@/components/sections/projects/ProjectMedia";
 import { ProjectStatusBadge } from "@/components/sections/projects/ProjectStatusBadge";
@@ -8,7 +10,7 @@ import { MonoLabel } from "@/components/ui/MonoLabel";
 import { FuelivoProof } from "@/components/widgets/fuelivo-proof/FuelivoProof";
 import { getCopy } from "@/content/copy";
 import { getFeatureStatusLabels } from "@/content/projects";
-import type { FeatureStatus, Project } from "@/content/projects";
+import type { FeatureStatus, Project, ProjectScreenshot } from "@/content/projects";
 import { type Locale } from "@/lib/i18n/locale";
 import { cn } from "@/lib/utils/cn";
 
@@ -16,8 +18,8 @@ import { cn } from "@/lib/utils/cn";
  * The dedicated project page rendered at /projekte/<slug> for projects flagged
  * `detailPage` (P3-3). It gives a warranted project more room than the onepager
  * card: a large cover, the full problem/role/learnings story and, for a project
- * with a `caseStudy`, the long-form sections (solution, features, architecture,
- * challenges, timeline, learnings).
+ * with a `caseStudy`, the long-form sections (solution, features, screenshots,
+ * architecture, challenges, timeline, learnings).
  *
  * On wide screens the page is a two-column case study: the narrative keeps a
  * readable measure in the main column while the reference facts (actions, tech
@@ -53,6 +55,42 @@ function BulletList({ items }: { items: readonly string[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * One screenshot with its caption. It reuses ProjectMedia's landscape frame -
+ * the same bordered surface, one fixed aspect for every shot so the grid stays
+ * a grid - so a gallery shot and the cover above it read as one family. The
+ * caption sits under the frame as a print caption, never as an overlay on the
+ * image, and `alt` and `caption` say different things: the first replaces the
+ * image for a screen reader, the second tells every reader what the shot
+ * proves.
+ *
+ * The shot is contained rather than cropped: a landscape web screenshot fills
+ * the frame either way, but a native app screenshot is portrait, and cropping
+ * one to a landscape box would cut off the very thing the caption promises. The
+ * leftover frame reads as a mat around the shot. Unlike the cover, which knows
+ * its shape from `media.orientation`, a gallery mixes both, so it takes the
+ * treatment that is right for either instead of asking the content to declare
+ * it.
+ */
+function ScreenshotFigure({ screenshot }: { screenshot: ProjectScreenshot }) {
+  return (
+    <figure className="flex flex-col gap-3">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-visual border border-line bg-surface">
+        <Image
+          src={screenshot.src}
+          alt={screenshot.alt}
+          fill
+          className="object-contain"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw"
+        />
+      </div>
+      <figcaption className="font-sans text-sm leading-relaxed text-ink-soft">
+        {screenshot.caption}
+      </figcaption>
+    </figure>
   );
 }
 
@@ -200,6 +238,19 @@ export function ProjectDetail({ project, locale, related = [] }: ProjectDetailPr
                     </li>
                   ))}
                 </ul>
+              </Field>
+            ) : null}
+
+            {/* Real screenshots of the running product (ADR-0011): the features
+                claim what it does, the shots show it, and the architecture then
+                explains how. Nothing renders while a project has no shots yet. */}
+            {caseStudy?.screenshots && caseStudy.screenshots.length > 0 ? (
+              <Field label={labels.screenshots}>
+                <div className="grid gap-6 sm:grid-cols-2">
+                  {caseStudy.screenshots.map((screenshot) => (
+                    <ScreenshotFigure key={screenshot.src} screenshot={screenshot} />
+                  ))}
+                </div>
               </Field>
             ) : null}
 
