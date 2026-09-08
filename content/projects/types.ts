@@ -141,7 +141,6 @@ export interface Project {
      * rather than cropped to the landscape frame.
      */
     orientation?: "landscape" | "portrait";
-    screenshots?: string[];
   };
   /** Gets its own /projekte/<slug> page later (P3-3). */
   detailPage?: boolean;
