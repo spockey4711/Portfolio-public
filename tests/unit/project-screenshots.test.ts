@@ -9,8 +9,9 @@ import { getDetailProject } from "@/content/projects";
 // This runs against a mocked project rather than the real content because no
 // project carries screenshots yet - the images and their captions arrive later.
 // Pinning the mechanic now means the content commit that adds them cannot get
-// the resolution wrong unnoticed. Both module mocks are hoisted above the import
-// above, so the barrel aggregates the fixture instead of the real fuelivo entry.
+// the resolution wrong unnoticed. The module mocks below are hoisted above the
+// import at the top of this file, so the barrel aggregates the fixtures instead
+// of the real project entries.
 vi.mock("@/content/projects/fuelivo", () => ({
   fuelivo: {
     slug: "fuelivo",
