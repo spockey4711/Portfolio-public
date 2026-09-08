@@ -2,9 +2,8 @@
  * English overrides for the project content. German (the per-project files) is the
  * canonical base and stays untouched; this file supplies only the translatable
  * fields, keyed by slug, and getProjects("en") merges them onto the base (see
- * ./index.ts). Locale-invariant fields - slug, order, status, links, media, the
- * tech stack, the feature build-states and metric values - are never duplicated
- * here, so they cannot drift. See docs/content/i18n.md.
+ * ./index.ts). Locale-invariant fields - slug, order, status, links and media -
+ * are never duplicated here, so they cannot drift. See docs/content/i18n.md.
  *
  * Card-level fields (name, tagline, problem, role, learnings) feed the English
  * onepager and projects index. The long-form `caseStudy` prose is translated for
