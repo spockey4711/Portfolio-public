@@ -3,7 +3,7 @@
  * source in ./de), so a missing, renamed or extra key fails `pnpm typecheck` -
  * the primary guard against untranslated leakage on the English path. Keep the
  * same plain, first-person, concrete voice as the German source; strings that are
- * already language-neutral (the kicker, the now-playing labels, terminal command
+ * already language-neutral (the name, the now-playing labels, terminal command
  * names, contact handles) stay identical on purpose. See docs/content/i18n.md.
  *
  * Internal hrefs are built from lib/i18n/routes.ts for the `en` locale so the two
@@ -56,18 +56,15 @@ export const enCopy: Copy = {
   cv: { label: "CV (PDF)", href: "/cv/yannik-wuenker.pdf" },
 
   hero: {
-    kicker: "STUDENT · DEVELOPER · ATHLETE",
-    headline: {
-      lead: "I build software that solves my own",
-      accent: "problems.",
-    },
-    sub: "Information Systems student from Cologne. I build websites, apps and automations that solve concrete problems - from productivity tooling to fueling for endurance athletes.",
+    name: "Yannik Wünker",
+    positioning:
+      "Information Systems in Cologne, working student at the Institut der deutschen Wirtschaft, building fuelivo.",
     ctas: {
-      primary: { label: "View projects", href: "#projekte" },
-      github: { label: "GitHub", href: "https://github.com/spockey4711" },
+      primary: { label: "Projects", href: "#projekte" },
     },
     status: {
       availability: "Available as a working student",
+      location: "Cologne",
       meta: {
         location: "GER",
         time: "14:32 CET",

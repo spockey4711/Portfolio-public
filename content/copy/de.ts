@@ -97,22 +97,30 @@ export const deCopy = {
   cv: { label: "Lebenslauf (PDF)", href: "/cv/yannik-wuenker.pdf" },
 
   hero: {
-    // Rendered mono + pine, preceded by a pulsing signal dot. The middle dot is
-    // the intended separator from the design handoff, not a dash.
-    kicker: "STUDENT · DEVELOPER · ATHLETE",
-    // The H1 renders in two parts: `lead` upright, `accent` italic + pine accent.
-    headline: {
-      lead: "Ich entwickle Software, die meine eigenen",
-      accent: "Probleme löst.",
-    },
-    sub: "Wirtschaftsinformatik-Student aus Köln. Ich baue Webseiten, Apps und Automatisierungen, die konkrete Probleme lösen - von Produktivitätsoptimierung bis zu Fueling für Ausdauerathleten.",
+    // The masthead: the name is the page's one h1 (docs/design/accessibility.md), set
+    // in the display face. No kicker - the generic "STUDENT · DEVELOPER · ATHLETE"
+    // formula said nothing the positioning sentence does not say better (PORT-48).
+    name: "Yannik Wünker",
+    // One sentence under the name: what, where, current role, current build - a
+    // recruiter's first five seconds. Sentence case, sans, plain (content-and-voice.md).
+    positioning:
+      "Wirtschaftsinformatik in Köln, Werkstudent beim Institut der deutschen Wirtschaft, baut fuelivo.",
     ctas: {
-      primary: { label: "Projekte ansehen", href: "#projekte" },
-      github: { label: "GitHub", href: "https://github.com/spockey4711" },
+      // The primary CTA jumps to the first proof (fuelivo). The CV download beside it
+      // reads the shared `cv` block. GitHub left the hero: the contact band lists it.
+      primary: { label: "Projekte", href: "#projekte" },
     },
     status: {
-      // Rendered only when SHOW_AVAILABILITY is enabled (see lib/config/features).
+      // The availability line under the positioning: "<dot> Verfügbar als
+      // Werkstudent · Köln". Rendered only when SHOW_AVAILABILITY is enabled (see
+      // lib/config/features), so the site advertises a job search only once that
+      // switch is deliberately flipped. Add the start ("ab <Monat Jahr>") to the
+      // string once the date is settled. The LiveStatus module in the depth layer
+      // renders the same availability string.
       availability: "Verfügbar als Werkstudent",
+      // The hero's location. The meta line below keeps its own short country code
+      // for the LiveStatus module.
+      location: "Köln",
       // The mono meta line. `location` is fixed; `time` and `temperature` are the
       // static fallbacks the live widget (P2-2) renders on the server and until -
       // or if - the live values arrive, so the line never shifts layout.
