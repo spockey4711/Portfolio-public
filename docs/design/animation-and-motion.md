@@ -22,9 +22,9 @@ immediately.
 ### Hero reveal
 - Hero elements rise in from first paint (`riseUp`: opacity 0→1 + translateY
   16px→0, ~0.8s ease forwards).
-- The text column rises top-to-bottom (kicker, headline, lede, CTAs) staggered
-  0-0.36s. The hero holds nothing but the words - no imagery (PORT-47, design audit
-  2026-09) - so this stagger is the whole sequence. Under reduced motion every element is
+- The text column rises top-to-bottom (name, positioning, availability line, CTAs)
+  staggered 0-0.36s. The hero holds nothing but the words - no imagery (PORT-47, design
+  audit 2026-09) - so this stagger is the whole sequence. Under reduced motion every element is
   settled from first paint (it rests hidden only under `motion-safe`).
 
 ### Scroll spine (the signature)

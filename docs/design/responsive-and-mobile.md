@@ -81,14 +81,15 @@ use:
 
 | Role | Clamp | Where |
 |---|---|---|
-| Hero display | `clamp(2.5rem, 9vw, 4.5rem)` | `Hero` (40 → 72px) |
+| Hero display | `clamp(2.625rem, 7.5vw, 4.75rem)` | `Hero` (the name; 42 → 76px) |
 | Section headline | `clamp(2rem, 5vw, 2.875rem)` | About, project/legal/list `h1` |
 | Contact lead | `clamp(1.75rem, 4vw, 2.5rem)` | `Contact` |
 
 Rules:
 
 - Any new display/headline text uses a `clamp()` in this family, not a bare px size.
-- Constrain line length with `max-w-[NNch]` (e.g. hero `max-w-[14ch]`, body `~46ch`) so
+- Constrain line length with `max-w-[NNch]` (e.g. the hero positioning `max-w-[52ch]`,
+  body `~46ch`) so
   measure stays readable and text wraps early instead of running to the edge.
 - Body and UI text stay at their fixed sizes (16-18px); they already wrap. Do not shrink
   body copy below 16px on mobile.
@@ -101,13 +102,11 @@ Rules:
   must read sensibly top-to-bottom.
 - **Gaps scale down implicitly** by collapsing columns; keep vertical rhythm (`gap-y-*`)
   generous enough that stacked blocks do not merge visually.
-- **The hero is full-bleed** (S2-2): it spans the viewport rather than the shared
-  `--container-max`, reading as a wide overture above the container-capped sections below.
-  Its left gutter still matches the site (`lg:pl-26`) so the left edge and scroll spine stay
-  aligned; only the right side opens to the viewport edge. On `lg`+ a text column sits beside
-  the live-status module; below `lg` they stack, text over module, copy fully visible at
-  every width. Above `--container-max` the hero content reads intentionally wider than the
-  sections below.
+- **The hero is a compact masthead** (PORT-48): the name, one positioning sentence, the
+  availability line and two CTAs in a single left-biased column inside the shared
+  `--container-max` shell, content-height rather than full-viewport. Nothing sits beside the
+  column at any width, so the fuelivo card's top edge is inside the first viewport at
+  1440x900 and the whole hero, CV CTA included, fits a 390x844 phone.
 - **The project detail page is a two-column case study at `lg`+** (`ProjectDetail`): a
   story column at readable measure plus a sticky rail (`lg:sticky`) holding the actions,
   tech stack and headline numbers. Below `lg` the rail drops below the story, so the
@@ -124,7 +123,8 @@ Decorative and navigational chrome must never overrun a narrow viewport.
 - **Hero** (`Hero`) - carries no imagery at any width. The walk-in character video and,
   later, the pixel-art figure beside the copy are both gone (Pressroom redesign; PORT-47,
   design audit 2026-09): a figure below the CTAs cost phones a full screen of scroll for no
-  information, so the first viewport is the kicker, headline, lede and CTAs alone.
+  information, so the first viewport is the name, positioning, availability line and CTAs
+  alone (PORT-48).
 - **Nav** (`Nav`) — fixed header with a logo, the section links, a "Mehr" menu and a live
   scroll percentage. It uses the canonical shell padding (`px-6 sm:px-10 lg:pr-14 lg:pl-26`)
   rather than the fixed desktop `pl-26 pr-14`, and respects `env(safe-area-inset-*)` so its
