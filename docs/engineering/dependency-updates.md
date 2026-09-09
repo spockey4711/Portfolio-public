@@ -43,7 +43,29 @@ a budget is caught automatically.
 2. Skim the changelog / release notes Dependabot links in the PR body, especially for majors.
 3. Merge into `develop` like any other PR (never self-merge without reading the diff). For a
    grouped minor/patch PR that is green, the review is usually just confirming CI passed.
-4. If a bump must be skipped, comment `@dependabot ignore this major version` (or minor/patch)
-   on the PR rather than closing it silently, so it is not re-proposed every week.
+4. If a bump must be skipped **once**, comment `@dependabot ignore this major version` (or
+   minor/patch) on the PR rather than closing it silently, so it is not re-proposed every
+   week. If it must be skipped **until upstream moves**, add an `ignore` entry to
+   [`.github/dependabot.yml`](../../.github/dependabot.yml) instead - see below.
 
 Dependabot rebases open PRs automatically when `develop` moves, so they stay mergeable.
+
+## Parked majors
+
+A comment-based ignore lives invisibly in Dependabot's own state, which is fine for a
+one-off but wrong for a block that will last months: six months on, nothing in the repo
+explains why a dependency sits a major behind. Long-lived blocks therefore go into the
+`ignore` list in `.github/dependabot.yml`, next to a comment saying **what** blocks the bump
+and **what to watch for** before removing the entry again.
+
+Two majors are parked today, both for the same root cause - the lint stack that
+`eslint-config-next` pulls in transitively:
+
+| Bump | Blocker |
+| --- | --- |
+| `eslint` 9 -> 10 | ESLint 10 removed `context.getFilename()`, which `eslint-plugin-react` still calls, so `pnpm lint` crashes before it lints a file. The latest releases of `eslint-plugin-react`, `eslint-plugin-jsx-a11y` and `eslint-plugin-import` all still cap at `eslint ^9`. |
+| `typescript` 6 -> 7 | `typescript-eslint` refuses TS 7 outright (`does not support TS 7.0`) and peers `typescript <6.1.0` up to and including its latest release. `tsc --noEmit` already passes on TS 7, so the app code is ready and only the lint step blocks. |
+
+Neither is fixable here: all three plugins arrive through `eslint-config-next`, which is
+already on its latest version. Recheck when a new `eslint-config-next` widens those peer
+ranges, then drop the matching `ignore` entry and let the major PR open again.
