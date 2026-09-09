@@ -12,6 +12,8 @@ export const fuelivo: Project = {
   name: "fuelivo",
   tagline: "Fueling für Ausdauerathleten - konkrete Strategien aus wenigen Eingaben.",
   status: "live",
+  kind: "web-ios",
+  year: 2026,
   featured: true,
   order: 1,
   problem:

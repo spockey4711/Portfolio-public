@@ -9,6 +9,13 @@ import { type Locale } from "@/lib/i18n/locale";
 
 export type ProjectStatus = "live" | "mvp" | "concept" | "experiment";
 
+/**
+ * What kind of thing a project is - the "type" column of the projects index.
+ * A closed set rather than free text so both locales get a label from one place
+ * and two projects can never describe the same shape differently.
+ */
+export type ProjectKind = "web" | "web-ios" | "ios" | "macos" | "cli";
+
 /** Build state of a single feature in a case study's feature list. */
 export type FeatureStatus = "done" | "in-progress" | "planned";
 
@@ -122,6 +129,18 @@ export interface Project {
   tagline: string;
   /** Shown as a labelled badge (text + color); see projectStatusLabels. */
   status: ProjectStatus;
+  /**
+   * What shape the project is - a web app, a native app, a CLI. Required, so the
+   * projects index can always state a type and a new entry cannot quietly ship
+   * without one; see projectKindLabels for the localized text.
+   */
+  kind: ProjectKind;
+  /**
+   * The year the work happened, taken from the project's own commit history.
+   * Required for the same reason as `kind`: it is the index's second fact, and a
+   * guessed year on a portfolio is worse than none.
+   */
+  year: number;
   /** fuelivo = true. Exactly one project is featured. */
   featured?: boolean;
   /** Sort key; fuelivo = 1, the rest by maturity and interest. */
@@ -170,6 +189,21 @@ const projectStatusLabelsByLocale: Record<Locale, Record<ProjectStatus, string>>
 /** The project status labels for a locale. */
 export function getProjectStatusLabels(locale: Locale): Record<ProjectStatus, string> {
   return projectStatusLabelsByLocale[locale];
+}
+
+/**
+ * Localized kind labels - the "type" the projects index shows next to the year.
+ * Kept here rather than in en.ts because a kind is a fact about the project, not
+ * prose: both locales must describe the same shape, so one table owns both.
+ */
+const projectKindLabelsByLocale: Record<Locale, Record<ProjectKind, string>> = {
+  de: { web: "Web-App", "web-ios": "Web & iOS", ios: "iOS-App", macos: "macOS-App", cli: "CLI" },
+  en: { web: "Web app", "web-ios": "Web & iOS", ios: "iOS app", macos: "macOS app", cli: "CLI" },
+};
+
+/** The project kind labels for a locale. */
+export function getProjectKindLabels(locale: Locale): Record<ProjectKind, string> {
+  return projectKindLabelsByLocale[locale];
 }
 
 /**

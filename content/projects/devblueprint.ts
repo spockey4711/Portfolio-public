@@ -15,6 +15,8 @@ export const devblueprint: Project = {
   tagline:
     "Ein wiederverwendbares Engineering-Setup für neue Projekte - professioneller Prozess ab Commit eins, ganz ohne Lock-in.",
   status: "live",
+  kind: "cli",
+  year: 2026,
   order: 3,
   problem:
     "Jedes neue Projekt startet ohne Prozess: Git-Workflow, Quality Gate, Konventionen und KI-Leitplanken werden jedes Mal neu erfunden oder ganz weggelassen - gerade im Solo-Betrieb. Mit mehreren parallelen KI-Sessions kommt ein zweites Problem dazu: die Chats wechseln sich gegenseitig den Branch weg. Fertige Frameworks und Template-Repos lösen das nur um den Preis dauerhafter Bindung.",

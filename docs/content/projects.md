@@ -12,12 +12,15 @@ Related: [content & voice](content-and-voice.md)
 
 ```ts
 type ProjectStatus = 'live' | 'mvp' | 'concept' | 'experiment';
+type ProjectKind = 'web' | 'web-ios' | 'ios' | 'macos' | 'cli';
 
 interface Project {
   slug: string;              // e.g. 'fuelivo' (no umlaut, url-safe)
   name: string;              // display name
   tagline: string;          // one line, German, plain
   status: ProjectStatus;    // shown as a labelled badge (text + color)
+  kind: ProjectKind;        // required: the index's "type" column
+  year: number;             // required: from the project's own commit history
   featured?: boolean;       // fuelivo = true
   order: number;            // fuelivo = 1; rest by maturity/interest
   problem?: string;         // what real problem it solves
@@ -76,6 +79,13 @@ Feature `status` (`'done' | 'in-progress' | 'planned'`) maps to a German label v
 alone. Section headings and the inline challenge labels live in `content/copy.ts`
 (`projects.labels`).
 
+`kind` and `year` are the two facts the projects index states next to every entry
+("iOS-App · 2026"). Both are **required**, so a new project cannot quietly ship without
+them, and both are facts rather than prose: `kind` maps to a label in *both* locales via
+`getProjectKindLabels` (in `types.ts`, not `en.ts` - the same shape must be described the
+same way in German and English), and `year` comes from the project's own commit history.
+A guessed year on a portfolio is worse than none, so look it up before adding an entry.
+
 ### Screenshots (ADR-0011)
 
 `screenshots` is the real-product evidence [ADR-0011](../../private-docs/docs/architecture/decisions/0011-lean-onepager-and-substance-gate.md)
@@ -106,9 +116,9 @@ least resistance, which the a11y suite (`tests/e2e/a11y.spec.ts`, `tests/e2e/axe
 exists to prevent.
 
 Only **real** shots of the running product belong here - no placeholders and no generated
-art. That is the point of the field: the generated on-brand covers under
-[Assets](#assets) are fine as a card cover, but they prove nothing about a product, and
-ADR-0011 gates further playground work on exactly that proof.
+art. That is the point of the field, and it is also why the generated on-brand covers
+under [Assets](#assets) are gone: they proved nothing about a product, and ADR-0011 gates
+further playground work on exactly that proof.
 
 English follows the same overlay rule as the feature list (`mergeCaseStudy` in
 `content/projects/index.ts`): `content/projects/en.ts` supplies only the translated `alt`
@@ -269,15 +279,19 @@ than being cropped to the landscape box.
 
 Aurelian and fuelivo lead with real screenshots - fuelivo's is a 2400x1520 shot of the
 fuelivo.de landing page. DevBlueprint uses a 1600x1000 terminal capture of the real
-`devblueprint list` output. Projects that are not yet publicly deployed use a deliberate,
-on-brand generated cover (`<slug>_cover.png`) with the project name, tagline, status and
-slug tag on the Pressroom palette rather than faking a UI. These generated covers and the
-default OG image come from committed HTML templates in `scripts/generate-assets.mjs`
-(`pnpm assets:generate`), rendered through Playwright's Chromium with the site's own
-tokens and fonts. The component-level diagonal striped placeholder in
-`ProjectMedia` remains the fallback for any future project that has no `media.cover` set.
+`devblueprint list` output. A project without a real shot simply sets no `media.cover`:
+it is listed as a row on the projects index, which has no media slot at all. There are no
+generated cover placeholders any more - they duplicated the card's own name and tagline
+and proved nothing about a product they never showed (ADR-0011), so the four that existed
+were deleted along with the template that produced them. The component-level diagonal
+striped placeholder in `ProjectMedia` remains the fallback for a coverless project on the
+surfaces that do frame media (the onepager teaser and the detail page).
+
+The default OG image still comes from a committed HTML template in
+`scripts/generate-assets.mjs` (`pnpm assets:generate`), rendered through Playwright's
+Chromium with the site's own tokens and fonts.
 Detail-page screenshots (`caseStudy.screenshots`) live in the same `public/images/`
-directory and are referenced by path; unlike the covers they are never generated. The
+directory and are referenced by path; unlike the OG image they are never generated. The
 script can also re-shoot the live screenshots at a consistent viewport
 (`node scripts/generate-assets.mjs reshoot`); those land in a git-ignored `.asset-preview/`
 for review before replacing the curated originals.

@@ -1,6 +1,6 @@
 import { Link } from "@/components/chrome/view-transitions";
 import { FeaturedProject } from "@/components/sections/projects/FeaturedProject";
-import { ProjectCard } from "@/components/sections/projects/ProjectCard";
+import { ProjectIndexRow } from "@/components/sections/projects/ProjectIndexRow";
 import { MonoLabel } from "@/components/ui/MonoLabel";
 import { getCopy } from "@/content/copy";
 import { getProjects } from "@/content/projects";
@@ -12,6 +12,12 @@ import { type Locale } from "@/lib/i18n/locale";
  * both locale routes (de at /projekte, en at /en/projects) exactly like Onepager,
  * so the two trees render the same structure and only the resolved copy/content
  * differs. The routes own their metadata; this owns the markup.
+ *
+ * The featured project leads as a full proof card - it is the one entry with a
+ * real product shot worth the space. Everything after it is a typographic index
+ * list (name, type and year, status, one line), not a card grid: most projects
+ * have no screenshot, and a card grid gave them a framed placeholder that read as
+ * an unfinished template. The story stays on each project's detail page.
  */
 export function ProjectsIndex({ locale }: { locale: Locale }) {
   const { index } = getCopy(locale).projects;
@@ -46,13 +52,15 @@ export function ProjectsIndex({ locale }: { locale: Locale }) {
       </header>
 
       <div className="mt-14 flex flex-col gap-12">
-        {featured ? <FeaturedProject project={featured} locale={locale} /> : null}
+        {/* Directly under the page h1, so the card takes h2 here rather than the
+            h3 it uses nested inside the onepager section. */}
+        {featured ? <FeaturedProject project={featured} locale={locale} headingLevel="h2" /> : null}
 
         {rest.length > 0 ? (
-          <ul className="grid list-none gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="flex list-none flex-col">
             {rest.map((project) => (
-              <li key={project.slug}>
-                <ProjectCard project={project} locale={locale} />
+              <li key={project.slug} className="border-t border-line last:border-b">
+                <ProjectIndexRow project={project} locale={locale} />
               </li>
             ))}
           </ul>

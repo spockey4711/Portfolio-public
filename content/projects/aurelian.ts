@@ -11,6 +11,8 @@ export const aurelian: Project = {
   name: "Aurelian",
   tagline: "Taegliche stoische Reflexion in unter zwei Minuten - auf den echten Tag bezogen.",
   status: "mvp",
+  kind: "ios",
+  year: 2026,
   order: 2,
   problem:
     "Stoizismus-Apps liefern generische Zitate ohne Bezug zum Alltag, Journal-Apps verlangen zu viel Input und fuehlen sich nach Arbeit an, und KI-Reflexionstools erfinden Zitate - bei philosophischen Quellen zerstoert das die Glaubwuerdigkeit sofort. Ambitionierte Nutzer wollen einen kurzen, praktischen Moment der Klarheit vor dem Tag: keine To-do-Liste, keinen Coach-Ton, keine erfundenen Weisheiten.",

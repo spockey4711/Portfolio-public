@@ -12,6 +12,13 @@ import { isRouteTranslated, localizedPath } from "@/lib/i18n/routes";
 export type FeaturedProjectProps = {
   project: Project;
   locale: Locale;
+  /**
+   * Which heading level the project name takes. The onepager nests this card
+   * under the section's own h2, so h3 is the default there; the projects index
+   * puts it directly under the page h1, where h2 is the level that keeps the
+   * outline gap-free.
+   */
+  headingLevel?: "h2" | "h3";
 };
 
 /** Pick three complementary proof points without duplicating the full detail-page rail. */
@@ -25,7 +32,11 @@ function headlineMetrics(metrics: ProjectMetric[]): ProjectMetric[] {
  * and two routes deeper. The role, learnings and complete metric rail remain on
  * the project detail page instead of being repeated here.
  */
-export function FeaturedProject({ project, locale }: FeaturedProjectProps) {
+export function FeaturedProject({
+  project,
+  locale,
+  headingLevel: Heading = "h3",
+}: FeaturedProjectProps) {
   const { detailsLink, liveLink: liveLinkLabel } = getCopy(locale).projects;
   const liveLink = project.links?.live;
   const detailLink =
@@ -48,9 +59,9 @@ export function FeaturedProject({ project, locale }: FeaturedProjectProps) {
 
       <div className="flex min-w-0 flex-col gap-5 lg:py-1">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <h3 className="font-display text-4xl leading-none font-extrabold tracking-[0.02em] text-ink uppercase sm:text-5xl">
+          <Heading className="font-display text-4xl leading-none font-extrabold tracking-[0.02em] text-ink uppercase sm:text-5xl">
             {project.name}
-          </h3>
+          </Heading>
           <ProjectStatusBadge status={project.status} locale={locale} />
         </div>
 

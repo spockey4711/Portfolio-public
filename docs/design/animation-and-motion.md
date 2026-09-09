@@ -129,8 +129,8 @@ It is strict progressive enhancement, never a hard dependency:
   site's motion language. A `prefers-reduced-motion` rule there also force-disables the
   `::view-transition-*` animations as a belt-and-suspenders fallback.
 - **No layout shift.** Only in-app route links are swapped; external links
-  (`ProjectCard` live/demo/repo) keep their plain `<a target="_blank">`. The cross-fade is a
-  compositor-only opacity animation, so it adds no CLS.
+  (`ProjectIndexRow` live/demo/repo) keep their plain `<a target="_blank">`. The cross-fade
+  is a compositor-only opacity animation, so it adds no CLS.
 
 ## Framer Motion vs. hand-rolled
 
