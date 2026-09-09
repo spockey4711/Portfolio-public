@@ -46,7 +46,7 @@ export function Experience({ locale, className }: { locale: Locale; className?: 
             className="flex flex-col gap-2 border-t border-line py-5 first:border-t-0 first:pt-0 last:pb-0"
           >
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <MonoLabel tone="muted" className="normal-case">
+              <MonoLabel tone="muted" textCase="normal">
                 {entry.period}
               </MonoLabel>
               {entry.current ? (

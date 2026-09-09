@@ -117,6 +117,12 @@ Type scale (authoritative values in the handoff):
 
 Hero display scales on mobile: `clamp(40px, 10vw, 72px)`.
 
+Mono micro-text uppercases by default (`MonoLabel`), because that is the register. Opt out
+with `textCase="normal"` where the text carries its own casing and losing it would be
+wrong: prose-shaped meta ("seit Oktober 2024") and names spelled a particular way
+("iOS-App", "macOS-App"). It is a prop, not a `normal-case` class - `cn` only joins class
+names, so passing both leaves the winner to Tailwind's emitted order, and `uppercase` wins.
+
 ### Spacing & layout
 
 - Content container: `max-width: 1440px`, centered. The cap is the single token
