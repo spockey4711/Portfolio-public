@@ -122,7 +122,11 @@ Wired in P0-3 (config lives at the repo root):
   is exact. **Regenerating baselines:** run the **Update visual snapshots** workflow
   (`gh workflow run update-visual-snapshots.yml --ref <branch>`) after an intended visual
   change - it re-shoots in the container and commits the PNGs back. Do not update baselines
-  from macOS; those pixels will not match CI. **First-time bootstrap:** when no baselines
-  exist yet, the `visual` job generates them and fails, uploading them as the
-  `visual-baselines` artifact; download it, commit the PNGs under
+  from macOS; those pixels will not match CI. **Upgrading Playwright:** the
+  `mcr.microsoft.com/playwright` tag in both workflows must be bumped in the same PR as
+  `@playwright/test` - the image ships only the browser build its own release expects, so a
+  mismatched tag fails every visual test with "Executable doesn't exist". The new image
+  re-renders the pages, so regenerate the baselines afterwards. **First-time bootstrap:**
+  when no baselines exist yet, the `visual` job generates them and fails, uploading them as
+  the `visual-baselines` artifact; download it, commit the PNGs under
   `tests/visual/visual.spec.ts-snapshots/`, and the job verifies green on the next run.
