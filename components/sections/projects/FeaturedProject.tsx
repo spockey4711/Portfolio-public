@@ -39,7 +39,12 @@ export function FeaturedProject({ project, locale }: FeaturedProjectProps) {
       data-project-shape="wide"
       className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(20rem,1fr)] lg:gap-10"
     >
-      <ProjectMedia project={project} locale={locale} className="aspect-[16/10] w-full" />
+      <ProjectMedia
+        project={project}
+        locale={locale}
+        loading="eager"
+        className="aspect-[16/10] w-full"
+      />
 
       <div className="flex min-w-0 flex-col gap-5 lg:py-1">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">

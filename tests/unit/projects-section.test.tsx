@@ -111,7 +111,7 @@ describe("Projects section", () => {
     render(<Projects locale="de" />);
 
     // fuelivo has a cover, so it shows the screenshot (not the placeholder)...
-    expect(screen.getByAltText("Vorschau von fuelivo")).toBeInTheDocument();
+    expect(screen.getByAltText("Vorschau von fuelivo")).toHaveAttribute("loading", "eager");
     // ...framed as a browser window captioned with its live domain.
     expect(screen.getByText("fuelivo.de")).toBeInTheDocument();
   });
