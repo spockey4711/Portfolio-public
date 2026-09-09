@@ -11,7 +11,7 @@ import { isCvAvailable } from "@/lib/content/cv";
 vi.mock("@/lib/content/cv", () => ({ isCvAvailable: vi.fn() }));
 
 const mockIsCvAvailable = vi.mocked(isCvAvailable);
-const { experience: experienceCopy } = copy;
+const { experience: experienceCopy, cv } = copy;
 const experience = getExperience("de");
 
 describe("Experience", () => {
@@ -75,16 +75,13 @@ describe("Experience", () => {
     mockIsCvAvailable.mockReturnValue(false);
     render(<Experience locale="de" />);
 
-    expect(screen.queryByRole("link", { name: experienceCopy.cv.label })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: cv.label })).not.toBeInTheDocument();
   });
 
   it("offers the CV download when the file exists", () => {
     mockIsCvAvailable.mockReturnValue(true);
     render(<Experience locale="de" />);
 
-    expect(screen.getByRole("link", { name: experienceCopy.cv.label })).toHaveAttribute(
-      "href",
-      experienceCopy.cv.href,
-    );
+    expect(screen.getByRole("link", { name: cv.label })).toHaveAttribute("href", cv.href);
   });
 });

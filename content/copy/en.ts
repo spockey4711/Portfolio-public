@@ -53,6 +53,8 @@ export const enCopy: Copy = {
     home: "Home",
   },
 
+  cv: { label: "CV (PDF)", href: "/cv/yannik-wuenker.pdf" },
+
   hero: {
     kicker: "STUDENT · DEVELOPER · ATHLETE",
     headline: {
@@ -333,7 +335,6 @@ export const enCopy: Copy = {
   experience: {
     title: "Experience",
     current: "current",
-    cv: { label: "CV (PDF)", href: "/cv/yannik-wuenker.pdf" },
   },
 
   wayOfWorking: {

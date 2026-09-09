@@ -88,6 +88,14 @@ export const deCopy = {
     home: "Startseite",
   },
 
+  // The CV (Lebenslauf) download. One block shared by every surface that links the
+  // CV, so the label and path live once. `href` is the canonical public path and the
+  // single source of truth for the server-side existence check (lib/content/cv.ts):
+  // each surface renders its link only when the file is really there, so an absent
+  // CV degrades to nothing instead of a dead link. The path is locale-invariant;
+  // only the label is translated.
+  cv: { label: "Lebenslauf (PDF)", href: "/cv/yannik-wuenker.pdf" },
+
   hero: {
     // Rendered mono + pine, preceded by a pulsing signal dot. The middle dot is
     // the intended separator from the design handoff, not a dash.
@@ -483,12 +491,8 @@ export const deCopy = {
     title: "Werdegang",
     // Marks an ongoing study/work entry (rendered mono + pine next to the period).
     current: "aktuell",
-    // The study/work entries live in content/experience.ts.
-    // Subtle CV download below the timeline, surfaced only once the file exists in
-    // public/ (checked server-side via lib/content/cv.ts). `href` is the canonical
-    // public path and the single source of truth for that check, so an absent CV
-    // degrades to nothing instead of a dead link.
-    cv: { label: "Lebenslauf (PDF)", href: "/cv/yannik-wuenker.pdf" },
+    // The study/work entries live in content/experience.ts. The CV download below
+    // the timeline reads the shared top-level `cv` block.
   },
 
   wayOfWorking: {
