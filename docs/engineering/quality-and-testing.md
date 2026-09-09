@@ -96,7 +96,11 @@ Wired in P0-3 (config lives at the repo root):
   smoke suite plus the axe scan against the dev server (`pnpm test:e2e`); `visual`
   (`tests/visual`) carries the pixel snapshots against a production build (`pnpm
   test:visual`, sets `PW_PROD`). `PW_PORT` overrides the port so a run does not reuse a
-  dev server from another worktree.
+  dev server from another worktree. A `globalSetup` (`tests/e2e/global-setup.ts`) requests
+  every route the suite visits once, sequentially, before the workers start: a cold dev
+  server compiling routes under parallel first requests used to race the
+  `/api/github-activity` cache write and fail one or two i18n toggle tests (PORT-56). The
+  route list lives in `tests/e2e/routes.ts`, shared with the i18n suite.
 - **lint-staged + husky** - a `pre-commit` hook formats and lints only the staged files.
   Husky no-ops outside a git repo, so container and CI installs are unaffected.
 - **CI** - `.github/workflows/ci.yml` runs on every PR to `develop` or `master` (and on push
