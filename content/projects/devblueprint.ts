@@ -5,8 +5,9 @@ import type { Project } from "./types";
  * für neue Projekte. Das dritte Projekt mit voller `caseStudy`, gezogen aus dem
  * eigenen (öffentlichen, MIT-lizenzierten) Repository; die flachen Felder
  * (tagline, problem, role, links) speisen die Onepager-Karte und den Index. Als
- * Kommandozeilen-Kit hat es keinen Produkt-Screenshot, daher greift ein bewusst
- * gestalteter, generierter Marken-Platzhalter als Cover (scripts/generate-assets.mjs).
+ * Kommandozeilen-Kit hat es keine Produkt-UI, daher ist das Cover eine echte
+ * Terminal-Aufnahme der `devblueprint list`-Ausgabe - der ehrliche Beleg für ein
+ * CLI-Werkzeug, nicht ein generierter Marken-Platzhalter (ADR-0011).
  * Siehe docs/content/projects.md.
  */
 export const devblueprint: Project = {
