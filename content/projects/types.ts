@@ -40,6 +40,14 @@ export interface ProjectMetric {
   label: string;
 }
 
+/** Compact evidence used only by the curated project cards on the onepager. */
+export interface ProjectOnepager {
+  /** One sentence: the featured problem or a secondary project's defining decision. */
+  statement: string;
+  /** A deliberately short, evidenced stack for secondary cards. */
+  stack?: string[];
+}
+
 /**
  * One real screenshot of the running product, shown in the detail page's
  * screenshot section. `alt` and `caption` are both required: the alt text is
@@ -122,6 +130,8 @@ export interface Project {
   problem?: string;
   /** What Yannik did. */
   role?: string;
+  /** Compact onepager copy; the full story remains on the detail page. */
+  onepager?: ProjectOnepager;
   /** Technologies (confirm before publishing). */
   stack?: string[];
   /** Honest takeaways. */

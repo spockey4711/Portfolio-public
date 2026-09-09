@@ -13,13 +13,16 @@
 > grid. `Onepager.tsx` is a vertical stack of **bands** in two registers that
 > alternate so the page breathes: *open editorial bands* (about, experience,
 > skills) render as plain prose straight on the paper background, set off by
-> whitespace and a hairline rule; *framed instrument clusters* (projects poster +
-> teasers, GitHub heatmap) keep the print-slab `Tile`, because for a real-UI
-> widget the frame is the metaphor. The rule of thumb: **a box must earn its
-> border** - reproduce a real interface (a contribution heatmap) and keep the
-> frame; otherwise open onto the background. Per ADR-0011 the heatmap is the one
-> signature widget on the one-pager; the terminal, now-playing, signals-of-life
-> and WakaTime widgets moved off it into the depth layer.
+> whitespace and a hairline rule; *framed instrument clusters* (project proof
+> cards, GitHub heatmap) keep the print-slab frame, because evidence benefits from
+> a clear boundary. The projects cluster is deliberately compact: one wide fuelivo
+> proof with screenshot, one problem sentence and three metrics, followed by an
+> upright native-app teaser and a wider typographic CLI teaser. Role, learnings and
+> the full metrics rail stay on the detail pages. The rule of thumb remains: **a
+> box must earn its border** - contain proof or reproduce a real interface,
+> otherwise open onto the background. Per ADR-0011 the heatmap is the one signature
+> widget on the one-pager; the terminal, now-playing, signals-of-life and WakaTime
+> widgets moved off it into the depth layer.
 > Each cluster leads with a `BandIntro` (mono eyebrow + one sentence, `landing.*`
 > copy) - the "background with text" beat before the boxes resume. `Band` owns the
 > shared measure (--container-max + horizontal padding); vertical rhythm is the

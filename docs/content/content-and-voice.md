@@ -58,9 +58,11 @@ nothing the positioning sentence does not say better, and it cost a line above t
   (a download, shown only once the file exists). GitHub lives in the contact band, not here.
 
 ### Projects
-Featured: **fuelivo** first, large. Then the others as cards with a status label. Full
-data model and per-project copy in [projects.md](projects.md). Order: fuelivo #1, the rest
-by maturity and how interesting they are.
+Featured: **fuelivo** first as a compact proof - screenshot, one problem sentence, three
+numbers, then Case Study and Live. Aurelian and DevBlueprint follow as shorter, differently
+shaped teasers with one hard decision each. The onepager does not repeat role and learnings;
+those stay on the detail pages. Full data model and per-project copy in
+[projects.md](projects.md). Order: fuelivo #1, the rest by maturity and interest.
 
 ### About
 Short. Who he is, how he thinks, the sport connection - stated plainly, not as a
