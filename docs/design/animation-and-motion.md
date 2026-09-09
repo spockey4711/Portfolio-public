@@ -23,10 +23,9 @@ immediately.
 - Hero elements rise in from first paint (`riseUp`: opacity 0→1 + translateY
   16px→0, ~0.8s ease forwards).
 - The text column rises top-to-bottom (kicker, headline, lede, CTAs) staggered
-  0-0.36s. The pixel-art character beside the copy (`Hero.tsx`,
-  `public/images/hero-avatar.png`) reveals last, one beat later (0.48s), so the words land
-  first and the figure settles in beside them. Under reduced motion every element is settled
-  from first paint (it rests hidden only under `motion-safe`).
+  0-0.36s. The hero holds nothing but the words - no imagery (PORT-47, design audit
+  2026-09) - so this stagger is the whole sequence. Under reduced motion every element is
+  settled from first paint (it rests hidden only under `motion-safe`).
 
 ### Scroll spine (the signature)
 - Fixed vertical line at `left: 71px`, full height, width 2px, track color `--line`,
