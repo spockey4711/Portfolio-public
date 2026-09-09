@@ -152,9 +152,11 @@ Build once as `components/ui/SectionHeader.tsx`; every section uses it.
   border → `pine`.
 - **Ghost:** text only in `pine`. Hover: → `signal`.
 
-### Status pill
-`surface` bg, `line` border, radius 999, pulsing `signal` dot + label
-(e.g. "Verfügbar für Werkstudent").
+### Status marker
+Pulsing `signal` dot + mono uppercase label in `pine`: the Werdegang "aktuell" marker and
+the hero availability line (e.g. "Verfügbar als Werkstudent · Köln", gated behind
+`SHOW_AVAILABILITY`). The handoff's rounded `surface` pill was not carried into the
+Pressroom register; the bare marker is the pattern.
 
 ## Component inventory (build order)
 
