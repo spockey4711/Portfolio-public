@@ -41,18 +41,21 @@ Copy below is **starting material**, not final strings. Refine toward the voice 
 keep it short.
 
 ### Hero
-- **Kicker (mono, pine):** pulsing signal dot + `WIRTSCHAFTSINFORMATIK · SOFTWARE · APPS`.
-- **H1 (Instrument Serif):** a short line where the last words are italic + pine.
-  Handoff example: "Ich baue Software, die sich *gut anfühlt.*" Keep it honest and
-  specific to what he builds; iterate.
-- **Sub (Hanken):** one intro sentence. Starting direction (from the derived positioning):
-  "Wirtschaftsinformatik-Student aus Köln. Ich baue Apps, Webprodukte und kleine Systeme,
-  die konkrete Probleme lösen - von Fueling für Ausdauerathleten bis zu
-  Prozessoptimierung mit Python und KI."
-- **CTAs:** primary "Projekte ansehen →", secondary "CV laden" (only once the file
-  exists), ghost "GitHub ↗".
-- **Status row:** pill "Verfügbar für Werkstudent" (pulsing dot) + mono meta
-  `GER · 14:32 CET · 18°C` (static placeholder in MVP; live in Phase 2).
+A compact masthead (PORT-48, design audit 2026-09). A recruiter must be able to place the
+person inside the first viewport - who, what, where, looking for what, and where the CV
+is - and the first proof (the fuelivo card) must start inside the first viewport at
+1440x900. No kicker: the generic three-word formula (`STUDENT · DEVELOPER · ATHLETE`) said
+nothing the positioning sentence does not say better, and it cost a line above the fold.
+- **H1 (display, uppercase):** the name, `Yannik Wünker`. One line at every width.
+- **Positioning (sans, one sentence):** what, where, current role, current build. Current
+  string: "Wirtschaftsinformatik in Köln, Werkstudent beim Institut der deutschen
+  Wirtschaft, baut fuelivo." Plain and factual; the owner refines the wording.
+- **Availability line (mono, pulsing dot):** "Verfügbar als Werkstudent · Köln". Gated
+  behind `SHOW_AVAILABILITY` (off by default), so the site advertises a job search only
+  once that switch is deliberately flipped; add the start ("ab <Monat Jahr>") to the string
+  when the date is settled.
+- **CTAs:** primary "Projekte" (jumps to the fuelivo card), secondary "Lebenslauf (PDF)"
+  (a download, shown only once the file exists). GitHub lives in the contact band, not here.
 
 ### Projects
 Featured: **fuelivo** first, large. Then the others as cards with a status label. Full
@@ -80,8 +83,10 @@ Present as tech stack / "uses"-style, not a rating bar chart.
 - **Werkstudent:** Institut der deutschen Wirtschaft, seit März 2025 - patent-database
   project, data analysis and process optimization. (Exact wording of tasks is an open
   question; keep it accurate and non-confidential.)
-- **CV:** subtle "Lebenslauf (PDF)" download below the timeline once the file is available -
-  the full CV sits next to the condensed career history it complements.
+- **CV:** the "Lebenslauf (PDF)" download - offered in the hero, in the nav's "Mehr" menu
+  and, subtly, below the timeline once the file is available, so the full CV also sits next
+  to the condensed career history it complements. One shared `cv` copy block, one
+  existence check (`lib/content/cv.ts`).
 
 ### Way of working (principles)
 A few short principles that show how he approaches building: problems first, deterministic
@@ -90,8 +95,8 @@ Keep to 3-5 lines, evidence-flavored.
 
 ### Contact
 Primary: **email** (mail@yannikwuenker.de), prominent. Plus LinkedIn and GitHub. CTA:
-"Projekte ansehen" or "Kontakt aufnehmen". (The CV download lives with the Werdegang
-timeline, not here.)
+"Projekte ansehen" or "Kontakt aufnehmen". (The CV download lives in the hero, the nav and
+the Werdegang timeline, not here.)
 
 ## AI transparency
 

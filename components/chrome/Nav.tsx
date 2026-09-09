@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils/cn";
 
 type NavLink = Copy["nav"]["links"][number];
 type NavPageLink = Copy["nav"]["pageLinks"][number];
+type CvCopy = Copy["cv"];
 type LanguageCopy = Copy["nav"]["language"];
 type ThemeCopy = Copy["nav"]["theme"];
 type CommandPaletteCopy = Copy["commandPalette"];
@@ -26,9 +27,9 @@ type CommandPaletteCopy = Copy["commandPalette"];
  *
  * The header is the map of the one-pager, nothing else (ADR-0005): the section
  * links scroll within it. Everything that *leaves* the one-pager - the page links
- * (blog, uses, now), the language toggle and the command palette - is collapsed on
- * desktop behind a single "Mehr" disclosure so a section anchor and a page
- * navigation can never look alike. Page-link hrefs point straight at the route
+ * (blog, uses, now), the CV download, the language toggle and the command palette -
+ * is collapsed on desktop behind a single "Mehr" disclosure so a section anchor and
+ * a page navigation can never look alike. Page-link hrefs point straight at the route
  * (not through `hrefToHomeAnchor`) and carry a trailing arrow.
  *
  * The nav is mounted in each locale's root layout, so it also renders on
@@ -174,6 +175,40 @@ function PageLinks({
         </li>
       ))}
     </>
+  );
+}
+
+/**
+ * The CV download in the menus (PORT-48): a plain anchor with `download`, since the
+ * target is a static PDF rather than a route - no next/link, no translated-route
+ * gate. It sits with the page links because it, too, leaves the one-pager
+ * (ADR-0005), and renders only while the file really exists (see `cvAvailable` on
+ * Nav). The arrow is aria-hidden so the accessible name stays the bare label.
+ */
+function CvLink({
+  copy,
+  className,
+  onNavigate,
+}: {
+  copy: CvCopy;
+  className?: string;
+  onNavigate?: () => void;
+}) {
+  return (
+    <a
+      href={copy.href}
+      download
+      onClick={onNavigate}
+      className={cn(
+        "font-mono tracking-[1px] text-ink-soft uppercase transition-colors duration-200 hover:text-signal",
+        className,
+      )}
+    >
+      {copy.label}
+      <span aria-hidden className="ml-1">
+        ↓
+      </span>
+    </a>
   );
 }
 
@@ -330,8 +365,8 @@ function MenuIcon({ open }: { open: boolean }) {
 
 /**
  * Desktop "Mehr" menu: a disclosure button whose panel groups every destination
- * that leaves the one-pager (page links, the command palette, the language toggle)
- * plus the dark-mode toggle, keeping the inline row a clean map of the sections
+ * that leaves the one-pager (page links, the CV download, the command palette, the
+ * language toggle) plus the dark-mode toggle, keeping the inline row a clean map of the sections
  * (ADR-0005). Its own state and refs make it self-contained; `useDismiss` gives it
  * Escape/outside-click parity with the phone menu. The panel is rendered only while
  * open, so the closed nav has no hidden links and the panel stays out of the a11y tree.
@@ -339,6 +374,8 @@ function MenuIcon({ open }: { open: boolean }) {
 function MoreMenu({
   moreLabel,
   pageLinks,
+  cvCopy,
+  cvAvailable,
   languageHref,
   targetLocale,
   languageCopy,
@@ -347,6 +384,8 @@ function MoreMenu({
 }: {
   moreLabel: string;
   pageLinks: readonly NavPageLink[];
+  cvCopy: CvCopy;
+  cvAvailable: boolean;
   languageHref: string;
   targetLocale: Locale;
   languageCopy: LanguageCopy;
@@ -386,6 +425,15 @@ function MoreMenu({
               linkClassName="flex flex-1 items-center px-2 py-2 text-[13px]"
               onNavigate={close}
             />
+            {cvAvailable ? (
+              <li className="flex">
+                <CvLink
+                  copy={cvCopy}
+                  className="flex flex-1 items-center px-2 py-2 text-[13px]"
+                  onNavigate={close}
+                />
+              </li>
+            ) : null}
           </ul>
           <div className="my-1 border-t border-line" />
           <div className="flex flex-col">
@@ -412,8 +460,13 @@ function MoreMenu({
   );
 }
 
-export function Nav({ locale }: { locale: Locale }) {
-  const { nav, commandPalette } = getCopy(locale);
+/**
+ * `cvAvailable` comes from the server-rendered SiteChrome: whether the CV file really
+ * exists (lib/content/cv.ts reads the filesystem, which this client component
+ * cannot), so the menus offer the download only when it would not be a dead link.
+ */
+export function Nav({ locale, cvAvailable }: { locale: Locale; cvAvailable: boolean }) {
+  const { nav, commandPalette, cv } = getCopy(locale);
   // usePathname() is typed as string but is null until the router has mounted (and
   // when the nav is rendered in isolation, e.g. tests); fall back to this locale's
   // home so the language toggle always resolves to a real counterpart URL.
@@ -461,7 +514,7 @@ export function Nav({ locale }: { locale: Locale }) {
           {nav.logo}
         </Link>
 
-        {/* Desktop: the inline section links, the "Mehr" menu (page links +
+        {/* Desktop: the inline section links, the "Mehr" menu (page links + CV +
             command palette + language) and the live scroll percentage, all hidden
             below md where the phone menu takes over. */}
         <div className="hidden items-center gap-6 md:flex">
@@ -474,6 +527,8 @@ export function Nav({ locale }: { locale: Locale }) {
           <MoreMenu
             moreLabel={nav.more.label}
             pageLinks={pageLinks}
+            cvCopy={cv}
+            cvAvailable={cvAvailable}
             languageHref={counterpartHref}
             targetLocale={targetLocale}
             languageCopy={nav.language}
@@ -508,8 +563,8 @@ export function Nav({ locale }: { locale: Locale }) {
       {/* The collapsed link list, rendered only while open so the closed nav has
           no duplicate or hidden links and the panel stays out of the a11y tree.
           Each item is a >=44px tap target. It carries every destination: the
-          section anchors, then the page links, the command palette and the
-          language toggle past a divider. */}
+          section anchors, then the page links and the CV download, the command
+          palette and the language toggle past a divider. */}
       {menuOpen && (
         <div id="nav-menu" className="mx-auto max-w-(--container-max) px-6 pb-4 sm:px-10 md:hidden">
           <ul className="flex flex-col border-t border-line pt-1">
@@ -526,6 +581,15 @@ export function Nav({ locale }: { locale: Locale }) {
               linkClassName="flex min-h-11 items-center text-[15px]"
               onNavigate={closeMenu}
             />
+            {cvAvailable ? (
+              <li className="mt-1 border-t border-line pt-1">
+                <CvLink
+                  copy={cv}
+                  className="flex min-h-11 items-center text-[15px]"
+                  onNavigate={closeMenu}
+                />
+              </li>
+            ) : null}
             <li className="mt-1 border-t border-line pt-1">
               <CommandPaletteTrigger
                 copy={commandPalette}
