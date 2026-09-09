@@ -17,6 +17,10 @@ export const fuelivo: Project = {
   problem:
     "Ausdauersportler müssen im Training und Wettkampf gezielt Kohlenhydrate, Flüssigkeit und Elektrolyte zuführen - zu wenig führt zum Leistungseinbruch, zu viel oder das Falsche zu Magen-Darm-Problemen. Die richtige Menge hängt von vielen Faktoren gleichzeitig ab: Dauer, Intensität, Sportart, Hitze, Magentoleranz. Pauschale Faustregeln wie '60 g Kohlenhydrate pro Stunde' ignorieren das, generische Ernährungs-Apps rechnen Tagesbilanzen statt Sessions, und KI-Coaches liefern Empfehlungen, die man nicht nachvollziehen kann.",
   role: "Alles - Idee, Domänenrecherche, Berechnungslogik, Design, Backend, Web-Frontend und die native iOS-App. KI war dabei Entwicklungswerkzeug, nicht Autopilot.",
+  onepager: {
+    statement:
+      "Die richtige Verpflegung hängt von Dauer, Intensität, Sportart, Hitze und Verträglichkeit ab - pauschale Gramm-pro-Stunde-Regeln greifen zu kurz.",
+  },
   learnings: [
     "Zum ersten Mal Backend, Web-Frontend und eine native iOS-App in einem Projekt vereint. Die saubere Schichtung hat sich beim zweiten Client ausgezahlt: die Logik war wiederverwendbar, nur die Transportschicht kam neu dazu.",
     "Zahlungen über zwei Welten - Stripe im Web und Apple StoreKit auf iOS - hinter einem einzigen Entitlement-Service: eine Quelle der Wahrheit für Feature-Flags.",

@@ -256,7 +256,8 @@ export const enCopy: Copy = {
       challenge: { problem: "Problem", solution: "Solution" },
       coverAlt: "Preview of",
     },
-    detailsLink: "View details",
+    detailsLink: "Case Study",
+    liveLink: "Live",
     viewAll: "View all projects",
     index: {
       eyebrow: "Projects",

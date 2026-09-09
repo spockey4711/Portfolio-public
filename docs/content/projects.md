@@ -22,6 +22,10 @@ interface Project {
   order: number;            // fuelivo = 1; rest by maturity/interest
   problem?: string;         // what real problem it solves
   role?: string;            // what Yannik did
+  onepager?: {              // compact level-1 evidence, not detail-page copy
+    statement: string;      // featured problem or defining decision, one sentence
+    stack?: string[];       // short evidenced stack for teaser cards
+  };
   stack?: string[];         // technologies (confirm before publishing)
   learnings?: string[];     // honest takeaways
   links?: {
@@ -139,12 +143,12 @@ one model, surfaced at up to three levels of depth.
 
 The section (`components/sections/projects/Projects.tsx`) is a curated teaser, not the
 full list - `TEASER_COUNT` caps how many non-featured cards it shows. The featured
-project leads a full-width row as a "wide" card (cover beside the story via
-`FeaturedProject`'s `layout` prop; on lg+ the media column fills the space below the
-cover with the project's case-study metrics in the detail rail's tile voice, so the
-column doesn't sit empty next to the taller story); the teaser projects share the row beneath it, one
-per column, and render the same flat `problem`/`role`/`learnings` story the featured one
-does (grid stretch keeps them equal height regardless of copy length). The `/projekte`
+project leads a full-width row as a wide proof card: screenshot, tagline, one problem
+sentence from `onepager.statement`, three selected metrics and links to the case study
+and live product. The teaser projects share an asymmetric row beneath it. Each gets a
+distinct shape, its image, tagline, one defining decision, a short evidenced stack and
+a case-study link. The long `problem`/`role`/`learnings` fields and complete metrics rail
+remain on the detail pages, so the onepager does not repeat their story. The `/projekte`
 index (`app/projekte/page.tsx`) is the full list and the parent of every detail page: a
 detail page's "Zurück zu den Projekten" link points at `/projekte`, and the index links
 back up to the `/#projekte` section. Both the index and each detail page are indexable and
@@ -236,9 +240,9 @@ the onepager; deeper ones can get a detail page later.
 - **Role:** solo, end-to-end - the idea, extracting the process from a real production
   codebase, the agnostic core docs, the Bash CLI, nine stack variants, the bats test suite
   and the agent integration.
-- **Detail page:** yes (`detailPage: true`) - links to the public repo. As a CLI kit it has
-  no product screenshot, so the card and detail page show a generated on-brand cover
-  (`devblueprint_cover.png`) rather than faking a UI.
+- **Detail page:** yes (`detailPage: true`) - links to the public repo. As a CLI kit its
+  card uses a real capture of `devblueprint list` (`devblueprint_terminal.png`) rather
+  than generated product imagery.
 
 ### 4. Rezepte App
 - Status: **done.** Recipes app. Needs tagline + optional media/repo.
@@ -264,14 +268,13 @@ native iOS screenshot (e.g. Aurelian, `aurelian_screen.png`) keeps its real prop
 than being cropped to the landscape box.
 
 Aurelian and fuelivo lead with real screenshots - fuelivo's is a 2400x1520 shot of the
-fuelivo.de landing page (its earlier generated headline cover only duplicated the card's
-own title and tagline sitting right next to it). Every other project - DevBlueprint (a
-CLI) and the projects not yet publicly deployed - uses a deliberate, on-brand
-generated cover (`<slug>_cover.png`) with the project name, tagline, status and slug tag on the
-Pressroom palette, rather than faking a UI. These covers and the default OG image are generated
-from committed HTML templates by `scripts/generate-assets.mjs` (`pnpm assets:generate`), which
-renders them through Playwright's Chromium using the site's own tokens and fonts, so
-regenerating is reproducible. The component-level diagonal striped placeholder in
+fuelivo.de landing page. DevBlueprint uses a 1600x1000 terminal capture of the real
+`devblueprint list` output. Projects that are not yet publicly deployed use a deliberate,
+on-brand generated cover (`<slug>_cover.png`) with the project name, tagline, status and
+slug tag on the Pressroom palette rather than faking a UI. These generated covers and the
+default OG image come from committed HTML templates in `scripts/generate-assets.mjs`
+(`pnpm assets:generate`), rendered through Playwright's Chromium with the site's own
+tokens and fonts. The component-level diagonal striped placeholder in
 `ProjectMedia` remains the fallback for any future project that has no `media.cover` set.
 Detail-page screenshots (`caseStudy.screenshots`) live in the same `public/images/`
 directory and are referenced by path; unlike the covers they are never generated. The

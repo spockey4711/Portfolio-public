@@ -21,25 +21,51 @@ describe("Projects section", () => {
     const headings = screen.getAllByRole("heading", { level: 3 });
     // The featured project leads and is the largest heading in the section.
     expect(headings[0]).toHaveTextContent("fuelivo");
-    expect(headings[0].className).toContain("text-3xl");
+    expect(headings[0].className).toContain("text-4xl");
   });
 
-  it("shows every visible project's problem, role and learnings story", () => {
+  it("keeps the onepager compact while the detail-page story stays in project data", () => {
     render(<Projects locale="de" />);
 
-    // Every card on the onepager now carries the full story (not just the featured
-    // one): the featured project leads as a full-row card and the two teasers
-    // beneath it render the same problem/role/learnings blocks their data holds.
     const { labels } = copy.projects;
-    const withProblem = visible.filter((project) => project.problem).length;
-    const withRole = visible.filter((project) => project.role).length;
-    const withLearnings = visible.filter(
-      (project) => project.learnings && project.learnings.length > 0,
-    ).length;
+    expect(screen.queryByText(labels.role)).toBeNull();
+    expect(screen.queryByText(labels.learnings)).toBeNull();
 
-    expect(screen.getAllByText(labels.problem)).toHaveLength(withProblem);
-    expect(screen.getAllByText(labels.role)).toHaveLength(withRole);
-    expect(screen.getAllByText(labels.learnings)).toHaveLength(withLearnings);
+    for (const project of visible) {
+      expect(project.problem).toBeTruthy();
+      expect(project.role).toBeTruthy();
+      expect(project.learnings?.length).toBeGreaterThan(0);
+      expect(
+        screen.getByText(project.onepager?.statement ?? "missing statement"),
+      ).toBeInTheDocument();
+    }
+  });
+
+  it("shows exactly three headline metrics for the featured project", () => {
+    const { container } = render(<Projects locale="de" />);
+    const metrics = container.querySelectorAll("#projekte dl > div");
+
+    expect(metrics).toHaveLength(3);
+    const sourceMetrics = visible[0].caseStudy?.metrics ?? [];
+    for (const metric of metrics) {
+      expect(
+        sourceMetrics.some(
+          (source) =>
+            metric.textContent?.includes(source.value) && metric.textContent.includes(source.label),
+        ),
+      ).toBe(true);
+    }
+  });
+
+  it("shows an evidenced short stack on each teaser", () => {
+    render(<Projects locale="de" />);
+
+    for (const project of visible.slice(1)) {
+      expect(project.onepager?.stack?.length).toBeGreaterThan(0);
+      for (const tech of project.onepager?.stack ?? []) {
+        expect(screen.getByText(tech)).toBeInTheDocument();
+      }
+    }
   });
 
   it("shows the featured project plus the teaser cards and hides the rest", () => {
@@ -85,7 +111,7 @@ describe("Projects section", () => {
     render(<Projects locale="de" />);
 
     // fuelivo has a cover, so it shows the screenshot (not the placeholder)...
-    expect(screen.getByAltText("Vorschau von fuelivo")).toBeInTheDocument();
+    expect(screen.getByAltText("Vorschau von fuelivo")).toHaveAttribute("loading", "eager");
     // ...framed as a browser window captioned with its live domain.
     expect(screen.getByText("fuelivo.de")).toBeInTheDocument();
   });
@@ -93,17 +119,16 @@ describe("Projects section", () => {
   it("links the featured project out to its live site", () => {
     render(<Projects locale="de" />);
 
-    // Several cards now carry a "Live ansehen" button (every project with a live
-    // link), so scope to the one that points at fuelivo's site.
-    const links = screen.getAllByRole("link", { name: /Live ansehen/i });
+    // The featured proof exposes its live product as the secondary CTA.
+    const links = screen.getAllByRole("link", { name: new RegExp(copy.projects.liveLink, "i") });
     expect(links.some((link) => link.getAttribute("href") === "https://fuelivo.de")).toBe(true);
   });
 
   it("links the featured project to its detail page (P3-3)", () => {
     render(<Projects locale="de" />);
 
-    // Each card exposes its own "view details" link now; assert fuelivo's resolves
-    // to its detail route.
+    // Each card exposes a compact Case Study CTA; assert fuelivo's resolves to
+    // its detail route.
     const links = screen.getAllByRole("link", {
       name: new RegExp(copy.projects.detailsLink, "i"),
     });
@@ -123,16 +148,12 @@ describe("Projects section", () => {
     ).toBe(false);
   });
 
-  it("gives the featured project its own full-width row (R-2)", () => {
+  it("gives the three cards distinct wide, upright and typographic shapes", () => {
     const { container } = render(<Projects locale="de" />);
 
-    // fuelivo now leads as a full-row "wide" card; the two teasers share the row
-    // beneath it, one per column. So the featured cell spans both grid columns
-    // while the teasers - now full rich cards themselves - stretch to equal height
-    // in their own single columns (the grid's default align-items: stretch is
-    // exactly what we want, no self-start opt-out).
-    const section = container.querySelector("#projekte");
-    expect(section?.className).toContain("md:col-span-2");
+    expect(container.querySelector('[data-project-shape="wide"]')).not.toBeNull();
+    expect(container.querySelector('[data-project-shape="upright"]')).not.toBeNull();
+    expect(container.querySelector('[data-project-shape="typographic"]')).not.toBeNull();
   });
 
   it("exposes the section for the nav anchor and a labelled heading", () => {

@@ -41,7 +41,7 @@ export interface CaseStudyOverride {
 
 /** The translatable subset of a Project, all optional (a lean entry has only a tagline). */
 export type ProjectContentOverride = Partial<
-  Pick<Project, "name" | "tagline" | "problem" | "role" | "learnings">
+  Pick<Project, "name" | "tagline" | "problem" | "role" | "learnings" | "onepager">
 > & { caseStudy?: CaseStudyOverride };
 
 export const enProjectContent: Record<string, ProjectContentOverride> = {
@@ -50,6 +50,10 @@ export const enProjectContent: Record<string, ProjectContentOverride> = {
     problem:
       "Endurance athletes have to take in carbohydrates, fluid and electrolytes deliberately in training and competition - too little causes a performance drop, too much or the wrong thing causes GI trouble. The right amount depends on many factors at once: duration, intensity, sport, heat, gut tolerance. Blanket rules of thumb like '60 g of carbs per hour' ignore that, generic nutrition apps track daily balances instead of sessions, and AI coaches hand out recommendations you can't reason about.",
     role: "Everything - the idea, domain research, the calculation logic, design, backend, web frontend and the native iOS app. AI was a development tool here, not an autopilot.",
+    onepager: {
+      statement:
+        "The right fueling depends on duration, intensity, sport, heat and tolerance - blanket grams-per-hour rules fall short.",
+    },
     learnings: [
       "For the first time I combined a backend, a web frontend and a native iOS app in one project. The clean layering paid off with the second client: the logic was reusable, only the transport layer was new.",
       "Payments across two worlds - Stripe on the web and Apple StoreKit on iOS - behind a single entitlement service: one source of truth for feature flags.",
@@ -201,6 +205,11 @@ export const enProjectContent: Record<string, ProjectContentOverride> = {
     },
   },
   aurelian: {
+    onepager: {
+      statement:
+        "Quotes stay in a vetted local database; AI may select one, but it can never invent one.",
+      stack: ["SwiftUI", "Swift 6", "SwiftData", "Node.js"],
+    },
     tagline: "Daily stoic reflection in under two minutes - grounded in your actual day.",
     problem:
       "Stoicism apps serve generic quotes with no bearing on everyday life, journaling apps demand too much input and feel like work, and AI reflection tools invent quotes - with philosophical sources that destroys credibility instantly. Ambitious users want a short, practical moment of clarity before the day: no to-do list, no coach tone, no made-up wisdom.",
@@ -344,6 +353,11 @@ export const enProjectContent: Record<string, ProjectContentOverride> = {
     },
   },
   devblueprint: {
+    onepager: {
+      statement:
+        "The core stays stack-agnostic; thin variants add only the gate, CI and setup for each stack.",
+      stack: ["Bash", "bats", "GitHub Actions", "Markdown"],
+    },
     tagline:
       "A reusable engineering setup for new projects - a professional process from commit one, with no lock-in.",
     problem:

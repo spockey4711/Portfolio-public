@@ -25,6 +25,7 @@ export type {
   ProjectChallenge,
   ProjectFeature,
   ProjectMetric,
+  ProjectOnepager,
   ProjectScreenshot,
   ProjectStatus,
   TechLayer,

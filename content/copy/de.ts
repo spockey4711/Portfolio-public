@@ -396,9 +396,10 @@ export const deCopy = {
       // Prefix for a project cover's alt text: "<coverAlt> <project name>".
       coverAlt: "Vorschau von",
     },
-    // Link on the onepager into a project's own /projekte/<slug> page (P3-3).
-    // Only shown for projects flagged detailPage.
-    detailsLink: "Details ansehen",
+    // Compact onepager links. The internal case study carries the story; the
+    // external live route is secondary proof rather than a second loud button.
+    detailsLink: "Case Study",
+    liveLink: "Live",
     // CTA under the onepager section teaser, linking to the full index (P3-9).
     // The onepager shows only a curated top-N; the rest live on /projekte.
     viewAll: "Alle Projekte ansehen",

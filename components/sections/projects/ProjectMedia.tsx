@@ -20,6 +20,7 @@ export type ProjectMediaProps = {
   project: Project;
   locale: Locale;
   className?: string;
+  loading?: "eager" | "lazy";
 };
 
 /** The bare hostname of the live site (e.g. "fuelivo.de"), shown in the caption bar. */
@@ -33,7 +34,7 @@ function liveHost(project: Project): string | null {
   }
 }
 
-export function ProjectMedia({ project, locale, className }: ProjectMediaProps) {
+export function ProjectMedia({ project, locale, className, loading }: ProjectMediaProps) {
   const cover = project.media?.cover;
   const coverAlt = `${getCopy(locale).projects.labels.coverAlt} ${project.name}`;
 
@@ -56,6 +57,7 @@ export function ProjectMedia({ project, locale, className }: ProjectMediaProps) 
             src={cover}
             alt={coverAlt}
             fill
+            loading={loading}
             className="object-cover object-top transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.03]"
             sizes="(max-width: 900px) 60vw, 25vw"
           />
@@ -86,6 +88,7 @@ export function ProjectMedia({ project, locale, className }: ProjectMediaProps) 
             src={cover}
             alt={coverAlt}
             fill
+            loading={loading}
             className="object-cover object-top transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.03]"
             sizes="(max-width: 900px) 100vw, 45vw"
           />

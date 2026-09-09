@@ -169,7 +169,12 @@ export function ProjectDetail({ project, locale, related = [] }: ProjectDetailPr
             </p>
           </header>
 
-          <ProjectMedia project={project} locale={locale} className="mt-12 aspect-[16/10] w-full" />
+          <ProjectMedia
+            project={project}
+            locale={locale}
+            loading="eager"
+            className="mt-12 aspect-[16/10] w-full"
+          />
 
           <div className="mt-14 flex flex-col gap-12">
             {caseStudy?.summary ? (
