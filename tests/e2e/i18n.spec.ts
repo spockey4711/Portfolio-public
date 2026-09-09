@@ -1,29 +1,15 @@
 import { type Locator, expect, test } from "@playwright/test";
 
+import { ROUTES } from "./routes";
+
 // Verifies the S5-1h acceptance against the real rendered documents: every live
 // English route advertises the correct <html lang>, canonical and
 // de-DE/en/x-default alternates, and the language toggle round-trips each route
 // between German and English without a 404 or German content under /en. The copy
 // helpers (counterpartPath, alternatesFor) are unit-tested in tests/unit; this
 // suite proves the end-to-end wiring in the browser. Host is asserted by path
-// suffix so the checks hold whatever siteUrl the metadata resolves to.
-
-/** The live translated routes: each key's German canonical path and its English twin. */
-const ROUTES = [
-  { name: "home", de: "/", en: "/en" },
-  { name: "projects index", de: "/projekte", en: "/en/projects" },
-  { name: "project detail", de: "/projekte/fuelivo", en: "/en/projects/fuelivo" },
-  { name: "uses", de: "/uses", en: "/en/uses" },
-  { name: "now", de: "/jetzt", en: "/en/now" },
-  { name: "imprint", de: "/impressum", en: "/en/imprint" },
-  { name: "privacy", de: "/datenschutz", en: "/en/privacy" },
-  { name: "blog index", de: "/blog", en: "/en/blog" },
-  {
-    name: "translated blog post",
-    de: "/blog/warum-dieses-portfolio",
-    en: "/en/blog/warum-dieses-portfolio",
-  },
-] as const;
+// suffix so the checks hold whatever siteUrl the metadata resolves to. The route
+// pairs live in ./routes, shared with the global warm-up.
 
 /** A regex asserting a URL ends with the given path (host-agnostic). */
 const endsWith = (path: string) => new RegExp(`${path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
