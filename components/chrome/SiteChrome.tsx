@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { CommandPalette } from "@/components/widgets/command-palette/CommandPalette";
 import { getCopy } from "@/content/copy";
 import { THEME_INIT_SCRIPT } from "@/lib/chrome/theme";
+import { isCvAvailable } from "@/lib/content/cv";
 import { type Locale } from "@/lib/i18n/locale";
 import { personJsonLd } from "@/lib/seo/structured-data";
 
@@ -19,6 +20,9 @@ import { personJsonLd } from "@/lib/seo/structured-data";
  */
 export function SiteChrome({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   const { nav } = getCopy(locale);
+  // Resolved here, on the server, because the Nav is a client component and cannot
+  // read the filesystem; it offers the CV download only while the file exists.
+  const cvAvailable = isCvAvailable();
 
   return (
     <>
@@ -41,7 +45,7 @@ export function SiteChrome({ locale, children }: { locale: Locale; children: Rea
       {/* Self-hosted, cookieless Umami tag; renders only when analytics is
           configured, else nothing (S2-5, see components/analytics/Analytics.tsx). */}
       <Analytics />
-      <Nav locale={locale} />
+      <Nav locale={locale} cvAvailable={cvAvailable} />
       {/* Animates route changes with the View Transitions API where supported;
           a no-op under reduced motion or in browsers without it (S2-7). Wraps
           only the routed children, which is what changes on navigation. */}
