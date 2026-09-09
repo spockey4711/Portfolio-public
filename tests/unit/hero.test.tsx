@@ -35,6 +35,14 @@ describe("Hero", () => {
     expect(screen.queryByTestId("hero-live-status")).not.toBeInTheDocument();
   });
 
+  it("holds nothing but the words: no image, picture or video in the hero", () => {
+    const { container } = render(<Hero locale="de" />);
+
+    // PORT-47 (design audit 2026-09): the generated pixel-art character is gone, and
+    // no figure may return to the first screen - the copy and CTAs are the whole hero.
+    expect(container.querySelector("img, picture, video")).toBeNull();
+  });
+
   it("exposes the #top anchor the nav wordmark links to", () => {
     const { container } = render(<Hero locale="de" />);
 

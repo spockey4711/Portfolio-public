@@ -121,13 +121,10 @@ Decorative and navigational chrome must never overrun a narrow viewport.
 - **Scroll spine** (`ScrollSpine`) — fixed at `left-[71px]`, `hidden` until
   `min-[1100px]:block`. It is `aria-hidden`, purely informational, and simply does not
   exist below 1100px, which is also why the section left padding only grows at `lg`.
-- **Hero character** (`HeroCharacter`) — a decorative one-shot walk-in video. It is
-  suppressed under `prefers-reduced-motion` (renders nothing) and, by the same rule, below
-  `lg` (`min-width: 1024px`): at narrow / mobile widths a `45vh` full-width figure crowds
-  the single-column hero and adds a video download for no benefit. Both gates are read
-  client-side, so the `<video>` is only added to the tree once the viewport is confirmed to
-  allow motion and be wide enough - which means small screens get the hero copy only, no
-  character, and never fetch the clip.
+- **Hero** (`Hero`) - carries no imagery at any width. The walk-in character video and,
+  later, the pixel-art figure beside the copy are both gone (Pressroom redesign; PORT-47,
+  design audit 2026-09): a figure below the CTAs cost phones a full screen of scroll for no
+  information, so the first viewport is the kicker, headline, lede and CTAs alone.
 - **Nav** (`Nav`) — fixed header with a logo, the section links, a "Mehr" menu and a live
   scroll percentage. It uses the canonical shell padding (`px-6 sm:px-10 lg:pr-14 lg:pl-26`)
   rather than the fixed desktop `pl-26 pr-14`, and respects `env(safe-area-inset-*)` so its
@@ -165,8 +162,8 @@ device via the dev subdomain, `portfolio.yannikwuenker.de`):
   `md`), **1024px** (`lg`), **1100px** (spine appears), **1320px** (design width).
 - No horizontal scrollbar and no clipped text at any of them.
 - Headlines shrink via `clamp` and never overflow their column.
-- The scroll spine, hero character and nav percentage are absent/collapsed on phones; the
-  nav links do not overflow.
+- The scroll spine and nav percentage are absent/collapsed on phones, the hero shows no
+  figure at any width; the nav links do not overflow.
 - Full-height hero shows no blank strip / clipped content as the mobile address bar
   toggles.
 - `prefers-reduced-motion` still renders a static, complete layout.

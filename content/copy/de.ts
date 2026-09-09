@@ -114,14 +114,10 @@ export const deCopy = {
         temperature: "18°C",
       },
     },
-    // Hero visual. The panel placeholder gave way to a full-page character that
-    // walks through the page on load (P3-2, no copy of its own); what remains here
-    // is the now-playing widget's live Spotify data (P3-1, P3-8). Kept here so the
-    // section holds no language literals.
+    // Hero visual copy. The hero itself carries no imagery (PORT-47); what lives
+    // here is the now-playing widget's live Spotify data (P3-1, P3-8). Kept here so
+    // the section holds no language literals.
     visual: {
-      // Alt text for the pixel-art character beside the hero copy. Identity-
-      // bearing (it is me), so it carries a real description, not empty alt.
-      portraitAlt: "Yannik als Pixel-Art-Figur",
       nowPlaying: {
         // Shown while a track is playing, and over the static placeholder.
         label: "// now playing",
