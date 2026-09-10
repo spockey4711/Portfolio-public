@@ -24,6 +24,7 @@ export type {
   Project,
   ProjectChallenge,
   ProjectFeature,
+  ProjectKind,
   ProjectMetric,
   ProjectOnepager,
   ProjectScreenshot,
@@ -31,7 +32,7 @@ export type {
   TechLayer,
   TimelinePhase,
 } from "./types";
-export { getFeatureStatusLabels, getProjectStatusLabels } from "./types";
+export { getFeatureStatusLabels, getProjectKindLabels, getProjectStatusLabels } from "./types";
 
 /**
  * All projects in German (the canonical base), sorted by `order` so the featured

@@ -1,18 +1,20 @@
 /**
- * Generates the site's brand imagery from committed HTML templates so the assets
- * stay reproducible instead of being hand-painted one-offs:
+ * Generates the site's brand imagery from a committed HTML template so the asset
+ * stays reproducible instead of being a hand-painted one-off: the default Open
+ * Graph share image (public/og/default.png).
  *
- *   - the default Open Graph share image (public/og/default.png), and
- *   - the on-brand cover placeholders for projects that have no live screenshot
- *     (public/images/<slug>_cover.png).
- *
- * It can also re-shoot the live product screenshots (Aurelian) at a
+ * It can also re-shoot the live product screenshots (Aurelian, fuelivo) at a
  * consistent viewport. Rendering goes through Playwright's bundled Chromium (a
  * devDependency already used by the e2e suite), so no extra tooling or font
- * embedding is needed - the templates load the site's Google fonts directly.
+ * embedding is needed - the template loads the site's Google fonts directly.
+ *
+ * It no longer generates on-brand cover placeholders. The projects index is a
+ * typographic list rather than a card grid, so a project without a real product
+ * shot needs no image at all - and a generated cover proved nothing about a
+ * product it never showed (ADR-0011).
  *
  * Usage:
- *   node scripts/generate-assets.mjs            # og + covers -> public/
+ *   node scripts/generate-assets.mjs            # og image -> public/
  *   node scripts/generate-assets.mjs reshoot    # + live screenshots -> preview dir
  *
  * The palette and typefaces mirror app/globals.css and app/fonts.ts; keep them in
@@ -68,14 +70,6 @@ const FONTS = {
   mono: `'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace`,
 };
 
-/** Per-status colour, mirrored from components ProjectStatusBadge (dot + resting label). */
-const statusStyles = {
-  live: { dot: c.signal, text: c.signalInk },
-  mvp: { dot: c.pine, text: c.pine },
-  concept: { dot: c.moss, text: c.moss },
-  experiment: { dot: c.muted, text: c.muted },
-};
-
 /** A faint diagonal hairline field, the same motif as the ProjectMedia placeholder. */
 const diagonalField = `repeating-linear-gradient(-45deg, ${c.line} 0, ${c.line} 1px, transparent 1px, transparent 11px)`;
 
@@ -118,78 +112,6 @@ function ogTemplate() {
   </body></html>`;
 }
 
-/** A project cover placeholder: a deliberate, branded slot (not a faked live screenshot). */
-function coverTemplate({ name, tagline, slug, status }) {
-  const style = statusStyles[status.key];
-  return `<!doctype html><html><head><meta charset="utf-8" />${FONT_LINK}
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { width: 1200px; height: 760px; background: ${c.surface}; font-family: ${FONTS.sans};
-           position: relative; overflow: hidden; }
-    .texture { position: absolute; inset: 0; background: ${diagonalField}; opacity: 0.55; }
-    /* The card renders covers with object-cover / object-top and crops the lower
-       ~15%, so the meta row is pinned to the top and the name block is centred
-       within the safe upper region rather than the true middle. */
-    .top { position: absolute; top: 56px; left: 72px; right: 72px;
-           display: flex; align-items: center; justify-content: space-between; }
-    .slug { font-family: ${FONTS.mono}; font-size: 20px; letter-spacing: 0.12em; color: ${c.muted}; }
-    /* Borderless dot + label, matching the site's ProjectStatusBadge (no pill chrome). */
-    .status { font-family: ${FONTS.mono}; font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase;
-              color: ${style.text}; display: flex; align-items: center; gap: 10px; }
-    .status .dot { width: 9px; height: 9px; border-radius: 999px; background: ${style.dot}; }
-    .body { position: absolute; left: 72px; right: 72px; top: 44%; transform: translateY(-50%); }
-    .name { font-family: ${FONTS.display}; font-weight: 800; font-size: 128px; line-height: 0.9;
-            text-transform: uppercase; color: ${c.ink}; letter-spacing: 0.01em; }
-    .tagline { font-size: 30px; line-height: 1.4; color: ${c.inkSoft}; max-width: 820px; margin-top: 26px; }
-    .rule { height: 2px; width: 88px; background: ${c.pine}; opacity: 0.9; margin-top: 34px; }
-  </style></head>
-  <body>
-    <div class="texture"></div>
-    <div class="top">
-      <div class="slug">[ ${slug} ]</div>
-      <div class="status"><span class="dot"></span>${status.label}</div>
-    </div>
-    <div class="body">
-      <div class="name">${name}</div>
-      <div class="tagline">${tagline}</div>
-      <div class="rule"></div>
-    </div>
-  </body></html>`;
-}
-
-// Projects that show a generated on-brand cover rather than a live screenshot; their
-// taglines and status mirror content/projects/*.ts (German, the canonical base).
-// fuelivo left the set again: the generated headline cover only duplicated the
-// card's own title/tagline next to it, so it leads with a live product shot once
-// more (see `reshoots` below) now that fuelivo.de's landing page carries it.
-const covers = [
-  {
-    slug: "devblueprint",
-    name: "DevBlueprint",
-    status: { key: "live", label: "Live" },
-    tagline:
-      "Ein wiederverwendbares Engineering-Setup für neue Projekte - professioneller Prozess ab Commit eins.",
-  },
-  {
-    slug: "rezepte-app",
-    name: "Rezepte App",
-    status: { key: "live", label: "Live" },
-    tagline: "App zum Sammeln, Ordnen und Wiederfinden von Rezepten.",
-  },
-  {
-    slug: "daily-dashboard",
-    name: "Daily Dashboard",
-    status: { key: "concept", label: "Konzept" },
-    tagline: "Persönliches Dashboard für Produktivität im Tag.",
-  },
-  {
-    slug: "mail-classifier",
-    name: "Mail Classifier",
-    status: { key: "experiment", label: "Experiment" },
-    tagline: "Kleines Tool, das eingehende Mails automatisch einsortiert.",
-  },
-];
-
 // Live product shots re-captured at a consistent viewport. Written to the preview
 // dir first so a regression against the curated originals can be caught by eye
 // before anything in public/ is overwritten. Aurelian and fuelivo lead with real
@@ -202,8 +124,8 @@ const reshoots = [
     viewport: { width: 430, height: 932 },
   },
   {
-    // 1200x760 at deviceScaleFactor 2 matches the generated covers' 2400x1520,
-    // so the card's 16/10 box crops nothing meaningful.
+    // 1200x760 at deviceScaleFactor 2 gives a 2400x1520 raster, so the featured
+    // card's 16/10 box crops nothing meaningful.
     name: "fuelivo_cover",
     url: "https://fuelivo.de",
     viewport: { width: 1200, height: 760 },
@@ -238,16 +160,6 @@ async function main() {
     { width: 1200, height: 630 },
     join(publicDir, "og/default.png"),
   );
-
-  console.log("Project covers:");
-  for (const cover of covers) {
-    await renderTemplate(
-      page,
-      coverTemplate(cover),
-      { width: 1200, height: 760 },
-      join(publicDir, `images/${cover.slug}_cover.png`),
-    );
-  }
 
   if (doReshoot) {
     await mkdir(previewDir, { recursive: true });

@@ -5,8 +5,9 @@ import type { Project } from "./types";
  * für neue Projekte. Das dritte Projekt mit voller `caseStudy`, gezogen aus dem
  * eigenen (öffentlichen, MIT-lizenzierten) Repository; die flachen Felder
  * (tagline, problem, role, links) speisen die Onepager-Karte und den Index. Als
- * Kommandozeilen-Kit hat es keinen Produkt-Screenshot, daher greift ein bewusst
- * gestalteter, generierter Marken-Platzhalter als Cover (scripts/generate-assets.mjs).
+ * Kommandozeilen-Kit hat es keine Produkt-UI, daher ist das Cover eine echte
+ * Terminal-Aufnahme der `devblueprint list`-Ausgabe - der ehrliche Beleg für ein
+ * CLI-Werkzeug, nicht ein generierter Marken-Platzhalter (ADR-0011).
  * Siehe docs/content/projects.md.
  */
 export const devblueprint: Project = {
@@ -15,6 +16,8 @@ export const devblueprint: Project = {
   tagline:
     "Ein wiederverwendbares Engineering-Setup für neue Projekte - professioneller Prozess ab Commit eins, ganz ohne Lock-in.",
   status: "live",
+  kind: "cli",
+  year: 2026,
   order: 3,
   problem:
     "Jedes neue Projekt startet ohne Prozess: Git-Workflow, Quality Gate, Konventionen und KI-Leitplanken werden jedes Mal neu erfunden oder ganz weggelassen - gerade im Solo-Betrieb. Mit mehreren parallelen KI-Sessions kommt ein zweites Problem dazu: die Chats wechseln sich gegenseitig den Branch weg. Fertige Frameworks und Template-Repos lösen das nur um den Preis dauerhafter Bindung.",

@@ -97,9 +97,13 @@ Rules:
 ## Layout: how blocks collapse
 
 - **Grids collapse to one column on mobile.** The base is `grid-cols-1`; two columns
-  appear at `sm` for card grids (`Projects`, `Skills`, `/projekte`) or at `md` for
+  appear at `sm` for card grids (`Projects`, `Skills`) or at `md` for
   editorial splits (`About`, `Contact`, `Experience`, `FeaturedProject`). Stacked order
   must read sensibly top-to-bottom.
+- **The `/projekte` index is a list, not a grid** (PORT-50). Each row is a two-column
+  split from `sm` up - name and tagline on the left, a fixed-width facts column (type,
+  year, status) on the right, so the columns align down the list. Below `sm` the row is a
+  stack with the facts first, reading as a kicker above the name.
 - **Gaps scale down implicitly** by collapsing columns; keep vertical rhythm (`gap-y-*`)
   generous enough that stacked blocks do not merge visually.
 - **The hero is a compact masthead** (PORT-48): the name, one positioning sentence, the
