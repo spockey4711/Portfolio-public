@@ -9,6 +9,13 @@ import { type Locale } from "@/lib/i18n/locale";
 
 export type ProjectStatus = "live" | "mvp" | "concept" | "experiment";
 
+/**
+ * What kind of thing a project is - the "type" column of the projects index.
+ * A closed set rather than free text so both locales get a label from one place
+ * and two projects can never describe the same shape differently.
+ */
+export type ProjectKind = "web" | "web-ios" | "ios" | "macos" | "cli";
+
 /** Build state of a single feature in a case study's feature list. */
 export type FeatureStatus = "done" | "in-progress" | "planned";
 
@@ -40,6 +47,30 @@ export interface ProjectMetric {
   label: string;
 }
 
+/** Compact evidence used only by the curated project cards on the onepager. */
+export interface ProjectOnepager {
+  /** One sentence: the featured problem or a secondary project's defining decision. */
+  statement: string;
+  /** A deliberately short, evidenced stack for secondary cards. */
+  stack?: string[];
+}
+
+/**
+ * One real screenshot of the running product, shown in the detail page's
+ * screenshot section. `alt` and `caption` are both required: the alt text is
+ * what a screen reader gets instead of the image, and the caption is what the
+ * shot is meant to prove. A shot without either would be decoration, and
+ * ADR-0011 asks for evidence.
+ */
+export interface ProjectScreenshot {
+  /** Path in public/images, e.g. "/images/fuelivo_calculator.png". */
+  src: string;
+  /** Describes the image itself for assistive tech; never empty. */
+  alt: string;
+  /** Short line under the shot saying what it shows. */
+  caption: string;
+}
+
 /** One phase on the project timeline. */
 export interface TimelinePhase {
   /** Period label, e.g. "März 2026". */
@@ -64,6 +95,13 @@ export interface CaseStudy {
     highlights?: string[];
   };
   features?: ProjectFeature[];
+  /**
+   * Real screenshots of the running product, rendered between the features and
+   * the architecture. ADR-0011 makes them part of what "carried" means, so they
+   * are evidence and never placeholders or generated art. Omitted or empty
+   * renders no section at all.
+   */
+  screenshots?: readonly ProjectScreenshot[];
   /** Tech stack grouped by layer; when set, replaces the flat `stack` pills. */
   techStack?: TechLayer[];
   architecture?: {
@@ -91,6 +129,18 @@ export interface Project {
   tagline: string;
   /** Shown as a labelled badge (text + color); see projectStatusLabels. */
   status: ProjectStatus;
+  /**
+   * What shape the project is - a web app, a native app, a CLI. Required, so the
+   * projects index can always state a type and a new entry cannot quietly ship
+   * without one; see projectKindLabels for the localized text.
+   */
+  kind: ProjectKind;
+  /**
+   * The year the work happened, taken from the project's own commit history.
+   * Required for the same reason as `kind`: it is the index's second fact, and a
+   * guessed year on a portfolio is worse than none.
+   */
+  year: number;
   /** fuelivo = true. Exactly one project is featured. */
   featured?: boolean;
   /** Sort key; fuelivo = 1, the rest by maturity and interest. */
@@ -99,6 +149,8 @@ export interface Project {
   problem?: string;
   /** What Yannik did. */
   role?: string;
+  /** Compact onepager copy; the full story remains on the detail page. */
+  onepager?: ProjectOnepager;
   /** Technologies (confirm before publishing). */
   stack?: string[];
   /** Honest takeaways. */
@@ -118,7 +170,6 @@ export interface Project {
      * rather than cropped to the landscape frame.
      */
     orientation?: "landscape" | "portrait";
-    screenshots?: string[];
   };
   /** Gets its own /projekte/<slug> page later (P3-3). */
   detailPage?: boolean;
@@ -138,6 +189,21 @@ const projectStatusLabelsByLocale: Record<Locale, Record<ProjectStatus, string>>
 /** The project status labels for a locale. */
 export function getProjectStatusLabels(locale: Locale): Record<ProjectStatus, string> {
   return projectStatusLabelsByLocale[locale];
+}
+
+/**
+ * Localized kind labels - the "type" the projects index shows next to the year.
+ * Kept here rather than in en.ts because a kind is a fact about the project, not
+ * prose: both locales must describe the same shape, so one table owns both.
+ */
+const projectKindLabelsByLocale: Record<Locale, Record<ProjectKind, string>> = {
+  de: { web: "Web-App", "web-ios": "Web & iOS", ios: "iOS-App", macos: "macOS-App", cli: "CLI" },
+  en: { web: "Web app", "web-ios": "Web & iOS", ios: "iOS app", macos: "macOS app", cli: "CLI" },
+};
+
+/** The project kind labels for a locale. */
+export function getProjectKindLabels(locale: Locale): Record<ProjectKind, string> {
+  return projectKindLabelsByLocale[locale];
 }
 
 /**

@@ -15,6 +15,11 @@ const port = process.env.PW_PORT ? Number(process.env.PW_PORT) : 3000;
 const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
+  // Requests every route once, sequentially, after the webServer is up and before the
+  // workers start, so a cold dev server never compiles (or first-fills a cache entry)
+  // under parallel first requests - the race behind the flaky i18n toggle tests
+  // (PORT-56). Skips itself under PW_PROD; see tests/e2e/global-setup.ts.
+  globalSetup: "./tests/e2e/global-setup.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

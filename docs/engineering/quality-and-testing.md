@@ -32,7 +32,7 @@ markup.
     (a malformed or missing upstream field coerced to a safe default, an unusable entry
     dropped, an auth/token step failing) so a broken coercion is caught, not shipped as a
     NaN or blank cell.
-  - Key component behavior: boot overlay session guard, reduced-motion branches, terminal
+  - Key component behavior: reduced-motion branches, terminal
     command parsing (Phase 2), and the interactive surfaces' input logic - terminal history
     recall (ArrowUp/Down) and the command palette's roving keyboard highlight, focus trap
     and backdrop dismiss.
@@ -41,7 +41,6 @@ Each of these tests is written so a deliberate break in the logic it guards fail
 coverage is a by-product of testing behavior, not the goal.
 - **E2E smoke (Playwright), a few only:**
   - Home page renders, hero visible, nav links jump to sections.
-  - Boot overlay shows once per session, not on reload.
   - Legal pages reachable.
   - A live widget renders its fallback when its API route returns "unavailable".
 - **No snapshot tests of large DOM** - they rot and prove little.
@@ -97,7 +96,11 @@ Wired in P0-3 (config lives at the repo root):
   smoke suite plus the axe scan against the dev server (`pnpm test:e2e`); `visual`
   (`tests/visual`) carries the pixel snapshots against a production build (`pnpm
   test:visual`, sets `PW_PROD`). `PW_PORT` overrides the port so a run does not reuse a
-  dev server from another worktree.
+  dev server from another worktree. A `globalSetup` (`tests/e2e/global-setup.ts`) requests
+  every route the suite visits once, sequentially, before the workers start: a cold dev
+  server compiling routes under parallel first requests used to race the
+  `/api/github-activity` cache write and fail one or two i18n toggle tests (PORT-56). The
+  route list lives in `tests/e2e/routes.ts`, shared with the i18n suite.
 - **lint-staged + husky** - a `pre-commit` hook formats and lints only the staged files.
   Husky no-ops outside a git repo, so container and CI installs are unaffected.
 - **CI** - `.github/workflows/ci.yml` runs on every PR to `develop` or `master` (and on push
@@ -109,8 +112,8 @@ Wired in P0-3 (config lives at the repo root):
   lighthouse` (`lhci autorun`) builds the app, starts the production server (`pnpm start`),
   runs Lighthouse three times against the home page and asserts the budgets below
   (Performance/Accessibility/Best-Practices/SEO `>= 0.95`, `cumulative-layout-shift <=
-  0.1`). Chrome is pre-installed on the CI runner. Note: fade-in animations (the boot
-  overlay, the hero rise-up) can make axe sample a colour mid-transition, so the a11y score
+  0.1`). Chrome is pre-installed on the CI runner. Note: fade-in animations (the hero
+  rise-up) can make axe sample a colour mid-transition, so the a11y score
   may read a point or two below 100 even though every colour clears AA at rest - the `0.95`
   floor accounts for this.
 - **Visual regression (S6-3)** - `tests/visual/visual.spec.ts` takes full-page
@@ -123,7 +126,11 @@ Wired in P0-3 (config lives at the repo root):
   is exact. **Regenerating baselines:** run the **Update visual snapshots** workflow
   (`gh workflow run update-visual-snapshots.yml --ref <branch>`) after an intended visual
   change - it re-shoots in the container and commits the PNGs back. Do not update baselines
-  from macOS; those pixels will not match CI. **First-time bootstrap:** when no baselines
-  exist yet, the `visual` job generates them and fails, uploading them as the
-  `visual-baselines` artifact; download it, commit the PNGs under
+  from macOS; those pixels will not match CI. **Upgrading Playwright:** the
+  `mcr.microsoft.com/playwright` tag in both workflows must be bumped in the same PR as
+  `@playwright/test` - the image ships only the browser build its own release expects, so a
+  mismatched tag fails every visual test with "Executable doesn't exist". The new image
+  re-renders the pages, so regenerate the baselines afterwards. **First-time bootstrap:**
+  when no baselines exist yet, the `visual` job generates them and fails, uploading them as
+  the `visual-baselines` artifact; download it, commit the PNGs under
   `tests/visual/visual.spec.ts-snapshots/`, and the job verifies green on the next run.

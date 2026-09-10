@@ -12,7 +12,6 @@ Related: [animation & motion](animation-and-motion.md) ·
 ### Reduced motion
 Respect `prefers-reduced-motion: reduce`:
 
-- Skip the boot overlay entirely (or show the six lines instantly, no stagger, no fade).
 - Replace `riseUp` reveals with an instant appearance (no translate).
 - Stop looping animations: `glowPulse`, `cueDot`, the terminal cursor `blink`, the
   equalizer bars — render their static end/rest state.

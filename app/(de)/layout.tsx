@@ -21,8 +21,8 @@ export { viewport } from "@/lib/seo/metadata";
 
 export default function DeRootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // suppressHydrationWarning: the pre-paint boot guard (BOOT_GUARD_SCRIPT in
-    // SiteChrome) sets data-boot="play" on <html> before React hydrates, so the
+    // suppressHydrationWarning: the pre-paint theme init (THEME_INIT_SCRIPT in
+    // SiteChrome) sets data-theme on <html> before React hydrates, so the
     // server HTML (no marker) intentionally differs from the client DOM. This
     // suppresses the warning for this element's attributes only (one level deep).
     <html

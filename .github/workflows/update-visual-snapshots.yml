@@ -5,6 +5,8 @@ name: Update visual snapshots
 # from the Actions tab (or `gh workflow run update-visual-snapshots.yml --ref <branch>`)
 # whenever an intended visual change updates the snapshots - the baselines are
 # Linux-rendered, so they match CI exactly and cannot be produced reliably on macOS.
+# Keep the image tag below in sync with the CI `visual` job and with the
+# `@playwright/test` version in package.json.
 
 on:
   workflow_dispatch:
@@ -21,7 +23,7 @@ jobs:
     name: Regenerate baselines
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -30,7 +32,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -42,7 +44,12 @@ jobs:
         run: pnpm build
 
       - name: Update snapshots
-        run: pnpm test:visual --update-snapshots
+        # "all" rewrites every baseline, not just the ones whose diff exceeds
+        # maxDiffPixelRatio: an intended change can sit just under the tolerance
+        # (a large page dilutes the ratio) and the default "changed" mode would
+        # keep the stale baseline. Unchanged renders produce byte-identical PNGs,
+        # so this causes no commit churn.
+        run: pnpm test:visual --update-snapshots all
 
       - name: Commit baselines
         run: |

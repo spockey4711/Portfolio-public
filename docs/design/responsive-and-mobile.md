@@ -81,14 +81,15 @@ use:
 
 | Role | Clamp | Where |
 |---|---|---|
-| Hero display | `clamp(2.5rem, 9vw, 4.5rem)` | `Hero` (40 → 72px) |
+| Hero display | `clamp(2.625rem, 7.5vw, 4.75rem)` | `Hero` (the name; 42 → 76px) |
 | Section headline | `clamp(2rem, 5vw, 2.875rem)` | About, project/legal/list `h1` |
 | Contact lead | `clamp(1.75rem, 4vw, 2.5rem)` | `Contact` |
 
 Rules:
 
 - Any new display/headline text uses a `clamp()` in this family, not a bare px size.
-- Constrain line length with `max-w-[NNch]` (e.g. hero `max-w-[14ch]`, body `~46ch`) so
+- Constrain line length with `max-w-[NNch]` (e.g. the hero positioning `max-w-[52ch]`,
+  body `~46ch`) so
   measure stays readable and text wraps early instead of running to the edge.
 - Body and UI text stay at their fixed sizes (16-18px); they already wrap. Do not shrink
   body copy below 16px on mobile.
@@ -96,18 +97,20 @@ Rules:
 ## Layout: how blocks collapse
 
 - **Grids collapse to one column on mobile.** The base is `grid-cols-1`; two columns
-  appear at `sm` for card grids (`Projects`, `Skills`, `/projekte`) or at `md` for
+  appear at `sm` for card grids (`Projects`, `Skills`) or at `md` for
   editorial splits (`About`, `Contact`, `Experience`, `FeaturedProject`). Stacked order
   must read sensibly top-to-bottom.
+- **The `/projekte` index is a list, not a grid** (PORT-50). Each row is a two-column
+  split from `sm` up - name and tagline on the left, a fixed-width facts column (type,
+  year, status) on the right, so the columns align down the list. Below `sm` the row is a
+  stack with the facts first, reading as a kicker above the name.
 - **Gaps scale down implicitly** by collapsing columns; keep vertical rhythm (`gap-y-*`)
   generous enough that stacked blocks do not merge visually.
-- **The hero is full-bleed** (S2-2): it spans the viewport rather than the shared
-  `--container-max`, reading as a wide overture above the container-capped sections below.
-  Its left gutter still matches the site (`lg:pl-26`) so the left edge and scroll spine stay
-  aligned; only the right side opens to the viewport edge. On `lg`+ a text column sits beside
-  the live-status module; below `lg` they stack, text over module, copy fully visible at
-  every width. Above `--container-max` the hero content reads intentionally wider than the
-  sections below.
+- **The hero is a compact masthead** (PORT-48): the name, one positioning sentence, the
+  availability line and two CTAs in a single left-biased column inside the shared
+  `--container-max` shell, content-height rather than full-viewport. Nothing sits beside the
+  column at any width, so the fuelivo card's top edge is inside the first viewport at
+  1440x900 and the whole hero, CV CTA included, fits a 390x844 phone.
 - **The project detail page is a two-column case study at `lg`+** (`ProjectDetail`): a
   story column at readable measure plus a sticky rail (`lg:sticky`) holding the actions,
   tech stack and headline numbers. Below `lg` the rail drops below the story, so the
@@ -121,13 +124,11 @@ Decorative and navigational chrome must never overrun a narrow viewport.
 - **Scroll spine** (`ScrollSpine`) — fixed at `left-[71px]`, `hidden` until
   `min-[1100px]:block`. It is `aria-hidden`, purely informational, and simply does not
   exist below 1100px, which is also why the section left padding only grows at `lg`.
-- **Hero character** (`HeroCharacter`) — a decorative one-shot walk-in video. It is
-  suppressed under `prefers-reduced-motion` (renders nothing) and, by the same rule, below
-  `lg` (`min-width: 1024px`): at narrow / mobile widths a `45vh` full-width figure crowds
-  the single-column hero and adds a video download for no benefit. Both gates are read
-  client-side, so the `<video>` is only added to the tree once the viewport is confirmed to
-  allow motion and be wide enough - which means small screens get the hero copy only, no
-  character, and never fetch the clip.
+- **Hero** (`Hero`) - carries no imagery at any width. The walk-in character video and,
+  later, the pixel-art figure beside the copy are both gone (Pressroom redesign; PORT-47,
+  design audit 2026-09): a figure below the CTAs cost phones a full screen of scroll for no
+  information, so the first viewport is the name, positioning, availability line and CTAs
+  alone (PORT-48).
 - **Nav** (`Nav`) — fixed header with a logo, the section links, a "Mehr" menu and a live
   scroll percentage. It uses the canonical shell padding (`px-6 sm:px-10 lg:pr-14 lg:pl-26`)
   rather than the fixed desktop `pl-26 pr-14`, and respects `env(safe-area-inset-*)` so its
@@ -165,8 +166,8 @@ device via the dev subdomain, `portfolio.yannikwuenker.de`):
   `md`), **1024px** (`lg`), **1100px** (spine appears), **1320px** (design width).
 - No horizontal scrollbar and no clipped text at any of them.
 - Headlines shrink via `clamp` and never overflow their column.
-- The scroll spine, hero character and nav percentage are absent/collapsed on phones; the
-  nav links do not overflow.
+- The scroll spine and nav percentage are absent/collapsed on phones, the hero shows no
+  figure at any width; the nav links do not overflow.
 - Full-height hero shows no blank strip / clipped content as the mobile address bar
   toggles.
 - `prefers-reduced-motion` still renders a static, complete layout.

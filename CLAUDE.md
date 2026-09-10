@@ -9,8 +9,9 @@ before non-trivial work.
 - **Commit after every small fix or task.** One logical change per commit,
   [Conventional Commits](CONTRIBUTING.md#commit-messages--conventional-commits),
   imperative summary. Small commits beat big ones.
-- **Two long-lived branches.** Feature work integrates on `develop` (which deploys to the dev
-  subdomain); `develop` is promoted to the always-deployable `master` via a periodic release
+- **Two long-lived branches.** Feature work integrates on `develop` (which publishes the dev
+  subdomain's preview image; the server rollout is a manual step); `develop` is promoted to
+  the always-deployable `master` via a periodic release
   PR. Never merge a feature branch straight into `master`. See
   [`docs/engineering/git-workflow.md#branching-model`](docs/engineering/git-workflow.md#branching-model).
 - **One directory per branch (worktrees).** Never commit directly to `develop` or `master`.

@@ -34,7 +34,7 @@ Related: [tech stack](tech-stack.md) · [conventions](../engineering/conventions
 │   │   ├── skills/
 │   │   ├── experience/
 │   │   └── contact/
-│   ├── chrome/                   Nav, scroll spine, boot overlay, footer
+│   ├── chrome/                   Nav, scroll spine, footer
 │   ├── widgets/                  Terminal, command palette, weather, github heatmap, now-playing
 │   └── ui/                       Primitives: Button, Pill, SectionHeader, Card
 │
@@ -92,7 +92,7 @@ Related: [tech stack](tech-stack.md) · [conventions](../engineering/conventions
 
 ### Components
 - `ui/` = generic, reusable primitives with no business meaning (Button, Pill, Card).
-- `chrome/` = the persistent frame (nav, scroll spine, boot overlay, footer).
+- `chrome/` = the persistent frame (nav, scroll spine, footer).
 - `widgets/` = self-contained interactive/live features that can fail independently and
   must degrade gracefully.
 - A component that is used by exactly one section lives inside that section's folder, not

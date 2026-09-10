@@ -13,7 +13,11 @@ import type { Locale } from "@/lib/i18n/locale";
  */
 export function PostMeta({ post, locale }: { post: BlogPostMeta; locale: Locale }) {
   return (
-    <MonoLabel tone="muted" className="flex flex-wrap items-center gap-x-3 gap-y-1 normal-case">
+    <MonoLabel
+      tone="muted"
+      textCase="normal"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1"
+    >
       <time dateTime={post.date}>{formatPostDate(post.date, locale)}</time>
       <span aria-hidden>·</span>
       <span>

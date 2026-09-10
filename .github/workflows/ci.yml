@@ -38,7 +38,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -75,7 +75,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -102,7 +102,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -136,8 +136,12 @@ jobs:
     # Runs inside the pinned Playwright image so the browser, fonts and rendering match
     # the committed baselines pixel-for-pixel (they are generated in this same image by
     # the update-visual-snapshots workflow). A layout/style regression fails the PR.
+    # The tag must track the `@playwright/test` version in package.json: the image ships
+    # only the browser build that its own Playwright release expects, so a mismatched tag
+    # fails every test with "Executable doesn't exist" before a single pixel is compared.
+    # Bumping it re-renders the baselines, so run update-visual-snapshots afterwards.
     container:
-      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -146,7 +150,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm

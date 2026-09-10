@@ -64,8 +64,6 @@ docker compose up --build
 - Test with `prefers-reduced-motion` both off and on (OS setting, or emulate in
   DevTools → Rendering). Reduced motion must fully degrade per
   [accessibility](../design/accessibility.md).
-- The boot overlay is guarded by `sessionStorage['pf_booted']`; clear session storage (or
-  use a fresh tab / private window) to see it again.
 - Verify the scroll spine stays smooth - it should not trigger React re-renders on scroll
   (check the profiler).
 
