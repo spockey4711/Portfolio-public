@@ -125,6 +125,7 @@ promotion predated tagging.
 
 | Date       | Version  | PR   | Notes                                                              |
 | ---------- | -------- | ---- | ----------------------------------------------------------------- |
+| 2026-09-18 | v0.5.0 | #19 | Automated release record; 52 commit(s) promoted. |
 | 2026-07-17 | v0.4.0 | #10 | Automated release record; 13 commit(s) promoted. |
 | 2026-07-09 | v0.3.0   | #143 | Promotes the S5 English i18n routes (S5-1e..h) and EN detail metadata parity (S5-5); last hand-written CHANGELOG release before Changesets. |
 | 2026-07-08 | v0.2.0   | #136 | First tagged release; promotes the S3-S6 sprint work (incl. the S6-5 cadence). |
