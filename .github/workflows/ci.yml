@@ -141,7 +141,7 @@ jobs:
     # fails every test with "Executable doesn't exist" before a single pixel is compared.
     # Bumping it re-renders the baselines, so run update-visual-snapshots afterwards.
     container:
-      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
     steps:
       - name: Checkout
         uses: actions/checkout@v7
