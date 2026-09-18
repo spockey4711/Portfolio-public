@@ -28,6 +28,26 @@ updates:
         update-types:
           - minor
           - patch
+    # Two majors are parked because the lint stack `eslint-config-next` pulls in
+    # cannot take them yet - nothing in this repo can unblock either, so an
+    # unignored bump would only reopen a permanently red PR every week:
+    #   - eslint 10 removed `context.getFilename()`, which
+    #     eslint-plugin-react still calls; its latest release (7.37.5), like
+    #     eslint-plugin-jsx-a11y and eslint-plugin-import, still caps at
+    #     `eslint ^9`, so `pnpm lint` crashes before it lints a file.
+    #   - typescript-eslint refuses TS 7 outright ("does not support TS 7.0")
+    #     and peers `typescript <6.1.0` up to and including its latest (8.70.0).
+    #     `tsc --noEmit` itself already passes on TS 7 - only the lint step
+    #     blocks, so this is purely a wait on upstream.
+    # Recheck when a new eslint-config-next widens those peers; then drop the
+    # matching entry here and let the major PR open again.
+    ignore:
+      - dependency-name: eslint
+        update-types:
+          - version-update:semver-major
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
 
   # GitHub Actions used by the CI and deploy workflows. Grouped together and
   # committed with the `ci` type since they touch the pipeline, not the app.

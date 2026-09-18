@@ -11,10 +11,17 @@ export const aurelian: Project = {
   name: "Aurelian",
   tagline: "Taegliche stoische Reflexion in unter zwei Minuten - auf den echten Tag bezogen.",
   status: "mvp",
+  kind: "ios",
+  year: 2026,
   order: 2,
   problem:
     "Stoizismus-Apps liefern generische Zitate ohne Bezug zum Alltag, Journal-Apps verlangen zu viel Input und fuehlen sich nach Arbeit an, und KI-Reflexionstools erfinden Zitate - bei philosophischen Quellen zerstoert das die Glaubwuerdigkeit sofort. Ambitionierte Nutzer wollen einen kurzen, praktischen Moment der Klarheit vor dem Tag: keine To-do-Liste, keinen Coach-Ton, keine erfundenen Weisheiten.",
   role: "Alles end-to-end - Produktdefinition und PRD, modulare local-first Architektur, SwiftUI-Frontend, Domaenen- und Anwendungslogik als Swift Package, Kuratierung der geprueften Zitat-Datenbank, den gehaerteten Node-Backend-Endpoint fuer die KI-Generierung sowie Deployment, App-Store-Vorbereitung und Test-Strategie.",
+  onepager: {
+    statement:
+      "Zitate bleiben in einer geprueften lokalen Datenbank; die KI darf auswaehlen, aber nie erfinden.",
+    stack: ["SwiftUI", "Swift 6", "SwiftData", "Node.js"],
+  },
   learnings: [
     "Eine port-basierte, modulare Architektur haelt Produktregeln unabhaengig von SwiftUI und SwiftData testbar - die Domaenenschicht haengt von nichts ab und laesst sich ohne iOS-Simulator pruefen.",
     "Zitat-Halluzinationen sind kein Prompt-Problem, sondern ein Architektur-Problem: geloest durch eine deterministische Selektionspolicy, die der KI nur zulaessige Kandidaten uebergibt - die KI waehlt aus, erfindet nie.",

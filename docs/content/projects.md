@@ -12,16 +12,23 @@ Related: [content & voice](content-and-voice.md)
 
 ```ts
 type ProjectStatus = 'live' | 'mvp' | 'concept' | 'experiment';
+type ProjectKind = 'web' | 'web-ios' | 'ios' | 'macos' | 'cli';
 
 interface Project {
   slug: string;              // e.g. 'fuelivo' (no umlaut, url-safe)
   name: string;              // display name
   tagline: string;          // one line, German, plain
   status: ProjectStatus;    // shown as a labelled badge (text + color)
+  kind: ProjectKind;        // required: the index's "type" column
+  year: number;             // required: from the project's own commit history
   featured?: boolean;       // fuelivo = true
   order: number;            // fuelivo = 1; rest by maturity/interest
   problem?: string;         // what real problem it solves
   role?: string;            // what Yannik did
+  onepager?: {              // compact level-1 evidence, not detail-page copy
+    statement: string;      // featured problem or defining decision, one sentence
+    stack?: string[];       // short evidenced stack for teaser cards
+  };
   stack?: string[];         // technologies (confirm before publishing)
   learnings?: string[];     // honest takeaways
   links?: {
@@ -31,7 +38,7 @@ interface Project {
   };
   media?: {
     cover?: string;         // path in public/images (placeholder allowed)
-    screenshots?: string[];
+    orientation?: 'landscape' | 'portrait';  // which frame the cover gets
   };
   detailPage?: boolean;     // renders its own /projekte/<slug> page (P3-3)
   caseStudy?: CaseStudy;    // long-form story for the detail page (see below)
@@ -54,6 +61,7 @@ interface CaseStudy {
     highlights?: string[];
   };
   features?: ProjectFeature[]; // { label, status, tag? } - status shows as text + dot
+  screenshots?: readonly ProjectScreenshot[]; // { src, alt, caption } - real product shots
   techStack?: TechLayer[];     // { name, items[] }; replaces the flat `stack` pills
   architecture?: {
     intro: string;
@@ -70,6 +78,54 @@ Feature `status` (`'done' | 'in-progress' | 'planned'`) maps to a German label v
 `featureStatusLabels`, shown next to the color dot so the state never relies on color
 alone. Section headings and the inline challenge labels live in `content/copy.ts`
 (`projects.labels`).
+
+`kind` and `year` are the two facts the projects index states next to every entry
+("iOS-App · 2026"). Both are **required**, so a new project cannot quietly ship without
+them, and both are facts rather than prose: `kind` maps to a label in *both* locales via
+`getProjectKindLabels` (in `types.ts`, not `en.ts` - the same shape must be described the
+same way in German and English), and `year` comes from the project's own commit history.
+A guessed year on a portfolio is worse than none, so look it up before adding an entry.
+
+### Screenshots (ADR-0011)
+
+`screenshots` is the real-product evidence [ADR-0011](../../private-docs/docs/architecture/decisions/0011-lean-onepager-and-substance-gate.md)
+requires of a *carried* project. `ProjectDetail` renders it between the features and the
+architecture - the features claim what the product does, the shots show it, the
+architecture explains how - as a one-column grid that becomes two columns from `sm` up.
+An omitted or empty list renders no section at all, so a project without shots simply
+skips it.
+
+Every shot gets the same landscape frame, and the image is *contained* in it rather than
+cropped, so a portrait native-app screenshot shows whole (matted by the frame) instead of
+being cut off at the top. That is the difference from `media.cover`, which picks a frame
+per project via `media.orientation`: a gallery mixes shapes, so it takes the treatment
+that is right for either.
+
+```ts
+interface ProjectScreenshot {
+  src: string;      // path in public/images, e.g. '/images/fuelivo_calculator.png'
+  alt: string;      // required: describes the image for assistive tech
+  caption: string;  // required: says what the shot proves
+}
+```
+
+Both `alt` and `caption` are **required**, and they carry different text. The alt text is
+what a screen reader gets *instead of* the image; the caption is what every reader gets
+*next to* it. An optional field here would make an undescribed screenshot the path of
+least resistance, which the a11y suite (`tests/e2e/a11y.spec.ts`, `tests/e2e/axe.spec.ts`)
+exists to prevent.
+
+Only **real** shots of the running product belong here - no placeholders and no generated
+art. That is the point of the field, and it is also why the generated on-brand covers
+under [Assets](#assets) are gone: they proved nothing about a product, and ADR-0011 gates
+further playground work on exactly that proof.
+
+English follows the same overlay rule as the feature list (`mergeCaseStudy` in
+`content/projects/index.ts`): `content/projects/en.ts` supplies only the translated `alt`
+and `caption` per shot, in the same order as the German list, and `src` is inherited from
+the German base - one image file serves both languages, so repeating the path would only
+let the two locales drift. A shot with no English entry keeps its German text rather than
+disappearing from `/en/projects/<slug>`. See [i18n](i18n.md).
 
 ### Interactive proof (S4-5)
 
@@ -97,10 +153,12 @@ one model, surfaced at up to three levels of depth.
 
 The section (`components/sections/projects/Projects.tsx`) is a curated teaser, not the
 full list - `TEASER_COUNT` caps how many non-featured cards it shows. The featured
-project leads a full-width row as a "wide" card (cover beside the story via
-`FeaturedProject`'s `layout` prop); the teaser projects share the row beneath it, one
-per column, and render the same flat `problem`/`role`/`learnings` story the featured one
-does (grid stretch keeps them equal height regardless of copy length). The `/projekte`
+project leads a full-width row as a wide proof card: screenshot, tagline, one problem
+sentence from `onepager.statement`, three selected metrics and links to the case study
+and live product. The teaser projects share an asymmetric row beneath it. Each gets a
+distinct shape, its image, tagline, one defining decision, a short evidenced stack and
+a case-study link. The long `problem`/`role`/`learnings` fields and complete metrics rail
+remain on the detail pages, so the onepager does not repeat their story. The `/projekte`
 index (`app/projekte/page.tsx`) is the full list and the parent of every detail page: a
 detail page's "Zurück zu den Projekten" link points at `/projekte`, and the index links
 back up to the `/#projekte` section. Both the index and each detail page are indexable and
@@ -192,9 +250,9 @@ the onepager; deeper ones can get a detail page later.
 - **Role:** solo, end-to-end - the idea, extracting the process from a real production
   codebase, the agnostic core docs, the Bash CLI, nine stack variants, the bats test suite
   and the agent integration.
-- **Detail page:** yes (`detailPage: true`) - links to the public repo. As a CLI kit it has
-  no product screenshot, so the card and detail page show a generated on-brand cover
-  (`devblueprint_cover.png`) rather than faking a UI.
+- **Detail page:** yes (`detailPage: true`) - links to the public repo. As a CLI kit its
+  card uses a real capture of `devblueprint list` (`devblueprint_terminal.png`) rather
+  than generated product imagery.
 
 ### 4. Rezepte App
 - Status: **done.** Recipes app. Needs tagline + optional media/repo.
@@ -219,14 +277,21 @@ screenshot reads as a real product shot; `portrait` renders it in a phone frame 
 native iOS screenshot (e.g. Aurelian, `aurelian_screen.png`) keeps its real proportions rather
 than being cropped to the landscape box.
 
-Only Aurelian still leads with a real screenshot. Every other project - including fuelivo,
-DevBlueprint (a CLI) and the projects not yet publicly deployed - uses a deliberate, on-brand
-generated cover (`<slug>_cover.png`) with the project name, tagline, status and slug tag on the
-Pressroom palette, rather than faking a UI. These covers and the default OG image are generated
-from committed HTML templates by `scripts/generate-assets.mjs` (`pnpm assets:generate`), which
-renders them through Playwright's Chromium using the site's own tokens and fonts, so
-regenerating is reproducible. The component-level diagonal striped placeholder in
-`ProjectMedia` remains the fallback for any future project that has no `media.cover` set. The
+Aurelian and fuelivo lead with real screenshots - fuelivo's is a 2400x1520 shot of the
+fuelivo.de landing page. DevBlueprint uses a 1600x1000 terminal capture of the real
+`devblueprint list` output. A project without a real shot simply sets no `media.cover`:
+it is listed as a row on the projects index, which has no media slot at all. There are no
+generated cover placeholders any more - they duplicated the card's own name and tagline
+and proved nothing about a product they never showed (ADR-0011), so the four that existed
+were deleted along with the template that produced them. The component-level diagonal
+striped placeholder in `ProjectMedia` remains the fallback for a coverless project on the
+surfaces that do frame media (the onepager teaser and the detail page).
+
+The default OG image still comes from a committed HTML template in
+`scripts/generate-assets.mjs` (`pnpm assets:generate`), rendered through Playwright's
+Chromium with the site's own tokens and fonts.
+Detail-page screenshots (`caseStudy.screenshots`) live in the same `public/images/`
+directory and are referenced by path; unlike the OG image they are never generated. The
 script can also re-shoot the live screenshots at a consistent viewport
 (`node scripts/generate-assets.mjs reshoot`); those land in a git-ignored `.asset-preview/`
 for review before replacing the curated originals.

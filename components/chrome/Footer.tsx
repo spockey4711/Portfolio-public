@@ -8,10 +8,9 @@ import { version } from "../../package.json";
 
 /**
  * The site footer, colophon register: a dense mono block that closes the page the
- * way a print colophon closes a book - owner and year, the typefaces and stack it
- * is set in, and the release version - followed by one inline row of links (the
- * explore destinations, then the legal pages). Mounted in the root layout, so the
- * legal pages carry it too.
+ * way a print colophon closes a book - owner, year and release version - followed
+ * by one inline row of links (the explore destinations, then the legal pages).
+ * Mounted in the root layout, so the legal pages carry it too.
  *
  * The footer stays the site's home for page-level links, kept out of the
  * scroll-only primary nav by design (ADR-0005). Explore uses next/link for client
@@ -31,7 +30,7 @@ export function Footer({ locale }: { locale: Locale }) {
     <footer className="border-t-2 border-ink">
       <div className="mx-auto flex w-full max-w-(--container-max) flex-col gap-5 px-6 py-10 sm:px-10 lg:px-14">
         <p className="max-w-[68ch] font-mono text-xs leading-relaxed text-muted">
-          © {year} {footer.owner} · v{version} · {footer.colophon}
+          © {year} {footer.owner} · v{version}
         </p>
 
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">

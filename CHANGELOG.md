@@ -1,5 +1,111 @@
 # Changelog
 
+## 0.5.0 - 2026-09-18
+
+### Minor Changes
+
+- 6aa742f: Turn the onepager's projects band into a compact proof layer. fuelivo now leads with one
+  problem sentence, three headline metrics, and direct Case Study and Live routes. Aurelian
+  and DevBlueprint become shorter, differently shaped teasers with one defining decision and
+  an evidenced stack; DevBlueprint uses a real capture of its CLI output instead of generated
+  cover art. The complete role, learnings, and metrics remain on each project detail page.
+- 24ce63e: Rebuild the hero as a compact masthead so a recruiter can place the person inside the
+  first viewport (design audit 2026-09, PORT-48): the name is the page's h1, one plain
+  sentence of positioning (studies, city, current role, current build) sits under it, then
+  the availability line - the Werdegang's pulsing marker plus the location, still gated
+  behind `SHOW_AVAILABILITY` so nothing advertises a job search until that switch is
+  flipped - and two CTAs, "Projekte" and the "Lebenslauf (PDF)" download. The generic
+  "STUDENT · DEVELOPER · ATHLETE" kicker and the four-line tagline are gone, which brings
+  the top edge of the fuelivo card into the first viewport at 1440x900. GitHub leaves the
+  hero for the contact band, which already lists it. The CV download is also offered in the
+  nav's "Mehr" menu and the phone menu, so it is one click away on every route; the CV copy
+  moves to a shared top-level `cv` block, and every surface shows the link only while the
+  file really exists.
+- ebefc43: Add a screenshots section to the project detail pages. ADR-0011 defines a "carried"
+  project as one whose detail page shows real screenshots of the running product, and the
+  data model had no place for them. A case study can now carry a list of
+  `{ src, alt, caption }` shots, rendered between the features and the architecture - the
+  features claim what the product does, the shots show it, the architecture explains how.
+  `alt` and `caption` are both required per shot: the alt text replaces the image for a
+  screen reader, the caption tells every reader what the shot proves. English translates
+  both and inherits `src`, since one image file serves both languages. A project without
+  shots renders no section at all, which is every project for now - this ships the
+  infrastructure, the images follow with the content. The unused `media.screenshots` field
+  is dropped so there is only one place a screenshot can go.
+- 7025491: Turn `/projekte` into a typographic index list instead of a card grid. Four of the six
+  projects have no real product shot, and the grid handed each of them a framed generated
+  cover that duplicated the card's own name and tagline - an empty frame that read as an
+  unfinished template, which is exactly what ADR-0011 says a placeholder must never be.
+  fuelivo still leads as a full proof card, because its screenshot is real and earns the
+  space; every other project is now a row: name, type and year, status, and the one line.
+  The story stays on the detail pages.
+  
+  Projects gain two required facts, `kind` (`web` | `web-ios` | `ios` | `macos` | `cli`) and
+  `year`, both read out of each project's own commit history rather than guessed. `kind`
+  maps to a label in both locales from one table, so German and English can never describe
+  the same shape differently. Required rather than optional, so a new entry cannot quietly
+  ship without stating what it is and when it was built.
+  
+  The four generated `<slug>_cover.png` placeholders are deleted along with the template
+  that produced them, and `ProjectCard` is gone - the list row replaced it. `pnpm
+  assets:generate` now produces only the OG image.
+- 5f98587: Remove the once-per-session boot overlay (terminal splash) and its pre-paint guard
+  scripts; the hero now reveals immediately on first paint. The multi-second splash
+  delayed the content and hurt first-visit acquisition.
+
+### Patch Changes
+
+- 6e62b70: Warm the dev server before the Playwright smoke suite starts. On a cold `pnpm dev`
+  server, several workers used to send the first request for a route at the same time, and
+  the same-origin `/api/github-activity` route (wrapped in `unstable_cache`) raced its own
+  first cache write: Next logged "Unexpected end of JSON input", the browser received a
+  truncated response and one or two i18n language-toggle tests failed - on a warm server
+  none did. A `globalSetup` now requests every route the suite visits once, sequentially,
+  before any worker runs; the route list moves to `tests/e2e/routes.ts` so the i18n suite
+  and the warm-up share it. Test infrastructure only, no site change.
+- e40bc92: Fill the featured fuelivo card's empty media column. The cover is a real screenshot of
+  the fuelivo.de landing page again instead of the generated headline cover, which only
+  duplicated the card's own title and tagline next to it; the asset script's `reshoot`
+  mode re-captures it reproducibly (with the cookie banner declined) at the covers'
+  2400x1520 format. On lg+ the wide layout's media column now shows the project's
+  case-study metrics below the cover - real numbers in the same tile voice as the detail
+  page's rail - so the column no longer sits blank beside the taller story.
+- fe24709: Fix `MonoLabel`'s case opt-out, which silently did nothing. Three call sites passed
+  `className="normal-case"` to keep text that carries its own casing - the Werdegang period
+  ("seit Oktober 2024"), the blog post meta and the Signals widget's kickers. `cn` only joins
+  class names, so both `uppercase` and `normal-case` landed on the element and Tailwind's
+  emitted order decided the winner: `uppercase`. The period rendered as "SEIT OKTOBER 2024".
+  
+  The opt-out is now an explicit `textCase="normal"` prop that emits one class or the other,
+  so it cannot be defeated by class order. Visible change: the Werdegang periods, the blog
+  post dates and reading times read in their intended casing again.
+- 71e6ab5: Park the `eslint` 10 and `typescript` 7 majors in `.github/dependabot.yml` instead of
+  leaving two permanently red PRs open. Both are blocked by the same upstream thing and by
+  nothing in this repo: ESLint 10 removed `context.getFilename()`, which `eslint-plugin-react`
+  still calls, and the latest releases of the react, jsx-a11y and import plugins all still cap
+  at `eslint ^9`; `typescript-eslint` refuses TS 7 outright and peers `typescript <6.1.0` up
+  to and including its latest release. All three plugins arrive through `eslint-config-next`,
+  which is already current, so neither bump can be taken by editing anything here. Worth
+  recording: `tsc --noEmit` already passes cleanly on TS 7, so the app code is ready and only
+  the lint step blocks. The ignore entries are declarative rather than
+  `@dependabot ignore` comments so the reason stays visible in the repo, and the docs gain a
+  "parked majors" section naming the condition for lifting each one.
+- f52407c: Refresh the Now page: update what I am building, learning and reading, and fix German copy typos.
+- 52607ce: Refresh the /uses inventory: the daily machine is a MacBook Pro M4 Pro next to the
+  Contabo VPS, the editor pair is Zed and Warp, and the stack and tools lists are
+  trimmed to what is genuinely reached for day to day. The English list at /en/uses
+  was still on the old kit and is brought back in sync, so both locales describe the
+  same setup.
+- 73c82a4: Remove the colophon sentence (typefaces and stack) from the footer in both locales;
+  the footer line now reads owner, year and version only.
+- 54e970e: Correct the deploy story in the docs after the public split: `deploy.yml` only builds and
+  publishes the per-environment image to GHCR (`ghcr.io/spockey4711/portfolio-public`,
+  `dev-/prod-sha-<sha>` plus moving `-latest`); this public repo holds no deploy credentials,
+  so rolling an image onto the server is a manual SSH step (`deploy-remote.sh` in the
+  environment's compose project). Updates the release runbook (step 6 is now "roll out and
+  verify"), the git-workflow branching/lifecycle notes, CLAUDE.md, CONTRIBUTING.md and the
+  dependency-updates note, which all still claimed merges deploy automatically.
+
 ## 0.4.0 - 2026-07-17
 
 ### Minor Changes

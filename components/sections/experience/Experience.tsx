@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils/cn";
  * period (mono) over the role, organisation and a short focus line; ongoing
  * entries carry the pulsing status marker. All strings come from content/.
  *
- * The full CV is offered as a subtle download below the timeline, surfaced only
- * when the file exists in public/ (checked server-side via lib/content/cv.ts),
- * so an absent CV leaves no dead link. This is a Server Component:
+ * The full CV is offered as a subtle download below the timeline (the shared `cv`
+ * copy block), surfaced only when the file exists in public/ (checked server-side
+ * via lib/content/cv.ts), so an absent CV leaves no dead link. This is a Server Component:
  * isCvAvailable() reads the filesystem, so the section must not become a Client
  * Component.
  *
@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils/cn";
  * Skills column beside it so the CV download can pin to the shared baseline.
  */
 export function Experience({ locale, className }: { locale: Locale; className?: string }) {
-  const { experience: experienceCopy } = getCopy(locale);
+  const { experience: experienceCopy, cv } = getCopy(locale);
   const experience = getExperience(locale);
   const cvAvailable = isCvAvailable();
 
@@ -46,7 +46,7 @@ export function Experience({ locale, className }: { locale: Locale; className?: 
             className="flex flex-col gap-2 border-t border-line py-5 first:border-t-0 first:pt-0 last:pb-0"
           >
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <MonoLabel tone="muted" className="normal-case">
+              <MonoLabel tone="muted" textCase="normal">
                 {entry.period}
               </MonoLabel>
               {entry.current ? (
@@ -76,13 +76,8 @@ export function Experience({ locale, className }: { locale: Locale; className?: 
       </ol>
 
       {cvAvailable ? (
-        <Button
-          variant="ghost"
-          href={experienceCopy.cv.href}
-          download
-          className="mt-auto self-start"
-        >
-          {experienceCopy.cv.label}
+        <Button variant="ghost" href={cv.href} download className="mt-auto self-start">
+          {cv.label}
           <span aria-hidden>↓</span>
         </Button>
       ) : null}

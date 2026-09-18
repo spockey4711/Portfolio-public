@@ -24,12 +24,15 @@ export type {
   Project,
   ProjectChallenge,
   ProjectFeature,
+  ProjectKind,
   ProjectMetric,
+  ProjectOnepager,
+  ProjectScreenshot,
   ProjectStatus,
   TechLayer,
   TimelinePhase,
 } from "./types";
-export { getFeatureStatusLabels, getProjectStatusLabels } from "./types";
+export { getFeatureStatusLabels, getProjectKindLabels, getProjectStatusLabels } from "./types";
 
 /**
  * All projects in German (the canonical base), sorted by `order` so the featured
@@ -66,8 +69,9 @@ function overlayList<T>(base: readonly T[], override: readonly Partial<T>[]): T[
  * truly locale-invariant. Everything else is translated - including the tech
  * stack (its layer names and descriptive items are German prose) and the metric
  * values (which use German number formatting, e.g. "16.100" -> "16,100"). Fully
- * translatable lists are replaced wholesale; the feature list is overlaid so its
- * inherited `status` never has to be repeated in en.ts.
+ * translatable lists are replaced wholesale; the feature and screenshot lists are
+ * overlaid so their inherited facts - a feature's `status`, a screenshot's `src` -
+ * never have to be repeated in en.ts.
  */
 function mergeCaseStudy(base: CaseStudy, override: CaseStudyOverride): CaseStudy {
   const merged: CaseStudy = { ...base };
@@ -80,6 +84,9 @@ function mergeCaseStudy(base: CaseStudy, override: CaseStudyOverride): CaseStudy
   }
   if (override.features && base.features) {
     merged.features = overlayList(base.features, override.features);
+  }
+  if (override.screenshots && base.screenshots) {
+    merged.screenshots = overlayList(base.screenshots, override.screenshots);
   }
   if (override.techStack) merged.techStack = override.techStack;
   if (override.challenges) merged.challenges = override.challenges;

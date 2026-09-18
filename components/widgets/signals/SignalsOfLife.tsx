@@ -61,7 +61,8 @@ function SignalRow({ kicker, primary, meta, link }: SignalRowProps) {
     <>
       <MonoLabel
         tone="pine"
-        className="w-20 shrink-0 pt-0.5 text-[10px] tracking-[1.5px] normal-case"
+        textCase="normal"
+        className="w-20 shrink-0 pt-0.5 text-[10px] tracking-[1.5px]"
       >
         {kicker}
       </MonoLabel>

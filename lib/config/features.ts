@@ -11,10 +11,10 @@ function envFlag(value: string | undefined): boolean {
 }
 
 /**
- * Whether the hero's availability pill ("Verfügbar als Werkstudent") is rendered.
+ * Whether the hero's availability line ("Verfügbar als Werkstudent · Köln") is rendered.
  * Off by default so the site never advertises a job search unless deliberately
  * switched on via SHOW_AVAILABILITY at build time. Read on the server only, so the
- * pill is simply absent from the prerendered HTML when the flag is unset. Reads the
+ * line is simply absent from the prerendered HTML when the flag is unset. Reads the
  * env on each call so the value is never captured stale at import time.
  */
 export function showAvailability(): boolean {

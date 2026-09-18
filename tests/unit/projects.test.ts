@@ -3,8 +3,10 @@ import { describe, expect, it } from "vitest";
 import {
   detailProjects,
   getDetailProject,
+  getProjectKindLabels,
   getProjectStatusLabels,
   projects,
+  type ProjectKind,
   type ProjectStatus,
 } from "@/content/projects";
 
@@ -49,6 +51,31 @@ describe("projects content", () => {
     const statuses: ProjectStatus[] = ["live", "mvp", "concept", "experiment"];
     for (const status of statuses) {
       expect(projectStatusLabels[status]).toBeTruthy();
+    }
+  });
+});
+
+// The projects index states a type and a year for every entry. Both are facts
+// taken from the project's own repository, so the guard here is that they are
+// present and plausible in both locales rather than guessed or left blank.
+describe("project type and year", () => {
+  it("maps every kind value to a label in both locales", () => {
+    const kinds: ProjectKind[] = ["web", "web-ios", "ios", "macos", "cli"];
+    for (const locale of ["de", "en"] as const) {
+      const labels = getProjectKindLabels(locale);
+      for (const kind of kinds) {
+        expect(labels[kind]).toBeTruthy();
+      }
+    }
+  });
+
+  it("gives every project a labelled kind and a plausible year", () => {
+    for (const project of projects) {
+      expect(getProjectKindLabels("de")[project.kind]).toBeTruthy();
+      expect(getProjectKindLabels("en")[project.kind]).toBeTruthy();
+      // Wide but real bounds: the work exists and is not dated in the future.
+      expect(project.year).toBeGreaterThanOrEqual(2020);
+      expect(project.year).toBeLessThanOrEqual(new Date().getFullYear());
     }
   });
 });

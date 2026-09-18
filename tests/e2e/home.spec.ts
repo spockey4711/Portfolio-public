@@ -6,14 +6,20 @@ import { expect, test } from "@playwright/test";
 test("home page renders the hero", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Ich entwickle Software, die meine eigenen Probleme löst.",
-  );
+  // The name is the page's one h1 (PORT-48): who, before anything else.
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Yannik Wünker");
 
-  // The primary CTA jumps to the projects section. Match the label exactly so it
-  // does not also resolve the section teaser's "Alle Projekte ansehen" link (P3-9).
-  await expect(page.getByRole("link", { name: "Projekte ansehen", exact: true })).toHaveAttribute(
+  // The two CTAs sit above the fold: the jump to the projects section and the CV
+  // download. Scope to the main landmark so the nav's own "Projekte" link (which
+  // points at the root-relative /#projekte) is not matched too, and match the labels
+  // exactly so the "Alle Projekte ansehen" tile stays out of it (P3-9). The CV is
+  // offered again below the Werdegang timeline, hence `.first()`.
+  const main = page.getByRole("main");
+  await expect(main.getByRole("link", { name: "Projekte", exact: true })).toHaveAttribute(
     "href",
     "#projekte",
   );
+  await expect(
+    main.getByRole("link", { name: "Lebenslauf (PDF)", exact: true }).first(),
+  ).toHaveAttribute("href", "/cv/yannik-wuenker.pdf");
 });

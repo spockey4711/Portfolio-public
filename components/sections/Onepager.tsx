@@ -51,14 +51,11 @@ export function Onepager({ locale }: { locale: Locale }) {
       {/* The band stack. Generous vertical gaps carry the rhythm; open prose bands
           add a hairline top rule, framed clusters lead with a BandIntro. */}
       <div className="flex flex-col gap-16 pb-24 sm:gap-20 lg:gap-24">
-        {/* Projects cluster: the featured poster + two teasers + the slate index. */}
+        {/* Projects cluster: one wide proof, two differently shaped teasers and
+            the slate index link. Projects owns the asymmetric internal grid. */}
         <Band className="flex flex-col gap-8">
           <BandIntro eyebrow={landing.projects.eyebrow} lead={landing.projects.lead} />
-          {/* Two columns: the featured card spans the full row (md:col-span-2),
-              the two teasers share the row beneath it, one per column. */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 lg:gap-6">
-            <Projects locale={locale} />
-          </div>
+          <Projects locale={locale} />
         </Band>
 
         {/* About - open prose straight on the paper, set off by a hairline rule. */}

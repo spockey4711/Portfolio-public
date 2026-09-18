@@ -15,35 +15,17 @@ fallback (see [accessibility](accessibility.md)).
 
 ## The signature elements
 
-### Boot overlay (once per session)
-- Fullscreen dark overlay (`--term-bg`), z-index 100, shown on first load of a session.
-- Six mono lines fade in one after another (`bootline`: opacity 0→1 + translateY 4px→0,
-  0.35s ease), staggered at `0.10 / 0.45 / 0.80 / 1.15 / 1.5 / 1.85s`:
-  ```
-  ▸ booting portfolio.os v2.4
-  loading modules            ok
-  mounting /projects         ok
-  establishing uplink        ok
-  whoami → yannik.wuenker
-  ▸ ready▮
-  ```
-  `ok` and `▸` in `--term-green`; value highlights in bright term text.
-- After ~2350ms the overlay fades out (opacity → 0 over 0.7s, then `display:none`).
-- Guard: set `sessionStorage['pf_booted']`. If already set, skip the animation and hide
-  the overlay immediately. Reload within a session goes straight to the hero.
+A once-per-session terminal boot overlay used to precede the hero reveal; it was removed
+because a multi-second splash hurts first-visit acquisition. The hero now reveals
+immediately.
 
 ### Hero reveal
-- Hero elements rise in after the boot sequence (`riseUp`: opacity 0→1 + translateY
-  16px→0, ~0.8s ease forwards), offset by `--hero-reveal-offset` so the reveal follows the
-  boot end (~2.3s) on a first visit and plays immediately when boot is skipped (guard set).
-- Two stages (S2-2). Stage one is the text column, staggered top-to-bottom (0-0.36s on top
-  of the offset). Stage two is the live-status module (`LiveStatus`), revealed as one unit a
-  clear beat later (~1.1s) so the copy lands first and the live surface settles in beside it,
-  roughly following the character's walk-in. The second-stage delay is a fixed CSS
-  approximation, not synced to the character's actual end: the character's timing differs
-  between a first and a returning visit and it is absent under reduced motion, so nothing in
-  the reveal may depend on it having played. Under reduced motion every element is settled
-  from first paint (it rests hidden only under `motion-safe`).
+- Hero elements rise in from first paint (`riseUp`: opacity 0→1 + translateY
+  16px→0, ~0.8s ease forwards).
+- The text column rises top-to-bottom (name, positioning, availability line, CTAs)
+  staggered 0-0.36s. The hero holds nothing but the words - no imagery (PORT-47, design
+  audit 2026-09) - so this stagger is the whole sequence. Under reduced motion every element is
+  settled from first paint (it rests hidden only under `motion-safe`).
 
 ### Scroll spine (the signature)
 - Fixed vertical line at `left: 71px`, full height, width 2px, track color `--line`,
@@ -84,7 +66,6 @@ before the true bottom (R-1).
 | Name | Purpose | Definition |
 |---|---|---|
 | `blink` | Cursor | 0–49% opacity 1, 50–100% opacity 0; `1.6s step-end infinite` |
-| `bootline` | Boot lines | opacity 0→1 + translateY 4px→0; 0.35s ease; staggered |
 | `riseUp` | Hero reveal | opacity 0→1 + translateY 16px→0; ~0.8s ease forwards; staggered |
 | `cueDot` | Scroll cue | translateY 0→22px, opacity 0→1→0; 1.6s ease-in-out infinite |
 | `glowPulse` | Status/kicker dot | box-shadow ring 0→5px in signal green; 2.4s ease infinite |
@@ -121,7 +102,6 @@ jarring — restore instantly without smooth behavior.
 
 ## What drives what (state)
 
-- `bootDone` — session-persistent; controls the boot overlay.
 - `scrollRatio` (0..1) — drives spine fill, node position and nav percentage. **Never**
   a per-frame React state; a ref/CSS variable.
 - terminal state (P2-1) — command log, input value and entered-command history; plain
@@ -149,12 +129,12 @@ It is strict progressive enhancement, never a hard dependency:
   site's motion language. A `prefers-reduced-motion` rule there also force-disables the
   `::view-transition-*` animations as a belt-and-suspenders fallback.
 - **No layout shift.** Only in-app route links are swapped; external links
-  (`ProjectCard` live/demo/repo) keep their plain `<a target="_blank">`. The cross-fade is a
-  compositor-only opacity animation, so it adds no CLS.
+  (`ProjectIndexRow` live/demo/repo) keep their plain `<a target="_blank">`. The cross-fade
+  is a compositor-only opacity animation, so it adds no CLS.
 
 ## Framer Motion vs. hand-rolled
 
-- Use **Framer Motion** for orchestration and reveal/stagger (boot lines, hero rise,
+- Use **Framer Motion** for orchestration and reveal/stagger (hero rise,
   section reveals via `whileInView`).
 - Use **hand-rolled rAF + CSS variables** for the continuous scroll-driven spine, because
   it runs every frame and must stay off the React render path.

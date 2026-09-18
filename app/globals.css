@@ -66,8 +66,8 @@
   --heat-3: oklch(66% 0.155 72);
   --heat-4: oklch(55% 0.16 72);
 
-  /* Terminal / dark context (boot overlay, terminal strip) — always dark, shared
-     by both themes. */
+  /* Terminal / dark context (terminal strip) — always dark, shared by both
+     themes. */
   --term-bg: #0f130f;
   --term-text: #e8ede6;
   --term-text-muted: #9bb0a2;
@@ -88,14 +88,6 @@
 
   /* Node-dot ring halo — bg-coloured, so it tracks the background token */
   --shadow-node-ring: 0 0 0 3px var(--bg);
-
-  /* Hero reveal offset: how long the staggered hero rise waits before it starts.
-     0s by default, so a returning visitor (boot skipped) and anyone with no JS
-     reveal immediately. On a first, motion-allowed visit the pre-paint hero-reveal
-     script (components/sections/hero/reveal.ts) freezes this to 2.3s as an inline
-     style on <html>, so the rise follows the boot end (docs/design/animation-and-
-     motion.md). Each hero element adds its own stagger on top with calc(). */
-  --hero-reveal-offset: 0s;
 }
 
 /*
@@ -107,8 +99,8 @@
  * lightness (surface is lighter than bg), and the hard-offset shadow drops to
  * near-black so it reads as depth, not glow.
  *
- * The --term-* tokens are deliberately NOT overridden - the terminal strip and
- * boot overlay are always-dark contexts and read identically in either theme.
+ * The --term-* tokens are deliberately NOT overridden - the terminal strip is an
+ * always-dark context and reads identically in either theme.
  */
 html[data-theme="dark"] {
   --bg: oklch(17% 0.02 60);
@@ -226,26 +218,8 @@ html[data-theme="dark"] {
     }
   }
 
-  /* bootline: each boot-overlay line fades and rises into place. Exposed as the
-     `animate-bootline` utility; the boot lines rest at opacity 0 and pair it with
-     `motion-safe:` so the staggered reveal only runs when motion is allowed (the
-     overlay itself is skipped entirely under reduced motion, see
-     components/chrome/BootOverlay.tsx). `forwards` holds the final visible state. */
-  --animate-bootline: bootline 0.35s ease forwards;
-
-  @keyframes bootline {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
   /* riseUp: the single orchestrated entrance (hero + bento tiles). Each element
-     fades and rises into place, staggered after the boot end. Exposed as the
+     fades and rises into place, staggered from first paint. Exposed as the
      `animate-rise-up` utility; elements pair it with `motion-safe:opacity-0` so
      they rest hidden and rise only when motion is allowed, and stay visible (no
      animation) under reduced motion. `forwards` holds the settled state. */
@@ -338,27 +312,6 @@ body {
   ::view-transition-new(*) {
     animation: none !important;
   }
-}
-
-/*
- * Boot overlay visibility is gated on the pre-paint guard on <html> (set by the
- * inline script in app/layout.tsx before first paint), so a returning visitor
- * within a session and anyone with reduced motion never sees a flash of the
- * overlay: it stays `display:none` unless this session opted in with
- * `data-boot="play"`. When the sequence ends the component sets `data-leaving`,
- * which fades the overlay out over 0.7s before it is unmounted (animation-and-motion.md).
- */
-[data-boot-overlay] {
-  display: none;
-  transition: opacity 0.7s ease;
-}
-
-html[data-boot="play"] [data-boot-overlay] {
-  display: flex;
-}
-
-[data-boot-overlay][data-leaving] {
-  opacity: 0;
 }
 
 body {

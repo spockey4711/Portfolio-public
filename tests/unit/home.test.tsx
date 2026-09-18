@@ -22,10 +22,9 @@ describe("Home", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders the hero headline as the page's h1", () => {
+  it("renders the name as the page's h1", () => {
     render(<Home />);
 
-    const { lead, accent } = copy.hero.headline;
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(`${lead} ${accent}`);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(copy.hero.name);
   });
 });

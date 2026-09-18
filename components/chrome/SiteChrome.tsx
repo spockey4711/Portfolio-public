@@ -1,27 +1,28 @@
 import { Analytics } from "@/components/analytics/Analytics";
-import { BootOverlay } from "@/components/chrome/BootOverlay";
 import { Footer } from "@/components/chrome/Footer";
 import { Nav } from "@/components/chrome/Nav";
 import { ViewTransitionProvider } from "@/components/chrome/view-transitions";
-import { HERO_REVEAL_SCRIPT } from "@/components/sections/hero/reveal";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { CommandPalette } from "@/components/widgets/command-palette/CommandPalette";
 import { getCopy } from "@/content/copy";
-import { BOOT_GUARD_SCRIPT } from "@/lib/chrome/boot";
 import { THEME_INIT_SCRIPT } from "@/lib/chrome/theme";
+import { isCvAvailable } from "@/lib/content/cv";
 import { type Locale } from "@/lib/i18n/locale";
 import { personJsonLd } from "@/lib/seo/structured-data";
 
 /**
  * The shared body chrome rendered by both locale root layouts (app/(de) and
- * app/(en)): the skip link, the Person JSON-LD, the pre-paint boot scripts, the
- * boot overlay, the nav, the routed page content (wrapped in the view-transition
- * provider) and the footer, plus the global command palette.
+ * app/(en)): the skip link, the Person JSON-LD, the pre-paint theme script, the
+ * nav, the routed page content (wrapped in the view-transition provider) and the
+ * footer, plus the global command palette.
  * Everything here is locale-parameterized so the same tree renders in German or
  * English; only the enclosing <html lang> differs between the two layouts.
  */
 export function SiteChrome({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   const { nav } = getCopy(locale);
+  // Resolved here, on the server, because the Nav is a client component and cannot
+  // read the filesystem; it offers the CV download only while the file exists.
+  const cvAvailable = isCvAvailable();
 
   return (
     <>
@@ -41,17 +42,10 @@ export function SiteChrome({ locale, children }: { locale: Locale; children: Rea
           preference and sets data-theme on <html> before first paint, so dark
           mode never flashes the wrong theme (S4-2, see lib/chrome/theme.ts). */}
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-      {/* Pre-paint boot guard: must run before the overlay below is parsed, so
-          it decides play/skip for this session with no flash (see boot.ts). */}
-      <script dangerouslySetInnerHTML={{ __html: BOOT_GUARD_SCRIPT }} />
-      {/* Freezes the hero reveal offset from the boot decision above, before paint,
-          so the rise follows the boot end without snapping (see hero/reveal.ts). */}
-      <script dangerouslySetInnerHTML={{ __html: HERO_REVEAL_SCRIPT }} />
       {/* Self-hosted, cookieless Umami tag; renders only when analytics is
           configured, else nothing (S2-5, see components/analytics/Analytics.tsx). */}
       <Analytics />
-      <BootOverlay />
-      <Nav locale={locale} />
+      <Nav locale={locale} cvAvailable={cvAvailable} />
       {/* Animates route changes with the View Transitions API where supported;
           a no-op under reduced motion or in browsers without it (S2-7). Wraps
           only the routed children, which is what changes on navigation. */}

@@ -36,8 +36,9 @@ Trigger: a request like "do task S5-2". Tasks are tracked in Plane, not in check
    left, set the item to Done. Do not wait for the merge - a ready PR must already read Done,
    never In Progress. Leave it In Progress only if a real follow-up beyond the merge is still
    outstanding. See [task tracking (Plane)](../../private-docs/docs/project/plane.md).
-9. **Hand the PR to the user**, who reviews and merges into `develop`. Merging deploys the
-   updated `develop` to the dev subdomain (see [deployment](../../private-docs/docs/operations/deployment.md)). The
+9. **Hand the PR to the user**, who reviews and merges into `develop`. Merging publishes the
+   updated preview image; rolling it onto the dev subdomain is a manual step (see
+   [deployment](../../private-docs/docs/operations/deployment.md)). The
    main clone never moved, so there is nothing to switch back. Once the PR is merged,
    `pnpm wt gc` removes the now-merged worktree and its branch.
 
@@ -54,8 +55,10 @@ Two long-lived branches with short-lived feature branches integrating on `develo
   directly. Pre-MVP it is not auto-deployed; release tags cut on `master` become the
   production deploy path at go-live (see [deployment](../../private-docs/docs/operations/deployment.md)).
 - **`develop`** is the integration branch. Feature branches merge here first, and every merge
-  deploys to the dev subdomain (`portfolio.yannikwuenker.de`) so a change can be tested across
-  devices and browsers before it is promoted. It is protected too: PRs only, CI must pass.
+  publishes a fresh preview image for the dev subdomain (`portfolio.yannikwuenker.de`; the
+  rollout onto the box is manual - see
+  [deployment](../../private-docs/docs/operations/deployment.md)) so a change can be tested
+  across devices and browsers before it is promoted. It is protected too: PRs only, CI must pass.
   Because it is protected, GitHub's "automatically delete head branches" setting leaves it
   alone while still cleaning up merged feature branches (see [Pull requests](#pull-requests)).
 - **Feature branches** off `develop`, named `<type>/<short-slug>`:
@@ -146,7 +149,8 @@ chore(deps): bump framer-motion to latest
 
 ## Releases: promoting develop to master
 
-`develop` accumulates merged feature work and continuously deploys to the dev subdomain. It is
+`develop` accumulates merged feature work and continuously publishes preview images for the
+dev subdomain. It is
 promoted to `master` on a **weekly release train** (the full cadence and runbook live in
 [releases](releases.md)); a week with nothing worth shipping simply skips the release. To
 promote:

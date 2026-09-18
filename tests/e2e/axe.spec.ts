@@ -6,8 +6,8 @@ import { expect, test } from "@playwright/test";
 // (a single aggregate number) with rule-level findings that fail the PR and name the
 // exact node, and the keyboard/focus acceptance in a11y.spec.ts.
 //
-// Reduced motion is emulated so the boot overlay is skipped and the hero rise-up is
-// settled from the first frame - otherwise axe can sample a colour mid-transition and
+// Reduced motion is emulated so the hero rise-up is settled from the first frame -
+// otherwise axe can sample a colour mid-transition and
 // report a false contrast violation (the same reason the Lighthouse a11y floor is 0.95,
 // see docs/engineering/quality-and-testing.md).
 

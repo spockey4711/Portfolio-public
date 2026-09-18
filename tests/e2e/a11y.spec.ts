@@ -2,8 +2,8 @@ import { expect, test } from "@playwright/test";
 
 // Keyboard-accessibility acceptance for P1-15: the skip link is the first tab
 // stop, becomes visible on focus and moves focus to <main>; focused elements
-// show the signal focus-visible ring. Reduced motion is emulated so the boot
-// overlay is skipped and the page is stable from the first frame.
+// show the signal focus-visible ring. Reduced motion is emulated so the hero
+// rise-up is skipped and the page is stable from the first frame.
 
 test("the skip link is the first tab stop and jumps to main", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });

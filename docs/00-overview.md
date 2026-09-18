@@ -90,7 +90,7 @@ Quality bars (see [quality-and-testing](engineering/quality-and-testing.md)):
 - Way of working / principles.
 - Experience / studies.
 - Contact.
-- Signature: scroll spine + boot sequence.
+- Signature: scroll spine.
 - SEO/OG metadata; legal pages (Impressum, Datenschutz).
 
 **Should have (Phase 2–3)**
