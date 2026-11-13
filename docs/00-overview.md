@@ -3,8 +3,9 @@
 **Purpose:** the shared mental model for the project — what we are building, for whom,
 and how we know it is good. Read this before anything else.
 
-Related: [roadmap](../private-docs/docs/project/roadmap.md) · [content & voice](content/content-and-voice.md)
-· [design system](design/design-system.md)
+Related: [content and voice](content/content-and-voice.md) ·
+[design system](design/design-system.md) · [repository README](../README.md).
+A phase roadmap is not published in this checkout.
 
 ## What it is
 
@@ -36,7 +37,7 @@ internships.**
 ## The person (facts to encode)
 
 - Name: **Yannik Wünker** (display); slug `yannik-wuenker` (no umlaut) for URLs.
-- 20 years old (mention is optional — see open questions).
+- Age is not stated in the site copy and is not recorded here.
 - Studies **Wirtschaftsinformatik at the University of Cologne since October 2024**.
   Relevant themes: data analysis, process optimization, software development, product
   management, AI applications, IT strategy, digital business models — above all working
@@ -76,39 +77,44 @@ Within the first ~30 seconds a visitor should understand:
 Quality bars (see [quality-and-testing](engineering/quality-and-testing.md)):
 
 - Lighthouse ≥ 95 across Performance / Accessibility / Best Practices / SEO on the
-  production build.
+  production build. The enforced run is desktop home only; see
+  [quality and testing](engineering/quality-and-testing.md).
 - No layout shift from live widgets (they reserve space and degrade gracefully).
 - Fully usable with `prefers-reduced-motion` and by keyboard.
 
 ## Scope
 
-**MVP (Phase 1) — must have**
-- Strong hero with clear positioning.
-- Featured project: fuelivo.
-- Other projects with status labels.
-- Skills / tech stack.
-- Way of working / principles.
-- Experience / studies.
-- Contact.
-- Signature: scroll spine.
-- SEO/OG metadata; legal pages (Impressum, Datenschutz).
+**Shipped in this checkout**
+- Hero masthead, featured fuelivo card, other projects with status labels.
+- Skills, experience, contact.
+- GitHub heatmap on the home page, with a static fallback.
+- Project detail pages for the case-study entries. No project sets
+  `caseStudy.screenshots` yet (`tests/unit/project-screenshots.test.ts`).
+- Now, Uses, one blog post, legal pages.
+- German and English routes (`lib/i18n/routes.ts`).
+- SEO/OG metadata; CV link when `public/cv/yannik-wuenker.pdf` exists.
+- Dark mode and a command palette.
 
-**Should have (Phase 2–3)**
-- "Now" section, CV download (subtle), dark mode if cheap.
-- Interactive terminal, live time/weather/location, GitHub activity.
-- Now-playing widget, hero video / mini-character, project detail pages.
+**Written as requirements, not rendered**
+- Way of working / principles: copy exists (`content/copy` `wayOfWorking`) and
+  [content and voice](content/content-and-voice.md) still asks for the section. No
+  component renders it. Whether to mount or delete it is an open product decision.
+- Scroll spine: specified in [animation and motion](design/animation-and-motion.md).
+  The current UI shows scroll progress as nav text only
+  (`lib/hooks/use-scroll-progress.ts`, `components/chrome/Nav.tsx`). Building the
+  spine or striking the spec is an open product decision. This overview does not
+  decide it.
 
-**Not for MVP**
-- Blog/devlog, CMS, complex interactive demos, multi-language, full detail pages for
-  every project.
+**Not a claim about production**
+- Whether https://yannikwuenker.de serves this commit is not verified here.
 
 ## Constraints and preferences
 
 - **Voice:** plain, direct, minimal, a little loose. Evidence over claims. No AI slop,
   no emojis, only the regular hyphen `-`. Details in
   [content & voice](content/content-and-voice.md).
-- **Site language:** German. Structure should later allow English content, but
-  multi-language is out of scope for MVP.
+- **Site language:** German and English are both published. German paths are
+  canonical; English paths live under `/en`.
 - **Assets:** placeholders are allowed in the first version. Profile photo may be used
   but not as a dominant hero element. A monogram is wanted but not required for the
   first build. Screenshots come later.
@@ -116,17 +122,16 @@ Quality bars (see [quality-and-testing](engineering/quality-and-testing.md)):
 - **Analytics:** minimal and privacy-friendly, only if it produces insights that
   actually change decisions.
 - **Launch date:** none fixed.
-- **Curation & prioritization (see [ADR-0011](../private-docs/docs/architecture/decisions/0011-lean-onepager-and-substance-gate.md)):**
-  playground-first, recruiting a valued side effect. The one-pager stays lean - a single
-  signature widget (GitHub heatmap); other widgets live in the depth layer. New feature work
-  is gated behind genuinely *carried* projects (fuelivo, then DevBlueprint) on a 1:1
-  unlock-ratio.
+- **Curation, as the code comments describe it:** the one-pager keeps a single
+  signature widget (GitHub heatmap). Terminal, now-playing, signals-of-life and
+  WakaTime are not imported by a page. The ADR that named this rule is not in this
+  checkout. New feature work is not authorized by this overview.
 
 ## Open questions (do not block the build)
 
 Surfaced during discovery. The ones most likely to affect the build:
 
-- Show age `20` or omit it?
+- Age is omitted until it is confirmed. Do not put a number back from this file.
 - Final public name for the featured project: `fuelivo`, `Fueling Optimizer`, or
   `fuelivo - Fueling Optimizer`?
 - Exact fuelivo tech stack (confirm from the project folder) and which parts of the

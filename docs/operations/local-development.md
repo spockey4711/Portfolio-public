@@ -1,10 +1,10 @@
 # Local development
 
-**Purpose:** get the site running locally and know the everyday commands. These become
-valid in **P0** when the app is scaffolded; until then this is the target contract.
+**Purpose:** get the site running locally and know the everyday commands. The app is
+in this checkout; these commands are the current contract, not a future scaffold.
 
-Related: [deployment](../../private-docs/docs/operations/deployment.md) · [environment variables](../../private-docs/docs/operations/environment-variables.md)
-· [quality & testing](../engineering/quality-and-testing.md)
+Related: [deployment](deployment.md) · [environment variables](environment-variables.md)
+· [quality and testing](../engineering/quality-and-testing.md)
 
 ## Prerequisites
 
@@ -18,17 +18,18 @@ Related: [deployment](../../private-docs/docs/operations/deployment.md) · [envi
 ## First run
 
 ```bash
-git clone git@github.com:spockey4711/portfolio.git
-cd portfolio
+git clone git@github.com:spockey4711/Portfolio-public.git
+cd Portfolio-public
 nvm use                 # Node 22
 pnpm install
 cp .env.example .env.local   # fill in as needed (all optional for a basic run)
 pnpm dev                # http://localhost:3000
 ```
 
-The site must run with an empty `.env.local`: live widgets fall back to their static
-placeholder states (see [rendering & data](../architecture/rendering-and-data.md)), so no
-secrets are needed for local UI work.
+The site must run with an empty `.env.local`: the mounted heatmap falls back to its
+static caption (see [rendering and data](../architecture/rendering-and-data.md)), so no
+secrets are needed for local UI work. Variable names are in
+[environment variables](environment-variables.md).
 
 ## Everyday commands
 
@@ -64,8 +65,10 @@ docker compose up --build
 - Test with `prefers-reduced-motion` both off and on (OS setting, or emulate in
   DevTools → Rendering). Reduced motion must fully degrade per
   [accessibility](../design/accessibility.md).
-- Verify the scroll spine stays smooth - it should not trigger React re-renders on scroll
-  (check the profiler).
+- The nav percentage is the scroll UI that is mounted. It should not trigger React
+  re-renders on scroll (the hook writes the DOM from a ref). A scroll-spine element is
+  specified in [animation and motion](../design/animation-and-motion.md) and is not in
+  the tree; do not debug a component that is not rendered.
 
 ## Troubleshooting
 

@@ -4,28 +4,38 @@ import { expect, test } from "@playwright/test";
 // stop, becomes visible on focus and moves focus to <main>; focused elements
 // show the signal focus-visible ring. Reduced motion is emulated so the hero
 // rise-up is skipped and the page is stable from the first frame.
+//
+// Both published home templates are covered. The English skip-link name is a
+// different string; a German-only assertion would stay green if /en dropped it.
 
-test("the skip link is the first tab stop and jumps to main", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+const HOMES = [
+  { path: "/", skipLinkName: "Zum Inhalt springen" },
+  { path: "/en", skipLinkName: "Skip to content" },
+] as const;
 
-  const skipLink = page.getByRole("link", { name: "Zum Inhalt springen" });
+for (const home of HOMES) {
+  test(`${home.path} skip link is the first tab stop and jumps to main`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(home.path);
 
-  // Off-screen (sr-only) until focused: the first Tab reveals and focuses it.
-  await page.keyboard.press("Tab");
-  await expect(skipLink).toBeFocused();
-  await expect(skipLink).toBeVisible();
+    const skipLink = page.getByRole("link", { name: home.skipLinkName });
 
-  // Activating it moves keyboard focus onto the main landmark, past the nav.
-  await page.keyboard.press("Enter");
-  await expect(page.locator("#main")).toBeFocused();
-});
+    // Off-screen (sr-only) until focused: the first Tab reveals and focuses it.
+    await page.keyboard.press("Tab");
+    await expect(skipLink).toBeFocused();
+    await expect(skipLink).toBeVisible();
+
+    // Activating it moves keyboard focus onto the main landmark, past the nav.
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#main")).toBeFocused();
+  });
+}
 
 test("keyboard focus shows the signal focus-visible ring", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+  await page.goto("/en");
 
-  const skipLink = page.getByRole("link", { name: "Zum Inhalt springen" });
+  const skipLink = page.getByRole("link", { name: "Skip to content" });
   await page.keyboard.press("Tab");
   await expect(skipLink).toBeFocused();
 

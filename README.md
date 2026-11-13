@@ -1,35 +1,32 @@
 # Portfolio — yannikwuenker.de
 
 Personal portfolio site for **Yannik Wünker**, a business informatics
-(Wirtschaftsinformatik) student in Cologne building apps, web products and small
-systems that solve concrete problems.
-
-The site is not a static CV. It is a quiet, technical, high-quality developer/product
-portfolio that unfolds while scrolling — a boot sequence, a scroll spine that tracks
-progress, terminal touches and small live widgets — without ever feeling like an
-experimental designer playground.
+(Wirtschaftsinformatik) student in Cologne. The public site is a Next.js app
+(version `0.5.0` in `package.json`). It is a one-pager plus a small set of
+depth routes, not a planning repository and not a product with its own accounts.
 
 > **Positioning** — Wirtschaftsinformatik student from Cologne. I build apps, web
 > products and small systems that solve real problems — from fueling for endurance
 > athletes to process optimization with Python and AI.
 
-- **Live domain (target):** https://yannikwuenker.de
-- **Status:** planning / pre-build (no application code yet — this repo currently holds
-  the documentation, including the design handoff and the project plan)
-- **Language of the site UI:** German · **Language of code & docs:** English
+- **Live domain (target):** https://yannikwuenker.de — this checkout does not prove
+  which commit that host serves.
+- **Status:** application code is in this repo (`app/`, `components/`, `lib/`,
+  `content/`). Version `0.5.0`.
+- **Site UI:** German (canonical, unprefixed) and English (`/en`). **Code and docs:**
+  English.
 
 ---
 
 ## Table of contents
 
 - [What this repository is](#what-this-repository-is)
+- [What the site renders](#what-the-site-renders)
 - [Tech stack at a glance](#tech-stack-at-a-glance)
 - [Repository layout](#repository-layout)
 - [Documentation map](#documentation-map)
-- [Getting started (once code exists)](#getting-started-once-code-exists)
+- [Getting started](#getting-started)
 - [How work is organized](#how-work-is-organized)
-- [Roadmap in one screen](#roadmap-in-one-screen)
-- [Task handoff — where to start](#task-handoff--where-to-start)
 - [Conventions](#conventions)
 - [Contact](#contact)
 
@@ -37,145 +34,149 @@ experimental designer playground.
 
 ## What this repository is
 
-This repository is the single source of truth for the portfolio project. Right now it
-contains everything needed to build the site **except the site itself**:
+This repository is the public source for the portfolio site: the Next.js application,
+typed content, tests, and the docs that actually live under `docs/`.
 
-- the **design handoff** (`docs/design/handoff/`) — a finalized design system
-  ("Sand & Pine + Serif") plus a high-fidelity Hero reference, authored in an internal
-  HTML preview format;
-- the **documentation** (`docs/`) — vision, architecture, engineering conventions,
-  operations and the project plan that turn the vision and design into a buildable,
-  maintainable product.
+Architecture decision records, the Plane backlog, and a server rollout runbook are
+**not in this checkout**. Nothing in this README links to `private-docs/`. Image
+publish is `.github/workflows/deploy.yml` (GHCR only). Rolling an image onto a server
+is outside this repository and is not documented here.
 
-The application code (Next.js app) will live in `app/`, `components/`, `lib/` etc. and
-is introduced in [Phase 0 of the roadmap](private-docs/docs/project/roadmap.md).
+## What the site renders
 
-The site is meant to be maintained for years as a personal product, not shipped once as
-a landing page. Structure, docs and conventions are set up accordingly.
+Home (`/` and `/en`) is `components/sections/Onepager.tsx`: hero masthead, projects,
+about, experience, skills, the GitHub contribution heatmap, contact. The heatmap is
+the only live widget mounted on a page. It calls same-origin `/api/github-activity`
+and keeps a static caption if that route is unavailable
+(`components/widgets/github-activity/GithubActivity.tsx`).
+
+Other published routes, from `lib/i18n/routes.ts`: projects index and detail, blog
+index and one translated post (`warum-dieses-portfolio`), Now, Uses, Impressum,
+Datenschutz, each with an English twin. Route handlers also exist for weather,
+now-playing, WakaTime, and latest commit. Their widgets are not imported by a page;
+the command palette uses the terminal parser, not the terminal widget.
+
+`SHOW_AVAILABILITY` is off unless the env flag is exactly `true` or `1`
+(`lib/config/features.ts`, `.env.example`). The CV link renders only when
+`public/cv/yannik-wuenker.pdf` exists.
+
+Motion on the page is CSS (`app/globals.css`, `motion-safe`). The nav shows scroll
+progress as text via `lib/hooks/use-scroll-progress.ts`. A scroll-spine element is
+specified in `docs/design/animation-and-motion.md` and is not mounted. That spec is
+unchanged here; building or striking it is an open product decision.
 
 ## Tech stack at a glance
 
-| Layer | Choice | Why |
+| Layer | Choice | Notes |
 |---|---|---|
-| Framework | **Next.js (App Router)** + React + TypeScript | Interactivity (terminal, live widgets, boot), API routes for live data, strong DX. See [ADR-0001](private-docs/docs/architecture/decisions/0001-framework.md). |
-| Styling | **Tailwind CSS** + CSS variables for design tokens | Fast, consistent, tokens map 1:1 to the design system. See [ADR-0003](private-docs/docs/architecture/decisions/0003-styling.md). |
-| Motion | **Framer Motion** + `IntersectionObserver` / `requestAnimationFrame` | Scroll spine, reveals, boot sequence. See [animation spec](docs/design/animation-and-motion.md). |
-| Fonts | Instrument Serif · Hanken Grotesk · IBM Plex Mono (Google Fonts, self-hosted via `next/font`) | Defined by the design system. |
-| Hosting | **Contabo VPS** (self-managed), Docker + Nginx reverse proxy + Let's Encrypt | Own the stack, generous RAM. See [ADR-0002](private-docs/docs/architecture/decisions/0002-hosting.md). |
-| CI/CD | **GitHub Actions** → build image → deploy to the VPS | Reproducible deploys. See [deployment](private-docs/docs/operations/deployment.md). |
-| Analytics | Optional, privacy-friendly (Plausible/Umami), self-hosted, only if it drives real decisions | Per owner preference. |
+| Framework | **Next.js 16.3.5** (App Router) + React 19.3.0 + TypeScript 6.0.3 | Pins in `package.json` / `pnpm-lock.yaml`. |
+| Styling | **Tailwind CSS 4.3.3** + CSS variables | Tokens in `app/globals.css`. |
+| Motion | **CSS** (`motion-safe`, keyframes). No `framer-motion` dependency. | Nav percentage uses a ref/`requestAnimationFrame` hook, not React state per frame. |
+| Fonts | `next/font` | See `app/fonts.ts`. |
+| Package manager | pnpm 11.9.0 | `packageManager` in `package.json`. Node `>=22.13` (`.nvmrc`). |
+| CI | GitHub Actions | Lint, typecheck, unit, build, Playwright (including axe), Lighthouse desktop home, visual. `.github/workflows/ci.yml`. |
+| Image publish | GitHub Actions → GHCR | `.github/workflows/deploy.yml`. No server rollout in this repo. |
+| Analytics | Optional Umami, off unless both public env values are set | `docs/operations/analytics.md`. |
 
-Exact versions are pinned in [`docs/architecture/tech-stack.md`](docs/architecture/tech-stack.md).
+Exact versions: [`docs/architecture/tech-stack.md`](docs/architecture/tech-stack.md).
 
 ## Repository layout
 
 ```
 .
-├── README.md                     ← you are here
-├── CHANGELOG.md                  ← human-readable history (Keep a Changelog)
-├── CONTRIBUTING.md               ← how to work in this repo (git, commits, PRs)
-├── LICENSE
-│
-└── docs/                         ← all project documentation, incl. the authoritative
-                                     design handoff in docs/design/handoff/ (see map below)
+├── app/                 Next.js App Router: (de), (en), api/
+├── components/          sections, chrome, widgets, ui
+├── content/             typed copy, projects, blog MDX
+├── lib/                 i18n, data adapters, config, hooks
+├── public/              images, CV PDF, icons
+├── tests/               unit, e2e, visual
+├── docs/                documents that exist in this checkout
+├── .github/workflows/   ci.yml, deploy.yml (image only), release.yml
+├── package.json
+└── pnpm-lock.yaml
 ```
 
-Once development starts, the application source is added following the structure defined
-in [`docs/architecture/project-structure.md`](docs/architecture/project-structure.md).
+Where a file goes is also described in
+[`docs/architecture/project-structure.md`](docs/architecture/project-structure.md).
+That page records the current route groups; older trees in the same file are labeled
+as historical.
 
 ## Documentation map
 
-Everything lives under [`docs/`](docs/). Start at the [docs index](docs/README.md).
+Start at the [docs index](docs/README.md). Only files present in this checkout are
+linked.
 
 | Area | Document | Use it for |
 |---|---|---|
-| Overview | [`docs/00-overview.md`](docs/00-overview.md) | Vision, goals, scope, success criteria |
-| Architecture | [`architecture/tech-stack.md`](docs/architecture/tech-stack.md) | Pinned stack, versions, rationale |
-| Architecture | [`architecture/project-structure.md`](docs/architecture/project-structure.md) | Where every file goes and why |
-| Architecture | [`architecture/rendering-and-data.md`](docs/architecture/rendering-and-data.md) | SSG/SSR strategy, live-data API routes |
-| Architecture | [`architecture/decisions/`](private-docs/docs/architecture/decisions/README.md) | Architecture Decision Records (ADRs) |
-| Design | [`design/design-system.md`](docs/design/design-system.md) | Tokens, type scale, spacing, components |
-| Design | [`design/animation-and-motion.md`](docs/design/animation-and-motion.md) | Boot, scroll spine, keyframes, timings |
-| Design | [`design/accessibility.md`](docs/design/accessibility.md) | a11y rules, reduced motion, contrast |
-| Content | [`content/content-and-voice.md`](docs/content/content-and-voice.md) | Section-by-section copy, tone of voice |
-| Content | [`content/projects.md`](docs/content/projects.md) | Project data model + per-project details |
-| Content | [`content/seo.md`](docs/content/seo.md) | Metadata, Open Graph, structured data |
-| Engineering | [`engineering/conventions.md`](docs/engineering/conventions.md) | Code style, naming, TypeScript rules |
-| Engineering | [`engineering/git-workflow.md`](docs/engineering/git-workflow.md) | Branching, commits, PRs, releases |
-| Engineering | [`engineering/quality-and-testing.md`](docs/engineering/quality-and-testing.md) | Testing, linting, performance budgets |
-| Operations | [`operations/local-development.md`](docs/operations/local-development.md) | Run and develop locally |
-| Operations | [`operations/deployment.md`](private-docs/docs/operations/deployment.md) | Docker + Contabo VPS + CI/CD |
-| Operations | [`operations/environment-variables.md`](private-docs/docs/operations/environment-variables.md) | Every env var and secret |
-| Project | [`project/roadmap.md`](private-docs/docs/project/roadmap.md) | Phases and milestones |
-| Project | [`project/backlog.md`](private-docs/docs/project/backlog.md) | The concrete, prioritized task list |
+| Overview | [`docs/00-overview.md`](docs/00-overview.md) | Vision, goals, scope |
+| Architecture | [`docs/architecture/tech-stack.md`](docs/architecture/tech-stack.md) | Pinned stack and versions |
+| Architecture | [`docs/architecture/project-structure.md`](docs/architecture/project-structure.md) | Where files live |
+| Architecture | [`docs/architecture/rendering-and-data.md`](docs/architecture/rendering-and-data.md) | Rendering and live-data routes |
+| Design | [`docs/design/design-system.md`](docs/design/design-system.md) | Tokens, type, spacing |
+| Design | [`docs/design/animation-and-motion.md`](docs/design/animation-and-motion.md) | Motion spec (spine is specified, not mounted) |
+| Design | [`docs/design/accessibility.md`](docs/design/accessibility.md) | a11y rules |
+| Content | [`docs/content/content-and-voice.md`](docs/content/content-and-voice.md) | Copy and voice |
+| Content | [`docs/content/i18n.md`](docs/content/i18n.md) | DE/EN routing |
+| Content | [`docs/content/projects.md`](docs/content/projects.md) | Project data model |
+| Engineering | [`docs/engineering/quality-and-testing.md`](docs/engineering/quality-and-testing.md) | Gates that CI actually runs |
+| Engineering | [`docs/engineering/git-workflow.md`](docs/engineering/git-workflow.md) | Branches, commits, PRs |
+| Engineering | [`docs/engineering/releases.md`](docs/engineering/releases.md) | Release-PR bot |
+| Operations | [`docs/operations/local-development.md`](docs/operations/local-development.md) | Local commands |
+| Operations | [`docs/operations/environment-variables.md`](docs/operations/environment-variables.md) | Env vars, no secret values |
+| Operations | [`docs/operations/deployment.md`](docs/operations/deployment.md) | What `deploy.yml` does and does not do |
+| Proposal | [`docs/SELLABILITY-ROADMAP.md`](docs/SELLABILITY-ROADMAP.md) | Unapproved proposal, not a build plan |
 
-## Getting started (once code exists)
+## Getting started
 
-> These commands become valid in **Phase 0**, when the Next.js app is scaffolded.
-> Until then they are the target contract; see [local development](docs/operations/local-development.md).
+Prerequisites: Node `>=22.13` (`.nvmrc`), pnpm 11.9 (`packageManager`).
 
 ```bash
-# Prerequisites: Node 22 LTS, pnpm
-pnpm install          # install dependencies
-pnpm dev              # start the dev server on http://localhost:3000
-pnpm build            # production build
-pnpm start            # serve the production build
-pnpm lint             # ESLint
-pnpm typecheck        # tsc --noEmit
-pnpm test             # unit tests (Vitest)
-pnpm test:e2e         # Playwright smoke tests
-pnpm format           # Prettier write
+pnpm install --frozen-lockfile
+cp .env.example .env.local   # every variable is optional; an empty file is enough
+pnpm dev                     # http://localhost:3000
+pnpm build
+pnpm start
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:e2e                # Playwright smoke + axe; set PW_PORT if 3000 is taken
+pnpm format
 ```
 
-Copy `.env.example` to `.env.local` and fill in the values documented in
-[environment variables](private-docs/docs/operations/environment-variables.md).
+Variable names and which ones are public are in
+[environment variables](docs/operations/environment-variables.md) and `.env.example`.
+The dev server and the production build must succeed with no secrets set. Do not put
+secrets in `NEXT_PUBLIC_*`.
 
 ## How work is organized
 
-- Work is broken into **phases** (see the [roadmap](private-docs/docs/project/roadmap.md)); each phase
-  has a clear deliverable and exit criteria.
-- Concrete, pickup-ready tasks live in the [backlog](private-docs/docs/project/backlog.md), each with
-  an ID (`P0-1`, `P1-3`, …), scope, acceptance criteria and doc references.
-- Every meaningful change is recorded in [`CHANGELOG.md`](CHANGELOG.md).
-- Non-trivial technical decisions are captured as
-  [ADRs](private-docs/docs/architecture/decisions/README.md).
-
-## Roadmap in one screen
-
-| Phase | Goal | Exit criteria |
-|---|---|---|
-| **P0 — Foundation** | Next.js app scaffolded, tokens wired, CI green, deploy pipeline working end-to-end (empty page live on the domain) | `pnpm build` + deploy succeed; design tokens available as Tailwind theme |
-| **P1 — MVP site** | Hero, Projects, About, Skills, Contact + scroll spine + boot sequence; German copy; SEO/OG; legal pages | Site tells who/what/why in 30s; Lighthouse ≥ 95; deployed to prod |
-| **P2 — Signature widgets** | Interactive terminal, live time/weather/location, GitHub activity | Widgets degrade gracefully, no layout shift, respect reduced motion |
-| **P3 — Depth** | Now-playing, hero video/mini-character, project detail pages, optional blog | Content complete, assets replaced, analytics reviewed |
-
-Full detail in [`docs/project/roadmap.md`](private-docs/docs/project/roadmap.md).
-
-## Task handoff — where to start
-
-If you are picking this up (future me, or a collaborator):
-
-1. Read [`docs/00-overview.md`](docs/00-overview.md) and the
-   [design handoff](docs/design/handoff/README.md) — 20 minutes, non-negotiable.
-2. Skim the [roadmap](private-docs/docs/project/roadmap.md) to see the shape of the work.
-3. Open the [backlog](private-docs/docs/project/backlog.md) and take the top unblocked task in the
-   current phase. Start with **`P0-1` (scaffold the Next.js app)**.
-4. Follow the [git workflow](docs/engineering/git-workflow.md): branch, small commits,
-   update the changelog, open a PR against the checklist.
+- Meaningful changes are recorded as a changeset under `.changeset/`; the release
+  process folds those into [`CHANGELOG.md`](CHANGELOG.md). See
+  [releases](docs/engineering/releases.md).
+- Branching and PRs: [git workflow](docs/engineering/git-workflow.md).
+- Quality gates: [quality and testing](docs/engineering/quality-and-testing.md).
+- ADRs and the Plane task list are not published in this checkout. Do not treat a
+  missing `private-docs/` path as a task to invent.
 
 ## Conventions
 
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/) — see
   [git workflow](docs/engineering/git-workflow.md).
-- **Changelog:** [Keep a Changelog](https://keepachangelog.com/), SemVer for tags.
-- **Code & docs:** English. **Site UI copy:** German (`de-DE`).
+- **Changelog:** [Keep a Changelog](https://keepachangelog.com/), SemVer for tags,
+  written via changesets.
+- **Code and docs:** English. **Site UI copy:** German and English
+  (`content/copy/de.ts`, `content/copy/en.ts`).
 - **Voice:** plain, direct, minimal, a little loose. No AI slop, no emojis, only the
-  regular hyphen `-`. See [content & voice](docs/content/content-and-voice.md).
-- **Naming:** the display name is `Yannik Wünker`; technical slugs/URLs use `yannik-wuenker`
-  (no umlaut).
+  regular hyphen `-`. See [content and voice](docs/content/content-and-voice.md).
+- **Naming:** the display name is `Yannik Wünker`; technical slugs and URLs use
+  `yannik-wuenker` (no umlaut).
 
 ## Contact
 
 - **Email:** mail@yannikwuenker.de
 - **LinkedIn:** https://www.linkedin.com/in/yannik-wuenker/
 - **GitHub:** https://github.com/spockey4711
+
+The LinkedIn URL is the one in the README and in `content/copy`. A comment in
+`content/copy/de.ts` still marks it as unconfirmed. This README does not verify the
+profile.
