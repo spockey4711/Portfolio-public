@@ -14,8 +14,9 @@ import { cn } from "@/lib/utils/cn";
 
 /**
  * The GitHub activity strip (P2-3): a standalone contribution heatmap after the
- * About section (mounted in app/page.tsx). Like the terminal, it is a widget rather
- * than a numbered section, so it stays out of the section-eyebrow sequence.
+ * About section, mounted by components/sections/Onepager.tsx on `/` and `/en`.
+ * Like the terminal, it is a widget rather than a numbered section, so it stays
+ * out of the section-eyebrow sequence.
  *
  * The last year of contributions is fetched from the same-origin /api/github-activity
  * route, which reads a server-only GitHub token; the client never sees the token and

@@ -1,89 +1,80 @@
 # Tech stack
 
-**Purpose:** the exact technology choices, pinned versions and the reasoning. When a
-version or tool changes, update this file and the changelog.
+**Purpose:** the technology choices and the versions resolved in this checkout. When a
+version or tool changes, update this file. `pnpm-lock.yaml` is the source of truth for
+the resolved version; `package.json` is the source of truth for the declared range or pin.
 
-Related: [ADR-0001 framework](../../private-docs/docs/architecture/decisions/0001-framework.md) ·
-[ADR-0003 styling](../../private-docs/docs/architecture/decisions/0003-styling.md) ·
-[rendering & data](rendering-and-data.md)
+Related: [rendering and data](rendering-and-data.md) ·
+[quality and testing](../engineering/quality-and-testing.md). Architecture decision
+records are not published in this checkout.
 
 ## Summary
 
 | Concern | Choice |
 |---|---|
 | Language | TypeScript (strict) |
-| Runtime | Node.js 22 LTS |
-| Package manager | pnpm |
-| Framework | Next.js (App Router) + React |
-| Styling | Tailwind CSS + CSS variables for tokens |
-| Motion | Framer Motion + native `IntersectionObserver` / `requestAnimationFrame` |
-| Fonts | `next/font` (Instrument Serif, Hanken Grotesk, IBM Plex Mono) |
-| Icons | none by default; Lucide (thin) only if needed |
-| Linting | ESLint (next config) + Prettier |
-| Testing | Vitest + Testing Library; Playwright for a couple of smoke E2E |
-| Container | Docker (multi-stage) |
-| Reverse proxy | Nginx + Let's Encrypt (certbot) |
-| Host | Contabo VPS (self-managed) |
-| CI/CD | GitHub Actions |
+| Runtime | Node.js 22 LTS (`>=22.13`, `.nvmrc`) |
+| Package manager | pnpm 11.9.0 |
+| Framework | Next.js 16.3.5 (App Router) + React 19.3.0 |
+| Styling | Tailwind CSS 4 + CSS variables for tokens |
+| Motion | CSS (`motion-safe`, keyframes in `app/globals.css`). No Framer Motion package. |
+| Fonts | `next/font` (see `app/fonts.ts`) |
+| Icons | none by default; Lucide is not a dependency |
+| Linting | ESLint 9 + Prettier 3 |
+| Testing | Vitest 4 + Testing Library; Playwright 1.63 for smoke, axe, and visual |
+| Container | Docker (multi-stage `Dockerfile`) |
+| Image publish | GitHub Actions → GHCR (`.github/workflows/deploy.yml`) |
+| Host | Not documented in this checkout. The workflow does not roll out. |
+| CI | GitHub Actions (`.github/workflows/ci.yml`) |
 
-## Versions (pin on scaffold)
+## Versions
 
-These are filled in with exact versions when the app is scaffolded in **P0**. Until
-then, target the latest stable of each. Record the resolved versions here and rely on
-`pnpm-lock.yaml` as the source of truth.
+Resolved from `pnpm-lock.yaml` on this tree (lockfile version 9.0). Ranges in
+`package.json` are caret unless the specifier below is exact.
 
-| Package | Target | Resolved |
+| Package | Declared (`package.json`) | Resolved (`pnpm-lock.yaml`) |
 |---|---|---|
-| `next` | latest stable | `16.2.9` |
-| `react` / `react-dom` | matches Next | `19.2.4` |
-| `typescript` | 5.x | `5.9.3` |
-| `tailwindcss` | 4.x (CSS-first, chosen at scaffold) | `4.3.2` (`@tailwindcss/postcss` `4.3.2`) |
-| `framer-motion` | latest stable | _tbd (added when motion lands)_ |
-| `vitest` | latest stable | _tbd (P0-3)_ |
-| `@playwright/test` | latest stable | _tbd (P0-3)_ |
-| `eslint` / `prettier` | latest stable | `eslint 9.39.4` / prettier _tbd (P0-3)_ |
+| `next` | `16.3.5` | `16.3.5` |
+| `react` / `react-dom` | `19.3.0` | `19.3.0` |
+| `typescript` | `^6` | `6.0.3` |
+| `tailwindcss` | `^4` | `4.3.3` (`@tailwindcss/postcss` `4.3.3`) |
+| `framer-motion` | not a dependency | not installed |
+| `vitest` | `^4.1.10` | `4.1.10` |
+| `@playwright/test` | `^1.63.0` | `1.63.0` |
+| `eslint` | `^9` | `9.39.4` |
+| `prettier` | `^3.9.6` | `3.9.6` |
 
-Resolved on scaffold (P0-1, 2026-07-02). The original target noted Next `15.x`, but
-`16.x` was the latest stable at scaffold time, so the app is on Next 16. `pnpm-lock.yaml`
-is the source of truth; ranges in `package.json` are caret.
-
-Node version is pinned via `.nvmrc` (`22`) and `engines` (`node >=22.13`) in
-`package.json`. Node 22 LTS is the floor because pnpm 11.9 requires Node
-`>=22.13`; local dev may run a newer line (e.g. 24). CI and the Docker image
-build on Node 22.
+Node is pinned via `.nvmrc` (`22`) and `engines` (`node >=22.13`) in `package.json`.
+Node 22 LTS is the floor because pnpm 11.9 requires Node `>=22.13`. CI and the Docker
+image build on Node 22.
 
 ## Why these
 
-- **Next.js (App Router).** The site is mostly static content but needs real
-  interactivity (scroll spine, an interactive terminal later) and
-  server-side API routes for live data (weather, GitHub activity, now-playing) so we do
-  not leak API keys to the client. Next covers both without gluing tools together.
-  Static sections are rendered at build time; live data goes through route handlers with
-  caching. See [ADR-0001](../../private-docs/docs/architecture/decisions/0001-framework.md).
+- **Next.js (App Router).** The site is mostly static content with a few client islands
+  and server route handlers for live data, so API tokens stay off the client. Static
+  sections are rendered at build time; live data goes through route handlers. The only
+  live widget mounted on a page is the GitHub heatmap
+  (`components/widgets/github-activity/GithubActivity.tsx`).
 - **TypeScript, strict.** The project is meant to last; types are the cheapest
   documentation and the cheapest bug prevention.
-- **Tailwind + CSS variables.** The design system is token-driven. Tokens live as CSS
-  variables (`--pine`, `--signal`, …) and are exposed to Tailwind's theme, so class
-  names map to the design vocabulary and there is a single source of truth. See
-  [ADR-0003](../../private-docs/docs/architecture/decisions/0003-styling.md).
-- **Framer Motion, sparingly.** Reveal/stagger animations and orchestration. The
-  performance-critical, per-frame work (scroll spine fill, nav percentage) does **not**
-  go through React state — it mutates a CSS variable / transform via a ref in a
-  `requestAnimationFrame` loop. See [animation & motion](../design/animation-and-motion.md).
+- **Tailwind + CSS variables.** Tokens live as CSS variables and are exposed to
+  Tailwind's theme. There is no `tailwind.config.ts`; Tailwind 4 is wired through
+  PostCSS (`postcss.config.mjs`).
+- **CSS motion, not Framer Motion.** Reveals are CSS under `motion-safe`. Scroll
+  progress for the nav percentage is a `requestAnimationFrame` loop that writes the DOM
+  via a ref (`lib/hooks/use-scroll-progress.ts`), not React state per frame. A scroll
+  spine is specified in [animation and motion](../design/animation-and-motion.md) and
+  is not mounted. This file does not decide whether to build it.
 - **pnpm.** Fast, strict, disk-efficient; good with a single-package repo and CI cache.
-- **Docker + Nginx on a Contabo VPS.** Self-managed box with generous RAM; full control
-  over TLS, caching and the domain. See [ADR-0002](../../private-docs/docs/architecture/decisions/0002-hosting.md) and
-  [deployment](../../private-docs/docs/operations/deployment.md).
+- **Docker image on GHCR.** This repo publishes an image. It does not document the
+  server, TLS, or DNS. See [deployment](../operations/deployment.md).
 
-## Explicitly not used (for now)
+## Explicitly not used (in this checkout)
 
-- **No CMS.** Content is small and lives in typed data files (`content/`), versioned in
-  git. Revisit only if a blog with frequent posts materializes.
-- **No component library (MUI/Chakra/…).** The design is bespoke; a generic kit would
-  fight the tokens. Small primitives are built in-house.
-- **No state manager (Redux/Zustand).** Local component state + refs are enough. Revisit
-  only if the terminal or dashboard state grows genuinely complex.
-- **Self-hosted, cookieless analytics (Umami), off by default.** No third-party analytics
-  vendor. A self-hosted Umami tag (S2-5) attaches only when a build supplies the two public
-  `NEXT_PUBLIC_ANALYTICS_*` values, else nothing loads. See
-  [ADR-0008](../../private-docs/docs/architecture/decisions/0008-analytics.md) and the [analytics runbook](../operations/analytics.md).
+- **No CMS.** Content lives in typed files under `content/`, including MDX blog posts.
+- **No component library (MUI/Chakra/…).** Small primitives are in `components/ui`.
+- **No state manager (Redux/Zustand).**
+- **No Framer Motion.** Do not add it to match an older sentence in this file.
+- **Self-hosted, cookieless analytics (Umami), off by default.** A tag attaches only
+  when a build supplies both public `NEXT_PUBLIC_ANALYTICS_*` values. See
+  [analytics](../operations/analytics.md).

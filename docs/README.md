@@ -1,72 +1,68 @@
 # Documentation
 
-This is the documentation for the **yannikwuenker.de** portfolio and the living source of
-truth for the project. It turns the vision, requirements and
-[design handoff](design/handoff/README.md) into a buildable, maintainable product.
+This is the documentation that **ships in this public checkout** for the
+yannikwuenker.de portfolio. Read [`00-overview.md`](00-overview.md) first, then the
+[repository README](../README.md) for how to run the app.
 
-Read [`00-overview.md`](00-overview.md) first.
+Files that are not listed below are not in this checkout. In particular, there is no
+`private-docs/` tree here: no ADR directory, no Plane backlog, no server-setup
+runbook. Links in older pages that still point at `private-docs/` do not resolve.
+Do not invent those files from memory.
+
+[`SELLABILITY-ROADMAP.md`](SELLABILITY-ROADMAP.md) is an unapproved proposal. It is
+not a task list and not authorization to build.
 
 ## Structure
 
 ```
 docs/
-├── 00-overview.md                 Vision, goals, scope, success criteria
+├── 00-overview.md                 Vision, goals, scope
+├── SELLABILITY-ROADMAP.md         Proposal only (awaiting approval)
 │
 ├── architecture/
-│   ├── tech-stack.md              Pinned stack + versions + rationale
-│   ├── project-structure.md       Folder-by-folder file layout
-│   ├── rendering-and-data.md      SSG/SSR strategy, live-data API routes
-│   └── decisions/                 Architecture Decision Records (ADRs)
-│       ├── README.md
-│       ├── 0001-framework.md
-│       ├── 0002-hosting.md
-│       ├── 0003-styling.md
-│       └── 0004-docs-language.md
+│   ├── tech-stack.md              Pinned stack + versions
+│   ├── project-structure.md       Folder layout, with the current route groups called out
+│   └── rendering-and-data.md      Rendering strategy, live-data API routes
 │
 ├── design/
 │   ├── design-system.md           Tokens, type scale, spacing, components
 │   ├── responsive-and-mobile.md   Breakpoints, fluid type, mobile behavior
-│   ├── animation-and-motion.md    Boot, scroll spine, keyframes, timings
+│   ├── animation-and-motion.md    Motion spec, including a scroll spine that is not mounted
 │   ├── accessibility.md           a11y, reduced motion, contrast
-│   └── handoff/                    Authoritative design handoff (HTML export)
+│   └── handoff/                   Design handoff HTML export
 │
 ├── content/
-│   ├── blog.md                    Blog authoring (MDX posts) + the /blog pipeline
-│   ├── content-and-voice.md       Section-by-section copy + tone of voice
-│   ├── i18n.md                    German/English routing, copy contract, translating a route
-│   ├── projects.md                Project data model + per-project details
+│   ├── blog.md                    Blog authoring (MDX) and the /blog pipeline
+│   ├── content-and-voice.md       Section copy and tone of voice
+│   ├── i18n.md                    German/English routing and copy contract
+│   ├── projects.md                Project data model
 │   ├── seo.md                     Metadata, Open Graph, structured data
-│   └── text-anpassung.md          Worksheet: every user-facing string + its source, to revise copy
+│   └── text-anpassung.md          Worksheet of user-facing strings
 │
 ├── engineering/
 │   ├── conventions.md             Code style, naming, TypeScript rules
-│   ├── dependency-updates.md      Automated dependency PRs (Dependabot)
-│   ├── git-workflow.md            Branching, commits, PRs, releases
-│   ├── quality-and-testing.md     Testing, linting, performance budgets
-│   └── releases.md                Release cadence, release-PR bot, runbook
+│   ├── dependency-updates.md      Dependabot
+│   ├── git-workflow.md            Branching, commits, PRs
+│   ├── quality-and-testing.md     Gates CI actually runs
+│   └── releases.md                Release-PR bot and versioning
 │
-├── operations/
-│   ├── local-development.md       Run and develop locally
-│   ├── deployment.md              Docker + Contabo VPS + CI/CD
-│   ├── server-setup.md            Contabo VPS provisioning runbook (P0-6)
-│   ├── two-environment-setup.md   Production apex + preview subdomain in parallel
-│   └── environment-variables.md   Every env var and secret
-│
-└── project/
-    ├── roadmap.md                 Phases and milestones
-    ├── backlog.md                 Groomed task scope + acceptance criteria
-    └── plane.md                   Task tracking in Plane (authoritative status)
+└── operations/
+    ├── local-development.md       Run and develop locally
+    ├── environment-variables.md   Env var names (no secret values)
+    ├── deployment.md              GHCR image publish; no server rollout
+    ├── analytics.md               Optional Umami tag
+    └── error-monitoring.md        Optional GlitchTip/Sentry DSN
 ```
 
 ## Conventions for these docs
 
-- Written in English, Markdown, wrapped at ~95 columns.
-- Each document states its **purpose** at the top and links to related docs.
-- When a decision changes, update the relevant doc **and** record it in
-  [`../CHANGELOG.md`](../CHANGELOG.md); if it is a significant technical decision, add an
-  [ADR](../private-docs/docs/architecture/decisions/README.md).
-- Docs and the code they describe change in the same pull request.
-- Source-of-truth precedence: an **ADR** overrides a general doc; the
-  [design handoff](design/handoff/README.md) is authoritative for visual
-  detail; [Plane](../private-docs/docs/project/plane.md) is authoritative for task status and what to do next
-  (the [backlog](../private-docs/docs/project/backlog.md) holds each task's groomed scope and acceptance criteria).
+- Written in English, Markdown, wrapped at about 95 columns, except
+  `SELLABILITY-ROADMAP.md`, which is a German proposal for the maintainer.
+- Each document states its purpose at the top and links only to files that exist
+  here, or says explicitly that a topic is not published in this checkout.
+- When a decision changes, update the relevant doc in the same change. A changeset
+  under `.changeset/` is how this repo records a changelog entry. ADRs are not
+  stored in this checkout.
+- Source-of-truth precedence for what the site **does**: the code. A design spec
+  can still describe something the UI does not mount; that gap is a product
+  decision, not a license to treat the spec as implemented.

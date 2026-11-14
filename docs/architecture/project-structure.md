@@ -5,9 +5,28 @@ it grows. This is a contract: new files follow it; deviations get discussed and 
 gets updated.
 
 Related: [tech stack](tech-stack.md) · [conventions](../engineering/conventions.md) ·
-[rendering & data](rendering-and-data.md)
+[rendering and data](rendering-and-data.md)
 
-## Target layout (introduced in P0)
+## Current tree (this checkout)
+
+The App Router uses route groups, not a single `app/page.tsx`:
+
+- `app/(de)/` — German pages: `page.tsx` (onepager), `projekte/`, `blog/`, `jetzt/`,
+  `uses/`, `impressum/`, `datenschutz/`, `primitives/`.
+- `app/(en)/en/` — English twins.
+- `app/api/` — `github-activity`, `weather`, `now-playing`, `wakatime`, `latest-commit`,
+  `health`.
+- `components/chrome/` — nav, footer, command palette, site chrome. There is no
+  `ScrollSpine` component.
+- `components/sections/Onepager.tsx` composes the home page for both locales.
+- `content/copy/de.ts` and `content/copy/en.ts` hold UI strings. `content/blog/` holds
+  MDX.
+- Tailwind 4 has no `tailwind.config.ts`. Tokens are CSS. `public/cv/` holds the CV PDF.
+
+The tree below is the original scaffold target. Where it disagrees with the list above,
+the list above is what the code does.
+
+## Original scaffold target
 
 ```
 .

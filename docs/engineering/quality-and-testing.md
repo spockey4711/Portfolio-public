@@ -42,29 +42,40 @@ coverage is a by-product of testing behavior, not the goal.
 - **E2E smoke (Playwright), a few only:**
   - Home page renders, hero visible, nav links jump to sections.
   - Legal pages reachable.
-  - A live widget renders its fallback when its API route returns "unavailable".
+  - The mounted live widget (the GitHub heatmap on `/` and `/en`) keeps its fallback
+    caption when `/api/github-activity` returns `{ available: false }`
+    (`tests/e2e/github-activity-fallback.spec.ts`).
 - **No snapshot tests of large DOM** - they rot and prove little.
 
 Target: meaningful coverage of `lib/` and critical widgets, not a global percentage.
 
 ## Performance budget
 
-The production build must meet, on a mid-tier laptop / throttled mobile:
+What CI enforces today is narrower than a laptop-plus-phone matrix. `lighthouserc.json`
+collects only `http://localhost:3000/` with `preset: desktop`, three runs. It does not
+collect `/en` and it does not run a mobile or throttled preset. Do not describe the gate
+as a mobile budget until that file says so. A separate performance change would be
+required before adding URLs or a mobile preset; this document does not add them.
 
-- Lighthouse (prod build): **Performance, Accessibility, Best Practices, SEO all ≥ 95.**
-- **No layout shift** from live widgets (CLS ≈ 0) - they reserve space and fall back.
+- Lighthouse (prod build, desktop home only): **Performance, Accessibility, Best
+  Practices, SEO all ≥ 95**, and `cumulative-layout-shift` ≤ 0.1.
+- **No layout shift** from the mounted heatmap (it reserves a skeleton and falls back).
 - LCP fast: hero is static HTML + `next/font` (no FOIT/FOUT jank), images sized and
   optimized.
-- JS kept lean: client islands only where needed; the scroll spine runs off the React
-  render path (see [animation & motion](../design/animation-and-motion.md)).
+- JS kept lean: client islands only where needed. The nav percentage is written off the
+  React render path (`lib/hooks/use-scroll-progress.ts`). A scroll-spine element is
+  specified in [animation and motion](../design/animation-and-motion.md) and is not
+  mounted.
 
 ## Accessibility gate
 
 - `eslint-plugin-jsx-a11y` on; Lighthouse a11y ≥ 95.
 - **Automated axe scan (S6-3)** - `tests/e2e/axe.spec.ts` runs `@axe-core/playwright`
-  over every key route and fails the PR on any WCAG 2.0/2.1 A or AA violation, with the
+  over every key template in both published locales (the German and English paths in
+  `tests/e2e/routes.ts`) and fails the PR on any WCAG 2.0/2.1 A or AA violation, with the
   offending rule and node named (the rule-level complement to Lighthouse's single a11y
-  score). Runs in the `e2e` job via `pnpm test:e2e`.
+  score). `tests/e2e/a11y.spec.ts` checks the skip link on `/` and `/en`. Both run in the
+  `e2e` job via `pnpm test:e2e`.
 - Manual pass before each release: keyboard tab-through, focus visibility, reduced-motion
   toggle, contrast check on any new colors. Full list in
   [accessibility](../design/accessibility.md).
@@ -110,9 +121,10 @@ Wired in P0-3 (config lives at the repo root):
   pinned Playwright container. All must be green to merge.
 - **Lighthouse budgets** - `@lhci/cli` with `lighthouserc.json` at the repo root. `pnpm
   lighthouse` (`lhci autorun`) builds the app, starts the production server (`pnpm start`),
-  runs Lighthouse three times against the home page and asserts the budgets below
-  (Performance/Accessibility/Best-Practices/SEO `>= 0.95`, `cumulative-layout-shift <=
-  0.1`). Chrome is pre-installed on the CI runner. Note: fade-in animations (the hero
+  runs Lighthouse three times against the German home page on the desktop preset and
+  asserts the budgets in `lighthouserc.json` (Performance/Accessibility/Best-Practices/SEO
+  `>= 0.95`, `cumulative-layout-shift <= 0.1`). It does not assert `/en` or a mobile
+  preset. Chrome is pre-installed on the CI runner. Note: fade-in animations (the hero
   rise-up) can make axe sample a colour mid-transition, so the a11y score
   may read a point or two below 100 even though every colour clears AA at rest - the `0.95`
   floor accounts for this.
